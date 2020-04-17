@@ -13,13 +13,12 @@
 #  censoring everything from the list from the previous step as well and use it
 #  to censor email_three.
 
-# TODO: Email Four Requirements
+# Email Four Requirements (DONE)
 #  -Write a function that censors not only all of the words from the
 #  negative_words and proprietary_terms lists, but also censor any words in
 #  email_four that come before AND after a term from those two lists.
 
-# Extra Challenges
-#  As a challenge, make sure they:
+# Extra Challenges (DONE)
 #  -Handle upper and lowercase letters. (DONE)
 #  -Handle punctuation. (DONE)
 #  -Censor words while preserving their length. (DONE)
@@ -69,7 +68,7 @@ def censor(match):
     word_is_negative = negative_words.count(word) > 0
     uses_allowed = 2
     censor_word = '*' * len(word)
-    if uses_allowed == 0 or word.count('S+') > 0:
+    if uses_allowed == 0:
         return censor_word
     elif word_is_negative and word_uses <= uses_allowed:
         word_uses += 1
@@ -86,6 +85,7 @@ email_two_scanned = re.sub(p2, censor, email_two, flags=re.IGNORECASE)
 
 email_three_scanned = re.sub(p3, censor, email_three, flags=re.IGNORECASE)
 
+# TODO: Pass through censor function auto-ban, no scanning
 email_four_scanned = re.sub(p4, censor, email_four, flags=re.IGNORECASE)
 
 print(email_one_scanned)
