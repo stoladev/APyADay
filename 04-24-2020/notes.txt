@@ -1,0 +1,4 @@
+Beginning to learn module importation. Focusing on Python first without
+having to multitask any other language is definitely allowing a quicker
+understanding. Approaching one language at a time seems to be the most 
+effective way to pursue fluency moving forward.

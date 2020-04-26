@@ -1,0 +1,41 @@
+Today I will be prioritizing Python lessons alongside a full setup of
+Arch Linux. I've been successful with Arch's installation up to internet
+connectivity. Maybe pre-installing a network manager before moving to the
+live system on reboot will fix the problem. 
+
+I have finally replaced my 4GB RAM module in my laptop with a 16GB upgrade,
+and the difference in performance is extremely noticeable. While increasing
+memory does not have any drastic boost on performance when memory is already
+high, the increase when it comes to replacing memory that constantly runs
+at 90%+ usage is worth the upgrade.
+
+With 18GB of useable RAM (4GB soldered into the laptop, 2GB used for
+graphics), it's safe to say this laptop will be useful for quite a long time.
+
+
+CC Notes:
+What are virtual environments and why are they useful?
+    -What?
+        -A 'locked-off' environment allowing use of older/newer repos
+    -Why?
+        -Different dependencies or versions required by team devs
+	-Allows you to keep different versions of repos and alike	
+
+
+Installing pipenv
+    -Bash:
+        -pip install pipenv
+    -CMD:
+        # Checks for pip version, should be for Python 3.x
+        -pip --version
+	-pip install --user pipenv
+	-PATH is a system variable that Windows uses to determine where the exe is located.
+	-Copy path to where pipenv installed
+	-Edit system environment variables
+	-PATH, edit, new, paste in path
+        -Check if --pipenv works
+
+Working with virtual environments
+
+
+
