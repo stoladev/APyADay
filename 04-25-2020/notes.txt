@@ -13,7 +13,8 @@ With 18GB of useable RAM (4GB soldered into the laptop, 2GB used for
 graphics), it's safe to say this laptop will be useful for quite a long time.
 
 
-CC Notes:
+Lesson Notes:
+
 What are virtual environments and why are they useful?
     -What?
         -A 'locked-off' environment allowing use of older/newer repos
@@ -23,19 +24,25 @@ What are virtual environments and why are they useful?
 
 
 Installing pipenv
-    -Bash:
-        -pip install pipenv
-    -CMD:
+    -Windows:
         # Checks for pip version, should be for Python 3.x
         -pip --version
 	-pip install --user pipenv
-	-PATH is a system variable that Windows uses to determine where the exe is located.
+	-PATH is a system variable that Windows uses to determine where the
+	exe is located.
 	-Copy path to where pipenv installed
 	-Edit system environment variables
 	-PATH, edit, new, paste in path
         -Check if --pipenv works
 
-Working with virtual environments
+Final Notes:
 
+Pipenv and Anaconda seem similar. I prefer Anaconda. Maybe there are reasons
+to use Pipenv over Anaconda, but I cannot find any with my current programming
+needs. Therefore, I will stick with and learn more of Anaconda.
 
-
+I have also been learning Vim more and more. It's about my 3rd official day of
+using Vim (only for making these notes; I haven't used it for programming
+purposes yet). I am learning the basics of the basics, and slowly getting the
+feel as to why Vim is so highly regarded among programmers, especially Linux
+SysAdmins. I'll try using it for programming in the near future.
