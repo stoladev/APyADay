@@ -1,0 +1,21 @@
+#+TITLE: Notes
+#+AUTHOR: Michael Stolarz
+#+DATE: 05-03-2020
+#+EMAIL: mike@stoladev.com
+
+* Learning Emacs
+** TODO Fuzzy File Searching just like Nvim
+** TODO Setting up of project folders through Projectile
+** TODO Automation of Org file template
+
+* Learning Tmux
+** start new with session name:
+*** tmux new -s myname
+** attach:
+*** tmux a  #  (or at, or attach)
+** attach to named:
+*** tmux a -t myname
+** list sessions:
+*** tmux ls
+** kill session:
+*** tmux kill-session -t mynam
