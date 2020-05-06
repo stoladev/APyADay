@@ -1,0 +1,62 @@
+#+TITLE: Doom Emacs: Org Mode Basics
+#+DATE: Tue May  5 19:36:54 2020
+#+AUTHOR: Michael Stolarz
+
+
+05-05-2020
+
+
+* Using Doom Emacs
+** The Benefits
+Emacs has shown time and time again (so far) that learning it brings benefits
+towards potential workflow scenarios. Org-mode especially is useful due to its
+capabilities and organizational structure (no pun intended).
+
+** The Next Steps
+1. Learning the markup language of Org-mode.
+2. Writing down tidbits of useful commands in a searchable format through rg.
+3. Through trial and error, I would like to switch to the email client *m4ue*.
+4. Read org-mode manual with M-x org-info.
+
+
+
+* Task Creation
+** Toggle a TODO state: SPC-m-t
+** Toggle TODO status: RETURN
+** [ ] This is a task you must accomplish.
+** [ ] Hold Shift+Arrow Keys to change task status.
+** [ ] Thiss a new task with subtasks. [1/3] [33%]
+1) [X] Subtask
+2) [-] Another Subtask
+3) [ ] Annnnd another one.
+
+
+
+* Table Creation
+** To create a new table, just type: | Col1 | Col2 | Col3 |
+
+|-----------+---------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------|
+| Keybind   | What Happens                                      | Cool Tidbits                                                                                                                         |
+|-----------+---------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------|
+| TAB       | Switches to the next tab.                         | The table automatically reformats itself once you tab out of the current cell.                                                       |
+| SHIFT-TAB | Switches to the previous tab.                     | If you start typing in that tab, it replaces all of the existing text. Undoing it will likely not work, and just create table chaos. |
+| -+        | Filling the first cell with this creates a split. | You can use this for formatting titles of tables and general aesthetics.                                                             |
+|-----------+---------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------|
+
+* Structure Editing
+** Insert new heading after subtree: C-RETURN
+** Promote/demote heading: M-h/l
+** Promote/demote current line: M-S-h/l
+
+
+* Inserting
+** SPC-i-s inserts a snippet, depending on what you select.
+
+
+
+* Advanced Editing
+** Select an element: vae
+** Delete an element: dae
+** Select a subtree: vaR
+** Delete a subtree: daR
+** Yank Subtree: yiR
