@@ -3,7 +3,8 @@
 #+AUTHOR: Michael Stolarz
 
 
-05-05-2020
+*This will be my final note pertaining to topics that are not of a Python relevance.*
+*I will be creating a separate repository with all of my notes, sectioned off in categories.*
 
 
 * Using Doom Emacs
@@ -19,7 +20,6 @@ capabilities and organizational structure (no pun intended).
 4. Read org-mode manual with M-x org-info.
 
 
-
 * Task Creation
 ** Toggle a TODO state: SPC-m-t
 ** Toggle TODO status: RETURN
@@ -29,7 +29,6 @@ capabilities and organizational structure (no pun intended).
 1) [X] Subtask
 2) [-] Another Subtask
 3) [ ] Annnnd another one.
-
 
 
 * Table Creation
@@ -43,6 +42,7 @@ capabilities and organizational structure (no pun intended).
 | -+        | Filling the first cell with this creates a split. | You can use this for formatting titles of tables and general aesthetics.                                                             |
 |-----------+---------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------|
 
+
 * Structure Editing
 ** Insert new heading after subtree: C-RETURN
 ** Promote/demote heading: M-h/l
@@ -51,7 +51,6 @@ capabilities and organizational structure (no pun intended).
 
 * Inserting
 ** SPC-i-s inserts a snippet, depending on what you select.
-
 
 
 * Advanced Editing
