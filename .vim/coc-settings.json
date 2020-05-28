@@ -1,6 +1,21 @@
 {
-  "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "markdown",
+    "javascript",
+    "graphql",
+    "html",
+    "yaml",
+    "json",
+    "python"
+  ],
+
+  // Python Settings
   "python.linting.enabled": true,
-  "diagnostic.refreshOnInsertMode": true
+  "python.linting.pylintEnabled": true,
+  "python.formatting.provider": "yapf",
+  "coc.preferences.hoverTarget": "float",
+  "diagnostic.refreshOnInsertMode": true,
+  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnInsertLeave": true
 }
