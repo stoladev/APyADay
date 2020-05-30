@@ -9,6 +9,12 @@ Lessons learned:
 - Read a file line-by-line using .readline() and .readlines()
 - Create new files by opening them in write-mode.
 - Append to a file non-destructively by opening a file in append-mode.
+
+Question:
+What does the with command do in Python?
+Answer:
+Creates a context-manager, which performs cleanup after exiting the
+adjacent indented block.
 """
 
 import json
