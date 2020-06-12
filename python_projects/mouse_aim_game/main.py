@@ -2,33 +2,28 @@
 Game concept: mouse aim practice game. Created with Pygame.
 """
 
-# Fix ui_element load of fonts
-# TODO Start screen with a start button
+# TODO Create seperate
+# TODO Create seperate input_handler class
+# TODO Transfer Target into Sprite group
 # TODO Countdown timer to main game (3... 2... 1... GO!)
 # TODO Leaderboard during countdown
 # TODO Random target spawning
 
 import pygame
-from target import Target
+import pygame.freetype
+
+import target
 import main_menu
 import settings
 
-# First, you must initialize pygame
 pygame.init()
+settings.cursor_init()
 
-# General Settings
 IS_RUNNING = True
 title = pygame.display.set_caption('Mouse Aim Practice')
-screen = pygame.display.set_mode((settings.game_width, settings.game_height))
-target = Target()
+target = target.Target()
 clock = pygame.time.Clock()
-
-# Mouse Cursor (Crosshair)
-size = (8, 8)
-hotspot = (4, 4)
-xormasks = (24, 24, 24, 231, 231, 24, 24, 24)
-andmasks = (0, 0, 0, 0, 0, 0, 0, 0)
-pygame.mouse.set_cursor(size, hotspot, xormasks, andmasks)
+screen = settings.screen
 
 while IS_RUNNING:
 
@@ -40,9 +35,7 @@ while IS_RUNNING:
         if event.type == pygame.MOUSEBUTTONDOWN:
             target.handle_input(mouse_state="DOWN")
 
-    screen.fill((settings.MAIN_BG_COLOR))
-    main_menu.uielement.update(pygame.mouse.get_pos())
-    main_menu.uielement.draw(screen)
+    main_menu.ui_load()
 
     # if playing_game:
     #     target.draw(screen)
@@ -51,3 +44,5 @@ while IS_RUNNING:
 
     # FPS
     clock.tick(60)
+
+pygame.quit()
