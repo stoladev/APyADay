@@ -11,8 +11,9 @@ BLUE = (106, 159, 181)
 WHITE = (255, 255, 255)
 
 
-
 def cursor_init():
+    """Initializes the crosshair cursor through set_cursor.
+    """
     size = (8, 8)
     hotspot = (4, 4)
     xormasks = (24, 24, 24, 231, 231, 24, 24, 24)
