@@ -4,11 +4,22 @@ import pygame
 # Sizings
 game_width, game_height = (1800, 900)
 screen = pygame.display.set_mode((game_width, game_height))
+title = pygame.display.set_caption("Mouse Aim Practice")
 
 # Colors
 MAIN_BG_COLOR = (75, 85, 130)
 BLUE = (106, 159, 181)
 WHITE = (255, 255, 255)
+
+# Clock
+clock = pygame.time.Clock()
+
+
+def init():
+    """
+    Initializes settings for the game.
+    """
+    cursor_init()
 
 
 def cursor_init():
