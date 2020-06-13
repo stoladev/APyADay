@@ -4,6 +4,8 @@ import pygame
 from pygame.sprite import Sprite
 import pygame.freetype
 
+import target
+
 
 def create_text_bg(text, font_size, text_rgb):
     """
@@ -74,7 +76,7 @@ class UIElement(Sprite):
         """
         return self.rects[1] if self.mouse_over else self.rects[0]
 
-    def ui_hover_check(self, mouse_pos):
+    def ui_interactions(self, mouse_pos, mouse_state):
         """
         Updates the UI element sprite.
 
@@ -84,6 +86,9 @@ class UIElement(Sprite):
 
         if self.rect.collidepoint(mouse_pos):
             self.mouse_over = True
+            if mouse_state == "DOWN":
+                target.init()
+
         else:
             self.mouse_over = False
 
