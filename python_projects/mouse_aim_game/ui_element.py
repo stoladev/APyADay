@@ -4,7 +4,7 @@ import pygame
 from pygame.sprite import Sprite
 import pygame.freetype
 
-import target
+import target_game
 
 
 def create_text_bg(text, font_size, text_rgb):
@@ -87,7 +87,10 @@ class UIElement(Sprite):
         if self.rect.collidepoint(mouse_pos):
             self.mouse_over = True
             if mouse_state == "DOWN":
-                target.init()
+                # print(self.rect.topleft)
+                # print(self.rect.bottomright)
+                # print(mouse_pos)
+                target_game.init()
 
         else:
             self.mouse_over = False

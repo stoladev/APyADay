@@ -17,12 +17,8 @@ def init():
     Begins the Target game.
     """
     playing_target_game = True
-    target_x_pos = random.randint(100, game_width - 100)
-    target_y_pos = random.randint(100, game_height - 100)
-    target_position = (target_x_pos, target_y_pos)
-    mouse_pos = pygame.mouse.get_pos()
     mouse_state = None
-    target = Target(target_position)
+    target = Target()
 
     while playing_target_game:
 
@@ -31,16 +27,15 @@ def init():
             if event.type == pygame.QUIT:
                 playing_target_game = False
 
-            if target.rect.collidepoint(mouse_pos):
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    playing_target_game = False
-                # mouse_state = "DOWN"
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_state = "DOWN"
 
-        target.handle_input(mouse_pos, mouse_state)
+        screen.fill((settings.MAIN_BG_COLOR))
         target.draw(screen)
+        target.handle_input(mouse_state)
         mouse_state = None
 
-        pygame.display.update()
+        pygame.display.flip()
         clock.tick(60)
 
 
@@ -48,11 +43,15 @@ class Target(Sprite):
     """All actions regarding the target in the game are handled here.
     """
 
-    def __init__(self, center_position):
+    def __init__(self):
         """ The constructor of the class. """
 
+        target_x_pos = random.randint(100, game_width - 100)
+        target_y_pos = random.randint(100, game_height - 100)
+        target_position = (target_x_pos, target_y_pos)
+
         self.images = [target_img.convert_alpha()]
-        self.rects = [self.images[0].get_rect(center=center_position)]
+        self.rects = [self.images[0].get_rect(center=target_position)]
 
         super().__init__()
 
@@ -71,20 +70,33 @@ class Target(Sprite):
         """
         return self.rects[0]
 
-    def handle_input(self, mouse_pos, mouse_state):
+    def handle_input(self, mouse_state):
         """Handles all input from the keyboard and mouse.
 
         Args:
             mouse_state: Checks if the mouse has been pressed.
         """
 
-        if self.rect.collidepoint(mouse_pos):
-            print("test")
-            if mouse_state == "DOWN":
-                print("test")
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_on_target = self.rect.collidepoint(mouse_pos)
+        target_clicked = mouse_state == "DOWN"
 
-            else:
-                print("noooope")
+        if mouse_on_target and target_clicked:
+            self.update()
+            print("boob")
+
+    def update(self):
+        """
+        Updates the sprite's position.
+        """
+        new_x_pos = random.randint(100, game_width - 100)
+        new_y_pos = random.randint(100, game_height - 100)
+        new_position = (new_x_pos, new_y_pos)
+
+        self.images = [target_img.convert_alpha()]
+        self.rects = [self.images[0].get_rect(center=new_position)]
+
+        self.draw(screen)
 
     def draw(self, surface):
         """
