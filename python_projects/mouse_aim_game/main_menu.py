@@ -1,37 +1,10 @@
 """ Handles the main menu of the game. """
 
-import pygame
-
-import ui_element
 import settings
-
-screen = settings.screen
-
-
-def init():
-    """
-    Draws the main menu screen.
-    """
-    in_main_menu = True
-    mouse_state = None
-    while in_main_menu:
-
-        for event in pygame.event.get():
-
-            if event.type == pygame.QUIT:
-                in_main_menu = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_state = "DOWN"
-
-        ui_elements_load(mouse_state)
-        mouse_state = None
-
-        pygame.display.update()
-        settings.clock.tick(60)
+import ui_element
 
 
-def ui_elements_load(mouse_state):
+def menu():
     """Loads all UI elements.
     """
 
@@ -58,7 +31,7 @@ def ui_elements_load(mouse_state):
     )
 
     settings_button_x_pos = settings.game_width / 2
-    settings_button_y_pos = credits_button_y_pos / 0.9
+    settings_button_y_pos = credits_button_y_pos * 1.03
 
     # SETTINGS BUTTON
     settings_button = ui_element.UIElement(
@@ -68,13 +41,13 @@ def ui_elements_load(mouse_state):
         text="SETTINGS",
     )
 
-    screen.fill((settings.MAIN_BG_COLOR))
+    if start_button.update():
+        return "START TARGET GAME"
 
-    mouse_pos = pygame.mouse.get_pos()
-    start_button.ui_interactions(mouse_pos, mouse_state)
-    credits_button.ui_interactions(mouse_pos, mouse_state)
-    settings_button.ui_interactions(mouse_pos, mouse_state)
+    if credits_button.update():
+        return "SHOW CREDITS"
 
-    start_button.draw(screen)
-    credits_button.draw(screen)
-    settings_button.draw(screen)
+    if settings_button.update():
+        return "SHOW SETTINGS"
+
+    return False

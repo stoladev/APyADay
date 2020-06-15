@@ -4,10 +4,12 @@ import pygame
 from pygame.sprite import Sprite
 import pygame.freetype
 
-import target_game
+import settings
+
+screen = settings.screen
 
 
-def create_text_bg(text, font_size, text_rgb):
+def create_text(text, font_size, text_rgb):
     """
     Creates an image-like object with text.
     """
@@ -29,37 +31,55 @@ class UIElement(Sprite):
     """
 
     def __init__(self, center_position, text, font_size, text_rgb):
-        """
-        Adds UI elements such as buttons and general text.
-
-        Args:
-            center_position - tuple (x, y)
-            text - string of text to write
-            font_size - int
-            text_rgb (text colour) - tuple (r, g, b)
-        """
 
         self.mouse_over = False  # indicates if the mouse over the element
 
         # create the default image
-        default_image = create_text_bg(
-            text=text, font_size=font_size, text_rgb=text_rgb
-        )
+        default_image = create_text(text, font_size, text_rgb)
+        default_image_rect = default_image.get_rect(center=center_position)
 
         # create the image that shows when mouse is over the element
-        highlighted_image = create_text_bg(
-            text=text, font_size=font_size * 1.2, text_rgb=text_rgb
-        )
+        hovered_image = create_text(text, font_size * 1.5, text_rgb)
+        hovered_image_rect = hovered_image.get_rect(center=center_position)
 
         # add both images and their rects to lists
-        self.images = [default_image, highlighted_image]
-        self.rects = [
-            default_image.get_rect(center=center_position),
-            highlighted_image.get_rect(center=center_position),
-        ]
+        self.images = [default_image, hovered_image]
+        self.rects = [default_image_rect, hovered_image_rect]
 
         # calls the init method of the parent sprite class
         super().__init__()
+
+    def update(self):
+        """
+        Updates the UI element sprite.
+
+        Args:
+            clicking: checks if mouse is being clicked.
+        """
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_on_element = self.rect.collidepoint(mouse_pos)
+
+        if mouse_on_element:
+            self.mouse_over = True
+            screen.blit(self.image, self.rect)
+
+            if self.clicked:
+                return True
+
+        else:
+            screen.blit(self.image, self.rect)
+            return False
+
+        return False
+
+    def clicked(self, clicked):
+        """
+        Checks if the UI Element has been clicked.
+        """
+        if clicked:
+            return True
+
+        return False
 
     @property
     def image(self):
@@ -76,27 +96,3 @@ class UIElement(Sprite):
         """
         return self.rects[1] if self.mouse_over else self.rects[0]
 
-    def ui_interactions(self, mouse_pos, mouse_state):
-        """
-        Updates the UI element sprite.
-
-        Args:
-            mouse_pos: mouse position is used for update state.
-        """
-
-        if self.rect.collidepoint(mouse_pos):
-            self.mouse_over = True
-            if mouse_state == "DOWN":
-                # print(self.rect.topleft)
-                # print(self.rect.bottomright)
-                # print(mouse_pos)
-                target_game.init()
-
-        else:
-            self.mouse_over = False
-
-    def draw(self, surface):
-        """
-        Draws element onto a surface
-        """
-        surface.blit(self.image, self.rect)
