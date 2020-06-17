@@ -1,14 +1,33 @@
+== Map Objectives ==
+- [ ] Create an initial map outline
 
-== Main Objectives ==
-- [ ] 
-- [ ] Countdown timer to main game (3... 2... 1... GO!)
-- [ ] Leaderboard during countdown
+== Skill System ==
+- [ ] Create a skills list for the player
 
+== Player Movement Objectives ==
+- [ ] Create player velocity
+- [ ] Fix player movement cancelling itself out (a and d together = stopped)
+- [ ] Create player jumping with gravity
 
-== Completed Objectives == 
-- [✓] Random target spawning
-- [✓] Handle keypresses through seperate file
-- [✓] Create seperate input_handler class
-- [✓] Transfer Target into Sprite group
+== Physics Engine Objectives ==
+- [ ] Create a physics engine that is universal amongst all entities
+
+== Sound Engine Objectives ==
+- [ ] Create a sound engine that allows for settings sounds and per-sound
+      volume control.
+
+== Target Game Objectives ==
 - [✓] Fix the target reloading on click
-- [✓] Create seperate todo list file for the game
+- [✓] Transfer Target into Sprite group
+- [✓] Random target spawning
+
+== Player Creation Objectives ==
+- [ ] Create a player-creator menu
+
+== Profile Save Objectives ==
+- [ ] Create a saving feature that saves all current progress of the player's
+      account.
+
+== Control Objectives ==
+- [✓] Create seperate input_handler class
+- [✓] Handle keypresses through seperate file
