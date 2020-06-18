@@ -1,6 +1,14 @@
 """ All settings related to color, sizings, and alike. """
 import pygame
 
+# Loops
+RUNNING = True
+IN_MAIN_MENU = True
+PLAYING_TARGET_GAME = False
+IN_SETTINGS = False
+IN_CREDITS = False
+CLICKING = None
+
 # Sizings
 game_width, game_height = (1800, 900)
 screen = pygame.display.set_mode((game_width, game_height))
@@ -10,9 +18,14 @@ title = pygame.display.set_caption("Mouse Aim Practice")
 MAIN_BG_COLOR = (75, 85, 130)
 BLUE = (106, 159, 181)
 WHITE = (255, 255, 255)
+ALPHA = (0, 255, 0)
 
 # Clock
 clock = pygame.time.Clock()
+
+# Animation Cycles
+VELOCITY = 1
+ANI = 4
 
 
 def init():

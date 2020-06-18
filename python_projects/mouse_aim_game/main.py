@@ -22,6 +22,8 @@ screen = settings.screen
 
 target = target_game.Target()
 player = player.Player()
+player.rect.x = 0
+player.rect.y = 0
 all_sprites = pygame.sprite.Group()
 
 
@@ -29,9 +31,6 @@ while settings.RUNNING:
 
     # Resets the game screen per frame to prevent sprite ghosting.
     screen.fill(bg)
-
-    # Catches user's inputs.
-    catch.catch_events()
 
     if settings.IN_MAIN_MENU:
 
@@ -54,12 +53,15 @@ while settings.RUNNING:
         all_sprites.add(player)
 
     # UPDATES
+    # Catches user's inputs.
+    catch.catch_events()
     # Checks if any sprites need to be updated.
     all_sprites.update()
     # Draws/all the sprites that are in the default group.
     all_sprites.draw(screen)
     # Updates the game's display.
-    pygame.display.update()
+    # pygame.display.update()
+    pygame.display.flip()
 
     # RESETS
     # Empties all sprites loaded by loops that are no longer running.

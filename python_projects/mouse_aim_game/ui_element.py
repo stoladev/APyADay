@@ -52,9 +52,6 @@ class UIElement(Sprite):
     def update(self):
         """
         Updates the UI element sprite.
-
-        Args:
-            clicking: checks if mouse is being clicked.
         """
         mouse_pos = pygame.mouse.get_pos()
         mouse_on_element = self.rect.collidepoint(mouse_pos)
@@ -63,21 +60,12 @@ class UIElement(Sprite):
             self.mouse_over = True
             screen.blit(self.image, self.rect)
 
-            if self.clicked:
+            if settings.CLICKING:
                 return True
 
         else:
             screen.blit(self.image, self.rect)
             return False
-
-        return False
-
-    def clicked(self, clicked):
-        """
-        Checks if the UI Element has been clicked.
-        """
-        if clicked:
-            return True
 
         return False
 

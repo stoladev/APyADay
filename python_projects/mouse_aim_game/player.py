@@ -1,7 +1,13 @@
 """ Handles the player model and all of its actions. """
 
+import os
 import pygame
 from pygame.sprite import Sprite
+
+import settings
+
+ANI = 4
+ALPHA = settings.ALPHA
 
 
 class Player(Sprite):
@@ -10,6 +16,7 @@ class Player(Sprite):
     location, health, size, bank, and items.
     """
 
+    velocity = 3
     walking_up = False
     walking_down = False
     walking_left = False
@@ -17,7 +24,7 @@ class Player(Sprite):
 
     def __init__(self):
 
-        Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.image.load("./img/player.png").convert_alpha()
         self.rect = self.image.get_rect()
@@ -30,10 +37,21 @@ class Player(Sprite):
 
         # MOVEMENT
         if self.walking_up:
-            self.rect.y -= 5
+            # if self.velocity <= 3:
+            #     self.velocity += 1
+            self.rect.y -= 1 * self.velocity
+
         if self.walking_down:
-            self.rect.y += 5
+            # if self.velocity <= 3:
+            #     self.velocity += 1
+            self.rect.y += 1 * self.velocity
+
         if self.walking_left:
-            self.rect.x -= 5
+            # if self.velocity <= 3:
+            #     self.velocity += 1
+            self.rect.x -= 1 * self.velocity
+
         if self.walking_right:
-            self.rect.x += 5
+            # if self.velocity <= 3:
+            #     self.velocity += 1
+            self.rect.x += 1 * self.velocity
