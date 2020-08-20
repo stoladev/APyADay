@@ -1,6 +1,9 @@
 # Python Projects
 
-Anything that has a code focus of Python will be included here. 
+Anything that has a code focus of Python will be included here. As the quantity
+of projects increases, the file structure of this repo will change to reduce
+clutter. Categories will soon come once I reach ~10 projects, ranging from
+machine learning to GUI applications to messing with PyGame.
 
 # Contents
 
