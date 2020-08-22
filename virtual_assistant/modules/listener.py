@@ -32,13 +32,16 @@ def listen():
     try:
         command = listener.recognize_google(audio).lower()
 
-        if "amy" in command:
-            print("Captured speech: " + command + "\n")
-            listening = False
-        else:
-            command = listen()
+        # if "amy" in command:
+        print("Command recognized. Captured speech: " + command + "\n")
+        listening = False
+        # else:
+        #     print("Command NOT recognized. Captured speech: " + command + "\n")
+        #     command = listen()
+        #     listening = False
 
     except sr.UnknownValueError:
+        print("No speech captured. Restarting capture...")
         command = listen()
 
     return command

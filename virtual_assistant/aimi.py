@@ -1,8 +1,6 @@
 from modules import responder
 from modules import listener
-
-import re
-import webbrowser
+from commands import command_handler
 
 
 def assistant(command):
@@ -13,20 +11,19 @@ def assistant(command):
     Searches through the command using regex.
     Runs through commands that are currently limited to if statements. 
 
-    ToDo:
+    Still needed:
     Transfer checks to use machine learning.
+    Sync data between app and cloud.
     """
 
-    if "open" in command:
+    print("Testing!")
+    responder.respond("Hello! What can I do for you?")
 
-        reg_ex = re.search("open (.+)", command)
-        if reg_ex:
-            domain = reg_ex.group(1)
-            url = "https://www." + domain
-            webbrowser.open(url)
+    if command_handler.main(command):
+        return
 
-        else:
-            responder.respond("Sorry, I'm not sure what you'd like me to do.")
+    else:
+        responder.respond("Sorry, I'm not sure what you'd like me to do.")
 
 
 while True:
