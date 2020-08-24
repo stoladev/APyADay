@@ -3,6 +3,8 @@ import os
 import errno
 from playsound import playsound
 
+from utils import debug
+
 
 def respond(text):
     """
@@ -15,7 +17,6 @@ def respond(text):
     Removes the file to prevent permission issues when overwriting.
     """
 
-    print(text)
     for _ in text.splitlines():
 
         try:
@@ -24,7 +25,10 @@ def respond(text):
             if error.errno != errno.EEXIST:
                 raise
 
+        debug.log("Grabbing and saving audio...")
         text_to_speech = gtts.gTTS(text=text, lang="en")
         text_to_speech.save("audio/tts_audio.mp3")
+
+        debug.log(text)
         playsound("audio/tts_audio.mp3", True)
         os.remove("audio/tts_audio.mp3")

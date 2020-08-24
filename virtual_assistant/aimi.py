@@ -1,6 +1,14 @@
 from modules import responder
 from modules import listener
 from commands import command_handler
+from utils import debug
+import tkinter as tk
+
+window = tk.Tk()
+
+debug.activated = True
+
+responder.respond("Hello! What can I do for you?")
 
 
 def assistant(command):
@@ -15,9 +23,6 @@ def assistant(command):
     Transfer checks to use machine learning.
     Sync data between app and cloud.
     """
-
-    print("Testing!")
-    responder.respond("Hello! What can I do for you?")
 
     if command_handler.main(command):
         return
