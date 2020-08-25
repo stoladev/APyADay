@@ -1,4 +1,5 @@
 from utils import debug
+from pynput.keyboard import Key, Controller
 
 
 def keyboard_input():

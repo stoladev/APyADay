@@ -1,35 +1,17 @@
-from modules import responder
-from modules import listener
-from commands import command_handler
-from utils import debug
-import tkinter as tk
+from playsound import playsound
 
-window = tk.Tk()
+from commands.command_handler import check_cmnd
+from modules import responder
+from modules.gui.main_gui import root
+from modules.listeners import listener
+from utils import debug
+
 
 debug.activated = True
 
-responder.respond("Hello! What can I do for you?")
+playsound("audio/start_audio.mp3")
+root.mainloop()
 
 
-def assistant(command):
-    """
-    Checks the commands that are registered after grabbing input once the hotkey is pressed.
-    
-    Procedure:
-    Searches through the command using regex.
-    Runs through commands that are currently limited to if statements. 
-
-    Still needed:
-    Transfer checks to use machine learning.
-    Sync data between app and cloud.
-    """
-
-    if command_handler.main(command):
-        return
-
-    else:
-        responder.respond("Sorry, I'm not sure what you'd like me to do.")
-
-
-while True:
-    assistant(listener.listen())
+# while True:
+# check_cmnd(listener.listen())

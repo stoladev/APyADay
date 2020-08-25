@@ -1,14 +1,32 @@
+from playsound import playsound
+
 from commands import open_command
+from modules import responder
 from utils import debug
 
 
-def main(command):
+def check_cmnd(command):
+    """
+    Checks the commands that are registered after grabbing input once the hotkey is pressed.
+
+    Procedure:
+    Searches through the command using regex.
+    Runs through commands that are currently limited to if statements.
+
+    Still needed:
+    Transfer checks to use machine learning.
+    Sync data between app and cloud.
+    """
 
     if "amy" in command:
-        debug.log("Command recognized. Captured speech: " + command + "\n")
+        debug.log("Command RECOGNIZED.")
+        debug.log("Command: " + command + "\n")
     else:
-        debug.log("Command NOT recognized. Captured speech: " + command + "\n")
-        return False
+        debug.log("Command NOT RECOGNIZED.")
+        debug.log("Command: " + command + "\n")
+        return
 
     if open_command.check(command):
-        return True
+        return
+    else:
+        playsound("audio/cmnd_not_recognized_audio.mp3")
