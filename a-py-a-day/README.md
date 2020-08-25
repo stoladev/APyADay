@@ -8,18 +8,19 @@ with time and practice.
 ### Update (08-25-2020)
 After delving into some C# and getting more familiar with frameworks, physics
 calculations, and game engines, I've decided to put up my hat for game
-development for a while. While C# isn't limited to only game development, it
-seems that with my current aspirations, Python is a better choice. Machine
-learning and all that is has to offer is too enticing for me to keep ignoring.
-This is where daily uploads will begin again, with a more specific agenda of
-learning the first lessons when it comes to neural nets and alike.
+development for a while. While C# definitely isn't limited to only game
+development, it seems that with my current aspirations, Python is a better
+choice. Machine learning and all that it has to offer is too enticing for me to
+keep ignoring.  This is where daily uploads will begin again, with a more
+specific agenda of learning the first lessons when it comes to neural nets and
+alike.
 
 ### Update (06-21-2020)
 I will be putting a pause on Python while I explore C# and program development.
 Python has turned out to be a great entry-level programming language with
 extremely useful libraries and capabilities. With C# I will further my interest
-in OOP and see what comes of it - Surely I will come back to Python, but for
-now I see more of a benefit when it comes to learning other languages.
+in OOP and see what comes of it - I will come back to Python, but for now I see
+more of a benefit when it comes to learning other languages.
 
 ### Update (05-16-2020)
 Some files may be dated incorrectly when it comes to the initial commit date.
