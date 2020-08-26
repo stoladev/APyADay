@@ -1,5 +1,5 @@
 import tkinter as tk
-from commands.command_handler import check_cmnd
+from modules.handlers.command_handler import check_cmnd
 
 window_height = 200
 window_width = 500
@@ -21,7 +21,6 @@ cmnd_field.bind("<Return>", (lambda event: btn_cmnd()))
 
 cmnd_btn = tk.Button(upper_frame, text=btn_txt, command=lambda: btn_cmnd())
 cmnd_btn.place(relx=0.85, rely=0.2, relwidth=0.25, relheight=0.55, anchor="n")
-
 
 
 def btn_cmnd():
