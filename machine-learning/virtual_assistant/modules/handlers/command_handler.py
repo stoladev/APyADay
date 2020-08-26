@@ -1,7 +1,6 @@
 from playsound import playsound
-
 from commands import open_command
-from modules import responder
+from modules.handlers import thread_handler
 from utils import debug
 
 
@@ -28,5 +27,7 @@ def check_cmnd(command):
 
     if open_command.check(command):
         return
+    elif "exit" in command:
+        thread_handler.stop_threads()
     else:
         playsound("audio/cmnd_not_recognized_audio.mp3")

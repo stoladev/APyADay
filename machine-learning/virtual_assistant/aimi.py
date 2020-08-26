@@ -1,17 +1,11 @@
-from playsound import playsound
-
-from commands.command_handler import check_cmnd
-from modules import responder
-from modules.gui.main_gui import root
-from modules.listeners import listener
 from utils import debug
-
+from modules.handlers import thread_handler
 
 debug.activated = True
 
-playsound("audio/start_audio.mp3")
-root.mainloop()
 
-
-# while True:
-# check_cmnd(listener.listen())
+if __name__ == "__main__":
+    try:
+        thread_handler.run_threads()
+    except (KeyboardInterrupt, SystemExit):
+        raise
