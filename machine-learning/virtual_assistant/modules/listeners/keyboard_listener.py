@@ -1,10 +1,11 @@
+from modules.handlers import command_handler
 from utils import debug
-from pynput.keyboard import Key, Controller
 
 
 def keyboard_input():
     debug.log("Listening for keyboard input...")
     command = input("Command: ")
 
-    if command is not None:
-        return command
+    command_handler.check_cmnd("amy " + command)
+
+    return keyboard_input()
