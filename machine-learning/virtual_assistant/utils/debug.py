@@ -14,7 +14,6 @@ def log_lines(file_to_print, quantity=10):
     :param quantity: The quantity of lines to print out (default is 10).
     """
 
-    global datafile
     with open(file_to_print, "rb") as datafile:
         lines = datafile.readlines()
     for line in lines[:quantity]:
