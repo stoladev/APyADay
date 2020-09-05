@@ -1,5 +1,5 @@
-from utils import debug
 from modules.handlers import thread_handler
+from utils import debug
 
 debug.activated = True
 
