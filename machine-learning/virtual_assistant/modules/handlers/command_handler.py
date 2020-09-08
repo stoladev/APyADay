@@ -1,6 +1,9 @@
 from playsound import playsound
-from commands import open_command
-from modules.handlers import thread_handler
+
+from modules.handlers.data_handler.data_cleaner import voc
+from modules.rnn.rnn_tools.rnn_decoder import SearchDecoder
+from modules.rnn.rnn_tools.rnn_evaluator import check_input
+from modules.rnn.rnn_trainer.rnn_loader import encoder, decoder
 
 
 def check_cmnd(command):
@@ -16,14 +19,14 @@ def check_cmnd(command):
     Sync training_data between app and cloud.
     """
 
-    # while True:
-    #     command = input("Command: ")
-    #     if command.lower() == "quit":
-    #         thread_handler.stop_threads()
-    #         break
-    #
-    #     results = model.predict([bag_of_words(command, word_list)])
-    #     print(results)
+    encoder.eval()
+    decoder.eval()
+
+    # Initialize search module
+    searcher = SearchDecoder(encoder, decoder)
+
+    # Begin chatting (uncomment and run the following line to begin)
+    check_input(searcher, voc, command)
 
     # else:
     playsound("audio/cmnd_not_recognized_audio.mp3")
