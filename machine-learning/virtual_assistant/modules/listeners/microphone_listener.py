@@ -38,5 +38,6 @@ def microphone_input():
         debug.log("Exception: no translatable audio captured. Restarting capture...")
         return microphone_input()
 
+    print("Captured: " + command)
     command_handler.check_cmnd(command)
     return microphone_input()
