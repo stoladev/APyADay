@@ -12,11 +12,11 @@ USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
 # General model configuration
-use_existing_model = False
+use_existing_model = True
 model_name = "cb_model"
-# attn_model = "dot"
-attn_model = 'general'
-# attn_model = 'concat'
+attn_model = "dot"
+# attn_model = "general"
+# attn_model = "concat"
 hidden_size = 500
 encoder_n_layers = 2
 decoder_n_layers = 2
