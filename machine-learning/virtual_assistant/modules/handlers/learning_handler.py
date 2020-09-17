@@ -1,4 +1,5 @@
 import os
+
 import torch
 
 # Directories
@@ -12,11 +13,9 @@ USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
 # General model configuration
-use_existing_model = True
+use_existing_model = False
 model_name = "cb_model"
 attn_model = "dot"
-# attn_model = "general"
-# attn_model = "concat"
 hidden_size = 500
 encoder_n_layers = 2
 decoder_n_layers = 2
@@ -37,7 +36,6 @@ n_iteration = 100
 checkpoint_iter = 100
 save_every = 50
 print_every = 5
-
 
 # Loading/creating  the model
 if use_existing_model:
