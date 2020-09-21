@@ -46,3 +46,8 @@ costs = [150, 500, 550, 550, 560]
 
 plt.plot(time, revenue, color='purple', linestyle='--')
 plt.plot()
+
+plt.plot(time, costs, color='#82edc9', marker='s')
+plt.plot()
+
+plt.show()
