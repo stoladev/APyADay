@@ -1,14 +1,10 @@
 import torch
 from torch import optim
 
-from modules.rnn.rnn_tools.rnn_decoder import decoder, embedding
-from modules.rnn.rnn_tools.rnn_encoder import RNNEncoder
-
 from modules.handlers.data_handler.data_cleaner import (
     voc,
     pairs,
 )
-
 from modules.handlers.learning_handler import (
     device,
     voc_directory,
@@ -27,12 +23,13 @@ from modules.handlers.learning_handler import (
     decoder_learning_ratio,
     model_name,
 )
-
-
+from modules.rnn.rnn_tools.rnn_decoder import decoder, embedding
+from modules.rnn.rnn_tools.rnn_encoder import RNNEncoder
 # Load model if a loadFilename is provided
 from modules.rnn.rnn_trainer.rnn_trainer import train_iterations
 
 if loadFilename:
+    # try:
     # If loading on same machine the model was trained on
     checkpoint = torch.load(loadFilename)
     # If loading a model trained on GPU to CPU
@@ -43,11 +40,14 @@ if loadFilename:
     decoder_optimizer_sd = checkpoint["de_opt"]
     embedding_sd = checkpoint["embedding"]
     voc.__dict__ = checkpoint["voc_dict"]
+    embedding.load_state_dict(embedding_sd)
+    # except:
+    #     loadFilename = None
 
 print("Building encoder and decoder ...")
 # Initialize word embeddings
-if loadFilename:
-    embedding.load_state_dict(embedding_sd)
+
+
 # Initialize encoder & decoder models
 encoder = RNNEncoder(hidden_size, embedding, encoder_n_layers, dropout)
 if loadFilename:

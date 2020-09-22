@@ -13,7 +13,6 @@ USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
 
 # General model configuration
-use_existing_model = False
 model_name = "cb_model"
 attn_model = "dot"
 hidden_size = 500
@@ -37,8 +36,8 @@ checkpoint_iter = 100
 save_every = 50
 print_every = 5
 
-# Loading/creating  the model
-if use_existing_model:
+# Loading/creating the model
+try:
     loadFilename = os.path.join(
         voc_directory,
         model_name,
@@ -46,5 +45,5 @@ if use_existing_model:
         "{}-{}_{}".format(encoder_n_layers, decoder_n_layers, hidden_size),
         "{}_checkpoint.tar".format(checkpoint_iter),
     )
-else:
+except RuntimeError:
     loadFilename = None

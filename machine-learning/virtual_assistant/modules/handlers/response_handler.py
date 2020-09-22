@@ -1,6 +1,7 @@
-import gtts
-import os
 import errno
+import os
+
+import gtts
 from playsound import playsound
 
 from utils import debug
@@ -29,7 +30,6 @@ def respond(text):
         text_to_speech = gtts.gTTS(text=text, lang="en")
         text_to_speech.save("audio/tts_audio.mp3")
 
-        debug.log("Command:")
-        debug.log(text)
+        print(text)
         playsound("audio/tts_audio.mp3", True)
         os.remove("audio/tts_audio.mp3")

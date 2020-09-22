@@ -1,5 +1,3 @@
-from playsound import playsound
-
 from modules.handlers.data_handler.data_cleaner import voc
 from modules.rnn.rnn_tools.rnn_decoder import SearchDecoder
 from modules.rnn.rnn_tools.rnn_evaluator import check_input
@@ -29,4 +27,3 @@ def check_cmnd(command):
     check_input(searcher, voc, command)
 
     # else:
-    playsound("audio/cmnd_not_recognized_audio.mp3")
