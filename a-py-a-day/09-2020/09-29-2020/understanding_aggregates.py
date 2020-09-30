@@ -41,8 +41,12 @@ You’ll use Numpy in this exercise to compute aggregates for a DataFrame.
 
 """
 
+import warnings
+
 import numpy as np
 import pandas as pd
+import seaborn as sns
+from matplotlib import pyplot as plt
 
 gradebook = pd.read_csv('gradebook.csv')
 print(gradebook)
@@ -52,3 +56,35 @@ print(assignment1)
 
 asn1_median = np.median(assignment1.grade)
 print(asn1_median)
+
+"""
+
+Plotting Aggregates
+Recall our gradebook from the previous exercise:
+
+student	assignment_name	grade
+Amy	Assignment 1	75
+Amy	Assignment 2	82
+Bob	Assignment 1	99
+Bob	Assignment 2	90
+Chris	Assignment 1	72
+Chris	Assignment 2	66
+…	…	…
+
+Suppose this data is stored in a Pandas DataFrame called df.
+
+The same Seaborn command that you previously learned (sns.barplot()) will plot this data in a bar plot and automatically aggregate the data:
+
+sns.barplot(data=df, x="student", y="grade")
+In the example above, Seaborn will aggregate grades by student, and plot the average grade for each student.
+
+
+"""
+
+warnings.filterwarnings('ignore')
+
+gradebook_2 = pd.read_csv("gradebook_2.csv")
+
+sns.barplot(data=gradebook_2, x="assignment_name", y="grade")
+
+plt.show()
