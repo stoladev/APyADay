@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
+
+
 class Ui_main_window(object):
     def setupUi(self, main_window):
         main_window.setObjectName("main_window")
@@ -82,17 +84,20 @@ class Ui_main_window(object):
         self.menu_bar.setObjectName("menu_bar")
         main_window.setMenuBar(self.menu_bar)
 
+        # Updates
         self.program_checkbox.stateChanged.connect(self.check_state)
+        self.env_checkbox.stateChanged.connect(self.update_preview)
+        self.site_checkbox.stateChanged.connect(self.update_preview)
+        self.program_checkbox.stateChanged.connect(self.update_preview)
+        self.crash_checkbox.stateChanged.connect(self.update_preview)
+        self.reproducible_checkbox.stateChanged.connect(self.update_preview)
+        self.profits_checkbox.stateChanged.connect(self.update_preview)
+        self.security_checkbox.stateChanged.connect(self.update_preview)
+        self.leak_checkbox.stateChanged.connect(self.update_preview)
 
         self.translate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
-    def check_state(self):
-        if self.program_checkbox.isChecked():
-            self.crash_checkbox.setEnabled(True)
-        else:
-            self.crash_checkbox.setEnabled(False)
-            self.crash_checkbox.setChecked(False)
 
     def translate_ui(self, main_window):
         _translate = QtCore.QCoreApplication.translate
@@ -112,6 +117,68 @@ class Ui_main_window(object):
         self.add_info_box.setPlaceholderText(_translate("main_window", "Additional information..."))
         self.preview_label.setText(_translate("main_window", "Report Preview"))
 
+    def check_state(self):
+        if self.program_checkbox.isChecked():
+            self.crash_checkbox.setEnabled(True)
+        else:
+            self.crash_checkbox.setEnabled(False)
+            self.crash_checkbox.setChecked(False)
+
+    def update_preview(self):
+
+        env_details = ""
+        issue_type_details = ""
+        crash_report_details = ""
+        reproducible_details = ""
+        profits_details = ""
+        security_details = ""
+        leak_details = ""
+        additional_details = ""
+
+        if self.env_checkbox.isChecked():
+            env_details = "Environment: ENV DETAILS"
+        else:
+            env_details = "Environment: N/A"
+
+        if self.site_checkbox.isChecked():
+            issue_type_details = "Issue Type: Website Related"
+        elif self.program_checkbox.isChecked():
+            issue_type_details = "Issue Type: Program Related"
+        elif self.site_checkbox.isChecked() & self.program_checkbox.isChecked():
+            issue_type_details = "Issue Type: Website AND Program Related"
+        else:
+            issue_type_details = "Issue Type: N/A"
+
+        if self.crash_checkbox.isChecked():
+            crash_report_details = "Crash Report: Attached"
+        else:
+            crash_report_details = "Crash Report: N/A"
+
+        if self.reproducible_checkbox.isChecked():
+            reproducible_details = "Reproducible: Yes"
+        else:
+            reproducible_details = "Reproducible: No"
+
+        if self.profits_checkbox.isChecked():
+            profits_details = "Affecting Profits: Yes"
+        else:
+            profits_details = "Affecting Profits: No"
+
+        if self.security_checkbox.isChecked():
+            security_details = "Security Risk: Yes"
+        else:
+            security_details = "Security Risk: No"
+
+        if self.leak_checkbox.isChecked():
+            leak_details = "Data Leak: Yes"
+        else:
+            leak_details = "Data Leak: No"
+
+        self.report_browser.setText(env_details + "\n" + issue_type_details + "\n"
+                                    + crash_report_details + "\n" + reproducible_details
+                                    + "\n" + profits_details + "\n" + security_details
+                                    + "\n" + leak_details + "\n" + additional_details)
+
 
 if __name__ == "__main__":
     import sys
@@ -119,5 +186,6 @@ if __name__ == "__main__":
     main_window = QtWidgets.QMainWindow()
     ui = Ui_main_window()
     ui.setupUi(main_window)
+    ui.update_preview()
     main_window.show()
     sys.exit(app.exec_())
