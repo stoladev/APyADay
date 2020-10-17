@@ -1,13 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-
-
 class Ui_main_window(object):
     def setupUi(self, main_window):
         main_window.setObjectName("main_window")
         main_window.setEnabled(True)
-        main_window.resize(690, 400)
+        main_window.setFixedSize(690, 400)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -98,7 +96,6 @@ class Ui_main_window(object):
         self.translate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
-
     def translate_ui(self, main_window):
         _translate = QtCore.QCoreApplication.translate
         main_window.setWindowTitle(_translate("main_window", "Bug Reporter 9001"))
@@ -126,62 +123,59 @@ class Ui_main_window(object):
 
     def update_preview(self):
 
-        env_details = ""
-        issue_type_details = ""
-        crash_report_details = ""
-        reproducible_details = ""
-        profits_details = ""
-        security_details = ""
-        leak_details = ""
-        additional_details = ""
-
         if self.env_checkbox.isChecked():
-            env_details = "Environment: ENV DETAILS"
+            env_details = "Environment: ENV DETAILS\n\n"
         else:
-            env_details = "Environment: N/A"
+            env_details = ""
 
-        if self.site_checkbox.isChecked():
-            issue_type_details = "Issue Type: Website Related"
+        if self.site_checkbox.isChecked() & self.program_checkbox.isChecked():
+            issue_type_details = "Issue Type: Website AND Program Related\n\n"
+        elif self.site_checkbox.isChecked():
+            issue_type_details = "Issue Type: Website Related\n\n"
         elif self.program_checkbox.isChecked():
-            issue_type_details = "Issue Type: Program Related"
-        elif self.site_checkbox.isChecked() & self.program_checkbox.isChecked():
-            issue_type_details = "Issue Type: Website AND Program Related"
+            issue_type_details = "Issue Type: Program Related\n\n"
         else:
-            issue_type_details = "Issue Type: N/A"
-
-        if self.crash_checkbox.isChecked():
-            crash_report_details = "Crash Report: Attached"
-        else:
-            crash_report_details = "Crash Report: N/A"
+            issue_type_details = ""
 
         if self.reproducible_checkbox.isChecked():
-            reproducible_details = "Reproducible: Yes"
+            reproducible_details = "Reproducible: Yes\n"
         else:
-            reproducible_details = "Reproducible: No"
+            reproducible_details = "Reproducible: No\n"
 
         if self.profits_checkbox.isChecked():
-            profits_details = "Affecting Profits: Yes"
+            profits_details = "Affecting Profits: "
         else:
-            profits_details = "Affecting Profits: No"
+            profits_details = "Affecting Profits: "
 
         if self.security_checkbox.isChecked():
-            security_details = "Security Risk: Yes"
+            security_details = "Security Risk: Yes\n"
         else:
-            security_details = "Security Risk: No"
+            security_details = "Security Risk: No\n"
 
         if self.leak_checkbox.isChecked():
-            leak_details = "Data Leak: Yes"
+            leak_details = "Data Leak: Yes\n"
         else:
-            leak_details = "Data Leak: No"
+            leak_details = "Data Leak: No\n"
 
-        self.report_browser.setText(env_details + "\n" + issue_type_details + "\n"
-                                    + crash_report_details + "\n" + reproducible_details
-                                    + "\n" + profits_details + "\n" + security_details
-                                    + "\n" + leak_details + "\n" + additional_details)
+        if not self.add_info_box.toPlainText() == "":
+            additional_details = "\nAdditional Details: \n" + self.add_info_box.toPlainText() + "\n"
+        else:
+            additional_details = "\nNo additional details provided.\n"
+
+        if self.crash_checkbox.isChecked():
+            crash_report_details = "\nCrash Report: Attached"
+        else:
+            crash_report_details = ""
+
+        self.report_browser.setText(env_details + issue_type_details
+                                    + reproducible_details
+                                    + profits_details + security_details
+                                    + leak_details + additional_details + crash_report_details)
 
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     main_window = QtWidgets.QMainWindow()
     ui = Ui_main_window()
