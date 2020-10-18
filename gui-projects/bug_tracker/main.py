@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import platform
 
 
+# noinspection PyAttributeOutsideInit,PyShadowingNames
 class Ui_main_window(object):
     def setupUi(self, main_window):
 
@@ -8,11 +10,11 @@ class Ui_main_window(object):
         main_window.setObjectName("main_window")
         main_window.setEnabled(True)
         main_window.setFixedSize(690, 400)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
-        main_window.setSizePolicy(sizePolicy)
+        size_policy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        size_policy.setHorizontalStretch(0)
+        size_policy.setVerticalStretch(0)
+        size_policy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
+        main_window.setSizePolicy(size_policy)
         self.central_widget = QtWidgets.QWidget(main_window)
         self.central_widget.setObjectName("central_widget")
         main_window.setCentralWidget(self.central_widget)
@@ -116,7 +118,13 @@ class Ui_main_window(object):
         self.security_checkbox.setObjectName("security_checkbox")
         self.questions_layout.addWidget(self.security_checkbox, 3, 0, 1, 1)
 
+        self.state_update()
+
+        self.translate_ui(main_window)
+        QtCore.QMetaObject.connectSlotsByName(main_window)
+
         # UPDATES
+    def state_update(self):
         # Checkbox Updates
         self.program_checkbox.stateChanged.connect(self.check_state)
         self.env_checkbox.stateChanged.connect(self.update_preview)
@@ -129,9 +137,6 @@ class Ui_main_window(object):
         self.leak_checkbox.stateChanged.connect(self.update_preview)
         # Textbox Update
         self.add_info_box.textChanged.connect(self.update_preview)
-
-        self.translate_ui(main_window)
-        QtCore.QMetaObject.connectSlotsByName(main_window)
 
     def translate_ui(self, main_window):
         _translate = QtCore.QCoreApplication.translate
@@ -152,25 +157,25 @@ class Ui_main_window(object):
         self.preview_label.setText(_translate("main_window", "Report Preview"))
 
     def check_state(self):
-        if self.program_checkbox.isChecked():
-            self.crash_checkbox.setEnabled(True)
-        else:
-            self.crash_checkbox.setEnabled(False)
-            self.crash_checkbox.setChecked(False)
+        check_status = self.program_checkbox.isChecked()
+
+        self.crash_checkbox.setEnabled(check_status)
+        self.crash_checkbox.setChecked(check_status)
 
     def update_preview(self):
 
         if self.env_checkbox.isChecked():
-            env_details = "Environment: ENV DETAILS\n\n"
+            env = platform.platform() + "\nPython " + platform.python_version()
+            env_details = "Environment:\n" + env + "\n\n"
         else:
             env_details = ""
 
         if self.site_checkbox.isChecked() & self.program_checkbox.isChecked():
-            issue_type_details = "Issue Type: Website AND Program Related\n\n"
+            issue_type_details = "Issue Type:\nWebsite AND Program Related\n\n"
         elif self.site_checkbox.isChecked():
-            issue_type_details = "Issue Type: Website Related\n\n"
+            issue_type_details = "Issue Type:\nWebsite Related\n\n"
         elif self.program_checkbox.isChecked():
-            issue_type_details = "Issue Type: Program Related\n\n"
+            issue_type_details = "Issue Type:\nProgram Related\n\n"
         else:
             issue_type_details = ""
 
