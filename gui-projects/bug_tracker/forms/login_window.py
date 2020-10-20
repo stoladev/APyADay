@@ -1,70 +1,66 @@
-from PyQt5 import QtCore, QtWidgets
-from forms.main_window import Ui_main_window
-import sys
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import (QMainWindow, QPushButton, QSizePolicy, QWidget, QMessageBox, QLineEdit)
+
+from forms.main_window import MainWindow
 
 
-# noinspection PyAttributeOutsideInit,PyMethodMayBeStatic,PyShadowingNames
+class LoginWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
+        # GENERAL SETTINGS
+        self.setWindowTitle("Login Window")
+        self.setEnabled(True)
+        self.setFixedSize(300, 100)
+        self.main_app = MainWindow()
 
-class Ui_login_window(object):
-    def setupUi(self, login_window):
-        login_window.setObjectName("login_window")
-        login_window.setEnabled(True)
-        login_window.setFixedSize(300, 160)
+        # WIDGET INITIALIZATION
+        self.central_widget = QWidget(self)
+        self.id_line = QLineEdit(self.central_widget)
+        self.password_line = QLineEdit(self.central_widget)
+        self.login_button = QPushButton(self.central_widget)
 
-        # GENERAL SIZING
-        size = QtWidgets.QSizePolicy
-        size_policy = QtWidgets.QSizePolicy(size.Fixed, size.Fixed)
+        # ACTIVATION
+        self.widget_setup()
+        QtCore.QMetaObject.connectSlotsByName(self)
+        self.show()
+
+    def sizing_policy_setup(self):
+        # SIZING POLICY
+        size = QSizePolicy
+        size_policy = QSizePolicy(size.Fixed, size.Fixed)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
-        size_policy.setHeightForWidth(login_window.sizePolicy().hasHeightForWidth())
-        login_window.setSizePolicy(size_policy)
+        size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
+        self.setSizePolicy(size_policy)
 
-        self.central_widget = QtWidgets.QWidget(login_window)
+    def widget_setup(self):
+        # CENTRAL WIDGET
         self.central_widget.setObjectName("central_widget")
-        login_window.setCentralWidget(self.central_widget)
-
-        self.login_line = QtWidgets.QLineEdit(self.central_widget)
-        self.login_line.setObjectName(u"login_line")
-        self.login_line.setGeometry(QtCore.QRect(10, 30, 281, 24))
-
-        self.password_line = QtWidgets.QLineEdit(self.central_widget)
+        self.setCentralWidget(self.central_widget)
+        # USERNAME FIELD
+        self.id_line.setObjectName(u"id_line")
+        self.id_line.setGeometry(QtCore.QRect(10, 10, 281, 24))
+        self.id_line.returnPressed.connect(self.verify_login)
+        self.id_line.setPlaceholderText("Employee ID")
+        # PASSWORD FIELD
         self.password_line.setObjectName(u"password_line")
-        self.password_line.setGeometry(QtCore.QRect(10, 60, 281, 24))
-        self.password_line.setEchoMode(QtWidgets.QLineEdit.Password)
-
-        self.login_button = QtWidgets.QPushButton(self.central_widget)
+        self.password_line.setGeometry(QtCore.QRect(10, 40, 281, 24))
+        self.password_line.setEchoMode(QLineEdit.Password)
+        self.password_line.returnPressed.connect(self.verify_login)
+        self.password_line.setPlaceholderText("Password")
+        # LOGIN BUTTON
         self.login_button.setObjectName(u"login_button")
-        self.login_button.setGeometry(QtCore.QRect(210, 130, 80, 24))
-
-        self.translate_ui(login_window)
-        self.state_update()
-        QtCore.QMetaObject.connectSlotsByName(login_window)
-
-    def translate_ui(self, login_window):
-        _translate = QtCore.QCoreApplication.translate
-        login_window.setWindowTitle(_translate("login_window", "Bug Reporter 9001"))
-        self.login_line.setPlaceholderText(_translate("login_window", u"Employee ID", None))
-        self.password_line.setPlaceholderText(_translate("login_window", u"Password", None))
-        self.login_button.setText(_translate("login_window", u"Login", None))
-
-    def state_update(self):
+        self.login_button.setGeometry(QtCore.QRect(210, 70, 80, 24))
+        self.login_button.setText("Login")
         self.login_button.clicked.connect(self.verify_login)
 
     def verify_login(self):
-        if self.login_line.text() == "stoladev" and self.password_line.text() == "password":
+        if self.id_line.text() == "stoladev" and self.password_line.text() == "password":
             print("Login Successful.")
-            load_main_window()
-            QtWidgets.QApplication.quit()
+            self.main_app.show()
+            self.hide()
         else:
-            print("Login Failed.")
-
-
-def load_main_window():
-    main_app = QtWidgets.QApplication(sys.argv)
-    main_window = QtWidgets.QMainWindow()
-    main_ui = Ui_main_window()
-    main_ui.setupUi(main_window)
-    main_ui.update_preview()
-    main_window.show()
-    main_app.exec_()
+            msg = QMessageBox()
+            msg.setText("Login Failed.")
+            msg.exec_()
