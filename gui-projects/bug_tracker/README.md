@@ -1,7 +1,7 @@
 
 # Bug Tracker Application
 
-![](demo.gif)
+![](media/demo.gif)
 
 ## Features
 - [✓] Available on Windows/Mac/Linux
