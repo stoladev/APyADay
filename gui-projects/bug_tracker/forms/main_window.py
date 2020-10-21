@@ -1,8 +1,26 @@
+import os
 import platform
+from zipfile import ZipFile
+
+import pyautogui
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QMainWindow, QPushButton, QSizePolicy, QWidget,
-                             QGridLayout, QTextBrowser, QGraphicsView, QTextEdit, QLabel,
-                             QMenuBar, QCheckBox)
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import (
+    QCheckBox,
+    QGraphicsPixmapItem,
+    QGraphicsScene,
+    QGraphicsView,
+    QGridLayout,
+    QLabel,
+    QMainWindow,
+    QMenuBar,
+    QMessageBox,
+    QPushButton,
+    QSizePolicy,
+    QTextBrowser,
+    QTextEdit,
+    QWidget,
+)
 
 
 class MainWindow(QMainWindow):
@@ -24,7 +42,7 @@ class MainWindow(QMainWindow):
         self.questions_layout = QGridLayout(self.gridLayoutWidget_2)
         self.report_view = QTextBrowser(self.central_widget)
         self.screenshot_view = QGraphicsView(self.central_widget)
-        self.submit_button = QPushButton(self.central_widget)
+        self.generate_button = QPushButton(self.central_widget)
         self.screenshot_button = QPushButton(self.central_widget)
         self.add_info_box = QTextEdit(self.central_widget)
         self.preview_label = QLabel(self.central_widget)
@@ -39,6 +57,13 @@ class MainWindow(QMainWindow):
         self.profits_checkbox = QCheckBox(self.gridLayoutWidget_2)
         self.leak_checkbox = QCheckBox(self.gridLayoutWidget_2)
         self.security_checkbox = QCheckBox(self.gridLayoutWidget_2)
+
+        # CLEAR ANY CURRENT SCREENSHOTS
+        self.report_path = "report/report.txt"
+        self.zipfile_path = "report/zipped_report.zip"
+        self.screenshot_path = "report/screenshot.png"
+        if os.path.exists(self.screenshot_path):
+            os.remove(self.screenshot_path)
 
         # ACTIVATION
         self.widget_setup()
@@ -69,11 +94,13 @@ class MainWindow(QMainWindow):
         self.screenshot_view.setGeometry(QtCore.QRect(10, 280, 191, 111))
 
         # SUBMIT BUTTON
-        self.submit_button.setText("Submit Bug Report")
-        self.submit_button.setGeometry(QtCore.QRect(210, 320, 131, 71))
+        self.generate_button.setText("Generate Report")
+        self.generate_button.setGeometry(QtCore.QRect(210, 320, 131, 71))
+        self.generate_button.pressed.connect(self.generate_report)
         # SCREENSHOT BUTTON
         self.screenshot_button.setText("Take A Screenshot")
         self.screenshot_button.setGeometry(QtCore.QRect(210, 280, 131, 31))
+        self.screenshot_button.pressed.connect(self.take_screenshot)
 
         # TEXT BOX
         self.add_info_box.setPlaceholderText("Additional information...")
@@ -85,15 +112,12 @@ class MainWindow(QMainWindow):
         self.preview_label.setGeometry(QtCore.QRect(350, 0, 91, 17))
         self.preview_label.setLayoutDirection(QtCore.Qt.RightToLeft)
         # DATA LABEL
-        self.data_label.setObjectName("data_label")
         self.data_layout.addWidget(self.data_label, 0, 0, 1, 1)
         # QUESTIONS LABEL
-        self.questions_label.setObjectName("questions_label")
         self.questions_layout.addWidget(self.questions_label, 0, 0, 1, 1)
 
         # MENU BAR
         self.menu_bar.setGeometry(QtCore.QRect(0, 0, 691, 21))
-        self.menu_bar.setObjectName("menu_bar")
         self.setMenuBar(self.menu_bar)
 
         # ENVIRONMENT CHECKBOX
@@ -107,7 +131,7 @@ class MainWindow(QMainWindow):
         # PROGRAM CHECKBOX
         self.program_checkbox.setText("Program Issue")
         self.data_layout.addWidget(self.program_checkbox, 4, 0, 1, 1)
-        self.program_checkbox.stateChanged.connect(self.check_state)
+        self.program_checkbox.stateChanged.connect(self.check_issue_type)
         self.program_checkbox.stateChanged.connect(self.update_preview)
         # CRASH CHECKBOX
         self.crash_checkbox.setText("Crash Report")
@@ -120,7 +144,6 @@ class MainWindow(QMainWindow):
         self.reproducible_checkbox.stateChanged.connect(self.update_preview)
         # PROFITS CHECKBOX
         self.profits_checkbox.setText("Affecting Profits?")
-        self.profits_checkbox.setObjectName("profits_checkbox")
         self.questions_layout.addWidget(self.profits_checkbox, 2, 0, 1, 1)
         self.profits_checkbox.stateChanged.connect(self.update_preview)
         # LEAK CHECKBOX
@@ -134,60 +157,115 @@ class MainWindow(QMainWindow):
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
-    def check_state(self):
+    def check_issue_type(self):
         check_status = self.program_checkbox.isChecked()
 
         self.crash_checkbox.setEnabled(check_status)
-        self.crash_checkbox.setChecked(check_status)
+
+        if self.site_checkbox.isChecked() & self.program_checkbox.isChecked():
+            issue_type = "Issue Type:\nWebsite and Program Related\n\n"
+        elif self.site_checkbox.isChecked():
+            issue_type = "Issue Type:\nWebsite Related\n\n"
+        elif self.program_checkbox.isChecked():
+            issue_type = "Issue Type:\nProgram Related\n\n"
+        else:
+            issue_type = ""
+
+        return issue_type
 
     def update_preview(self):
 
-        if self.env_checkbox.isChecked():
-            env = platform.platform() + "\nPython " + platform.python_version()
-            env_details = "Environment:\n" + env + "\n\n"
-        else:
-            env_details = ""
+        issue_type = self.check_issue_type()
 
-        if self.site_checkbox.isChecked() & self.program_checkbox.isChecked():
-            issue_type_details = "Issue Type:\nWebsite AND Program Related\n\n"
-        elif self.site_checkbox.isChecked():
-            issue_type_details = "Issue Type:\nWebsite Related\n\n"
-        elif self.program_checkbox.isChecked():
-            issue_type_details = "Issue Type:\nProgram Related\n\n"
-        else:
-            issue_type_details = ""
+        environment = (
+            "Environment:\n" + platform.system() + " " + platform.release() + "\n\n"
+        )
+        additional_details = (
+            "Additional Details:\n" + self.add_info_box.toPlainText() + "\n\n"
+        )
 
-        if self.reproducible_checkbox.isChecked():
-            reproducible_details = "Reproducible: Yes\n"
-        else:
-            reproducible_details = "Reproducible: No\n"
+        main_details = [
+            [self.crash_checkbox.isChecked(), "Crash Report:\nAttached\n\n"],
+            [self.env_checkbox.isChecked(), environment],
+            [self.add_info_box.toPlainText() != "", additional_details],
+        ]
 
-        if self.profits_checkbox.isChecked():
-            profits_details = "Affecting Profits: Yes\n"
-        else:
-            profits_details = "Affecting Profits: No\n"
+        questions = [
+            [self.reproducible_checkbox.isChecked(), "Reproducible: "],
+            [self.profits_checkbox.isChecked(), "Affecting Profits: "],
+            [self.security_checkbox.isChecked(), "Security Risk: "],
+            [self.leak_checkbox.isChecked(), "Data Leak: "],
+        ]
 
-        if self.security_checkbox.isChecked():
-            security_details = "Security Risk: Yes\n"
-        else:
-            security_details = "Security Risk: No\n"
+        report = ""
 
-        if self.leak_checkbox.isChecked():
-            leak_details = "Data Leak: Yes\n"
-        else:
-            leak_details = "Data Leak: No\n"
+        for detail in main_details:
+            if detail[0]:
+                report += detail[1]
 
-        if not self.add_info_box.toPlainText() == "":
-            additional_details = "\nAdditional Details: \n" + self.add_info_box.toPlainText() + "\n"
-        else:
-            additional_details = "\nNo additional details provided.\n"
+        for question in questions:
+            if question[0]:
+                report += question[1] + "Yes\n"
+            else:
+                report += question[1] + "No\n"
 
-        if self.crash_checkbox.isChecked():
-            crash_report_details = "\nCrash Report: Attached"
-        else:
-            crash_report_details = ""
+        self.report_view.setText(issue_type + report)
 
-        self.report_view.setText(env_details + issue_type_details
-                                 + reproducible_details
-                                 + profits_details + security_details
-                                 + leak_details + additional_details + crash_report_details)
+    def take_screenshot(self):
+
+        if os.path.exists(self.screenshot_path):
+            os.remove(self.screenshot_path)
+
+        dialogue = QMessageBox.question(
+            self,
+            "Confirmation",
+            "A screenshot is about to be taken of all your active monitors. Please make sure to "
+            "have the website and/or program related issue(s) open and visible.\n\nAre you ready "
+            "to take a screenshot?",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if dialogue == QMessageBox.Yes:
+            pyautogui.screenshot(self.screenshot_path)
+            pixmap = QPixmap(self.screenshot_path)
+            item = QGraphicsPixmapItem(pixmap)
+            scene = QGraphicsScene(self)
+            scene.addItem(item)
+            self.screenshot_view.setScene(scene)
+            self.screenshot_view.ensureVisible(scene.sceneRect())
+            self.screenshot_view.fitInView(
+                scene.sceneRect(), mode=QtCore.Qt.KeepAspectRatio
+            )
+
+            msg = QMessageBox()
+            msg.setWindowTitle("Success")
+            msg.setText("Screenshot successfully taken.")
+            msg.exec_()
+
+    def generate_report(self):
+        dialogue = QMessageBox.question(
+            self,
+            "Confirmation",
+            "A zip file containing your report and screenshot, if taken, will be generated "
+            "in the same directory you are running this executable from.\n\nAre you ready "
+            "to generate the report?",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+        if dialogue == QMessageBox.Yes:
+
+            if os.path.exists(self.report_path):
+                os.remove(self.report_path)
+
+            data = self.report_view.toPlainText()
+
+            with open(self.report_path, "w") as report:
+                report.write(data)
+
+            with ZipFile(self.zipfile_path, "w") as zipObj2:
+                zipObj2.write(self.report_path, "report.txt")
+                if os.path.exists(self.screenshot_path):
+                    zipObj2.write(self.screenshot_path, "screenshot.png")
+
+            msg = QMessageBox()
+            msg.setWindowTitle("Success")
+            msg.setText("Report successfully generated.")
+            msg.exec_()
