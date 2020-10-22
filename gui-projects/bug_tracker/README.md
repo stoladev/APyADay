@@ -4,13 +4,13 @@
 ![](media/demo.gif)
 
 ## Features
-- [✓] Available on Windows/Mac/Linux
-- [✓] Employee login with ID number and password
-- [✓] Checkboxes to mark what information to send (with defaults)
-- [✓] Questionaire with urgency level
-- [✓] Generate and attach a screenshot
-- [✓] Textboxes to optionally write in more details
-- [✓] Preview of bug report with all selected information shown
+- [x] Available on Windows/Mac/Linux
+- [x] Employee login with ID number and password
+- [x] Checkboxes to mark what information to send (with defaults)
+- [x] Questionaire with urgency level
+- [x] Generate and attach a screenshot
+- [x] Textboxes to optionally write in more details
+- [x] Preview of bug report with all selected information shown
 - [ ] Secure Login Authentication through MYSQL (or might try MongoDB)
 - [ ] Zipped report automatic upload to FTP
 - [ ] Bug Tracker admin server that shows all current reports
