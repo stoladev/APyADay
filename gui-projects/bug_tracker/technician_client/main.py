@@ -1,11 +1,10 @@
-from PyQt5 import QtCore, QtGui
-
 import sys
+
 from PyQt5.QtWidgets import QApplication
 
-from forms.login_window import LoginWindow
+from technician_client.client_window import TechnicianMainWindow
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    login_window = LoginWindow()
+    login_window = TechnicianMainWindow()
     sys.exit(app.exec())

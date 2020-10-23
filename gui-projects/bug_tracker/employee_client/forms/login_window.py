@@ -1,7 +1,15 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QMainWindow, QPushButton, QSizePolicy, QWidget, QMessageBox, QLineEdit)
+from PyQt5.QtWidgets import (
+    QLineEdit,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QSizePolicy,
+    QWidget,
+)
 
-from forms.main_window import MainWindow
+from employee_client.forms.main_window import MainWindow
+from modules import mongo_connection
 
 
 class LoginWindow(QMainWindow):
@@ -56,10 +64,15 @@ class LoginWindow(QMainWindow):
         self.login_button.clicked.connect(self.verify_login)
 
     def verify_login(self):
-        if self.id_line.text() == "stoladev" and self.password_line.text() == "password":
-            print("Login Successful.")
-            self.main_app.show()
-            self.hide()
+        username = self.id_line.text()
+        password = self.password_line.text()
+
+        if username == "stoladev" and password == "password":
+
+            mongo_connection.verify_user(username, password)
+            # print("Login Successful.")
+            # self.main_app.show()
+            # self.hide()
         else:
             msg = QMessageBox()
             msg.setText("Login Failed.")
