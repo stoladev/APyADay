@@ -1,16 +1,8 @@
 from pymongo import MongoClient
 
-cluster = MongoClient(
-    "mongodb+srv://stoladev:123123abcabc@cluster0.1tg5d.mongodb.net/"
-    "bug_tracker_db?retryWrites=true&w=majority"
-)
+connection = open("../modules/mongo_cluster.txt", "r")
+cluster = MongoClient(connection.read())
 
-
-def verify_user(username, password):
-    db = cluster["bug_tracker_db"]
-    collection = db["users"]
-
-    accounts = collection.find({username: username})
-
-    for x in accounts:
-        print(x)
+# def verify_user(username, password):
+#     for x in accounts:
+#         print(x)
