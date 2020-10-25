@@ -1,4 +1,3 @@
-import bcrypt as bcrypt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QComboBox,
@@ -15,8 +14,6 @@ from PyQt5.QtWidgets import (
     QTextEdit,
     QWidget,
 )
-
-from modules.mongo_connection import cluster
 
 
 class TechnicianMainWindow(QMainWindow):
@@ -36,8 +33,6 @@ class TechnicianMainWindow(QMainWindow):
         self.load_tabs()
 
         # Text Line Initialization
-        self.technician_login_line = QLineEdit(self.accounts_tab)
-        self.technician_password_line = QLineEdit(self.accounts_tab)
         self.new_password_line = QLineEdit(self.accounts_tab)
         self.search_reports_line = QLineEdit(self.reports_tab)
         self.new_pass_id_line = QLineEdit(self.accounts_tab)
@@ -52,7 +47,6 @@ class TechnicianMainWindow(QMainWindow):
         self.load_text_lines()
 
         # Button Initialization
-        self.technician_login_button = QPushButton(self.accounts_tab)
         self.update_report_button = QPushButton(self.reports_tab)
         self.delete_user_button = QPushButton(self.accounts_tab)
         self.reset_password_button = QPushButton(self.accounts_tab)
@@ -63,7 +57,6 @@ class TechnicianMainWindow(QMainWindow):
 
         # Label initialization
         self.reset_password_label = QLabel(self.accounts_tab)
-        self.technician_label = QLabel(self.accounts_tab)
         self.reports_filed_label = QLabel(self.accounts_tab)
         self.last_login_label = QLabel(self.accounts_tab)
         self.create_user_label = QLabel(self.accounts_tab)
@@ -103,25 +96,15 @@ class TechnicianMainWindow(QMainWindow):
         self.tab_widget.addTab(self.reports_tab, "Reports")
 
     def load_text_lines(self):
-        self.technician_login_line.setPlaceholderText("Username/Email Address")
-        self.technician_login_line.setGeometry(QtCore.QRect(400, 30, 181, 24))
-        self.technician_login_line.setAlignment(
-            QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
-        )
-
-        self.technician_password_line.setPlaceholderText("Password")
-        self.technician_password_line.setEchoMode(QLineEdit.Password)
-        # self.password_line.setEchoMode(QLineEdit.Password)
-        self.technician_password_line.setGeometry(QtCore.QRect(400, 60, 181, 24))
-
         self.email_line.setPlaceholderText("Email Address")
-        self.email_line.setGeometry(QtCore.QRect(400, 200, 181, 24))
+        self.email_line.setGeometry(QtCore.QRect(400, 140, 181, 24))
 
         self.username_line.setPlaceholderText("Username")
-        self.username_line.setGeometry(QtCore.QRect(400, 140, 181, 24))
+        self.username_line.setGeometry(QtCore.QRect(400, 80, 181, 24))
 
         self.password_line.setPlaceholderText("Password")
-        self.password_line.setGeometry(QtCore.QRect(400, 170, 181, 24))
+        self.password_line.setEchoMode(QLineEdit.Password)
+        self.password_line.setGeometry(QtCore.QRect(400, 110, 181, 24))
 
         self.find_user_line.setPlaceholderText("Find User...")
         self.find_user_line.setGeometry(QtCore.QRect(10, 410, 381, 24))
@@ -150,6 +133,7 @@ class TechnicianMainWindow(QMainWindow):
         self.new_pass_id_line.setGeometry(QtCore.QRect(401, 310, 181, 24))
 
         self.new_password_line.setPlaceholderText("New Password")
+        self.new_password_line.setEchoMode(QLineEdit.Password)
         self.new_password_line.setGeometry(QtCore.QRect(401, 340, 181, 24))
 
         self.search_reports_line.setPlaceholderText("Search reports for...")
@@ -157,10 +141,6 @@ class TechnicianMainWindow(QMainWindow):
         self.search_reports_line.setAlignment(QtCore.Qt.AlignCenter)
 
     def load_buttons(self):
-        self.technician_login_button.setText("Login")
-        self.technician_login_button.setGeometry(QtCore.QRect(529, 90, 51, 24))
-        self.technician_login_button.pressed.connect(self.verify_technician)
-
         self.change_username_button.setText("Change")
         self.change_username_button.setGeometry(QtCore.QRect(310, 440, 80, 24))
 
@@ -168,7 +148,7 @@ class TechnicianMainWindow(QMainWindow):
         self.change_email_button.setGeometry(QtCore.QRect(310, 470, 80, 24))
 
         self.create_user_button.setText("Create")
-        self.create_user_button.setGeometry(QtCore.QRect(529, 260, 51, 24))
+        self.create_user_button.setGeometry(QtCore.QRect(529, 200, 51, 24))
 
         self.reset_password_button.setText("Reset")
         self.reset_password_button.setGeometry(QtCore.QRect(530, 370, 51, 24))
@@ -176,21 +156,18 @@ class TechnicianMainWindow(QMainWindow):
         self.delete_user_button.setText("Delete Selected User")
         self.delete_user_button.setGeometry(QtCore.QRect(450, 500, 131, 24))
 
-        self.update_report_button.setText("Update Report")
+        self.update_report_button.setText("Update")
         self.update_report_button.setGeometry(QtCore.QRect(500, 500, 80, 24))
 
     def load_labels(self):
         self.create_user_label.setText("Create User")
-        self.create_user_label.setGeometry(QtCore.QRect(400, 120, 71, 16))
+        self.create_user_label.setGeometry(QtCore.QRect(400, 60, 71, 16))
 
         self.last_login_label.setText("Last Login:")
         self.last_login_label.setGeometry(QtCore.QRect(160, 500, 71, 16))
 
         self.reports_filed_label.setText("Reports Filed:")
         self.reports_filed_label.setGeometry(QtCore.QRect(10, 500, 91, 16))
-
-        self.technician_label.setText("Technician Login")
-        self.technician_label.setGeometry(QtCore.QRect(400, 10, 101, 16))
 
         self.reset_password_label.setText("Reset Password")
         self.reset_password_label.setGeometry(QtCore.QRect(401, 290, 91, 16))
@@ -258,7 +235,7 @@ class TechnicianMainWindow(QMainWindow):
         self.case_status_combo_box.addItem("Case Closed - Fixed")
         self.case_status_combo_box.addItem("Not A Bug")
 
-        self.worker_type_combo_box.setGeometry(QtCore.QRect(400, 230, 181, 24))
+        self.worker_type_combo_box.setGeometry(QtCore.QRect(400, 170, 181, 24))
         self.worker_type_combo_box.addItem("Employee")
         self.worker_type_combo_box.addItem("Manager")
         self.worker_type_combo_box.addItem("Supervisor")
@@ -266,28 +243,6 @@ class TechnicianMainWindow(QMainWindow):
 
     def load_graphics_view(self):
         self.screenshot_view.setGeometry(QtCore.QRect(340, 220, 241, 121))
-
-    def verify_technician(self):
-        if self.technician_login_button.text() != "Login":
-            return self.disable_client()
-
-        username = self.technician_login_line.text()
-        password = self.technician_password_line.text()
-
-        db = cluster["bug_tracker_db"]
-
-        accounts = db.technicians
-        account = accounts.find_one({"username": username})
-
-        if account:
-            key = password.encode("utf-8")
-            salt = account["password"]
-            lock = account["password"]
-            if bcrypt.hashpw(key, salt) == lock:
-                print("Password correct.")
-                self.enable_client()
-            else:
-                print("Password incorrect.")
 
     def disable_client(self):
         self.reports_tab.setEnabled(False)
@@ -319,10 +274,6 @@ class TechnicianMainWindow(QMainWindow):
         self.delete_user_button.setEnabled(False)
 
         # Disable Technician Login Info; changes Login to Logout if switching tech
-        self.technician_label.setEnabled(True)
-        self.technician_login_line.setEnabled(True)
-        self.technician_password_line.setEnabled(True)
-        self.technician_login_button.setText("Login")
 
     def enable_client(self):
         self.reports_tab.setEnabled(True)
