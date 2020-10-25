@@ -1,3 +1,4 @@
+import bcrypt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QComboBox,
@@ -6,6 +7,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QTabWidget,
     QTableWidget,
@@ -14,6 +16,8 @@ from PyQt5.QtWidgets import (
     QTextEdit,
     QWidget,
 )
+
+from modules.mongo_connection import cluster
 
 
 class TechnicianMainWindow(QMainWindow):
@@ -84,7 +88,7 @@ class TechnicianMainWindow(QMainWindow):
         self.screenshot_view = QGraphicsView(self.reports_tab)
         self.load_graphics_view()
 
-        self.disable_client()
+        self.enable_client()
         self.setCentralWidget(self.central_widget)
 
         self.show()
@@ -149,6 +153,7 @@ class TechnicianMainWindow(QMainWindow):
 
         self.create_user_button.setText("Create")
         self.create_user_button.setGeometry(QtCore.QRect(529, 200, 51, 24))
+        self.create_user_button.pressed.connect(self.create_user)
 
         self.reset_password_button.setText("Reset")
         self.reset_password_button.setGeometry(QtCore.QRect(530, 370, 51, 24))
@@ -206,9 +211,13 @@ class TechnicianMainWindow(QMainWindow):
         self.reports_table.setColumnCount(4)
         self.reports_table.setRowCount(0)
         item = QTableWidgetItem()
+        header = self.reports_table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(0, QHeaderView.Stretch)
         self.reports_table.setHorizontalHeaderItem(0, item)
         item = QTableWidgetItem()
         self.reports_table.setHorizontalHeaderItem(1, item)
+        header.setSectionResizeMode(1, QHeaderView.Stretch)
         item = QTableWidgetItem()
         self.reports_table.setHorizontalHeaderItem(2, item)
         item = QTableWidgetItem()
@@ -218,9 +227,9 @@ class TechnicianMainWindow(QMainWindow):
         item = self.reports_table.horizontalHeaderItem(1)
         item.setText("Issue Type")
         item = self.reports_table.horizontalHeaderItem(2)
-        item.setText("Severity")
+        item.setText(" Severity ")
         item = self.reports_table.horizontalHeaderItem(3)
-        item.setText("Reported On")
+        item.setText(" Reported On ")
 
     def load_text_browsers(self):
         self.report_text_browser.setGeometry(QtCore.QRect(10, 190, 321, 331))
@@ -304,15 +313,36 @@ class TechnicianMainWindow(QMainWindow):
 
         self.delete_user_button.setEnabled(True)
 
-        # Disable Technician Login Info; changes Login to Logout if switching tech
-        self.technician_label.setEnabled(False)
-        self.technician_login_line.setEnabled(False)
-        self.technician_password_line.setEnabled(False)
-        self.technician_login_button.setText("Logout")
+    def create_user(self):
+        username = self.username_line.text()
+        email = self.email_line.text()
+        employee_type = self.worker_type_combo_box.currentText()
+        password = self.password_line.text()
+        hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-        # elif account is None:
-        #     hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-        #     accounts.insert({"username": username, "password": hash_pass})
-        #     print("Account created.")
+        # Fix this logic dummy boy
+        if (username == "") | (len(username) <= 6):
+            msg = QMessageBox()
+            msg.about(self, "Error!", "Email requires an @. Please check again.")
+            return
 
-    # def create_user(self):
+        if (email == "") | (email.find("@") != 1):
+            msg = QMessageBox()
+            msg.about(self, "Error!", "Email requires an @. Please check again.")
+            return
+
+        db = cluster["bug_tracker_db"]
+        accounts = db.users
+
+        accounts.insert(
+            {
+                "username": username,
+                "email": email,
+                "employee_type": employee_type,
+                "password": hash_pass,
+                "reports_filed": 0,
+                "last_login": 0,
+            }
+        )
+
+        print("Account created.")

@@ -41,8 +41,8 @@ class TechnicianLoginWindow(QDialog):
         password = self.technician_password_line.text()
 
         db = cluster["bug_tracker_db"]
-
         accounts = db.technicians
+
         account = accounts.find_one({"username": username})
 
         if account:
