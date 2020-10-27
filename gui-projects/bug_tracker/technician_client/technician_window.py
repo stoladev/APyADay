@@ -1,3 +1,5 @@
+import re
+
 import bcrypt
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
@@ -321,14 +323,14 @@ class TechnicianMainWindow(QMainWindow):
         hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
         # Fix this logic dummy boy
-        if (username == "") | (len(username) <= 6):
+        if len(username) < 7:
             msg = QMessageBox()
-            msg.about(self, "Error!", "Email requires an @. Please check again.")
+            msg.about(self, "Error!", "The username must be more than 6 characters.")
             return
 
-        if (email == "") | (email.find("@") != 1):
+        if email.find("@") == -1:
             msg = QMessageBox()
-            msg.about(self, "Error!", "Email requires an @. Please check again.")
+            msg.about(self, "Error!", "Emails require an @ sign.")
             return
 
         db = cluster["bug_tracker_db"]
@@ -346,3 +348,20 @@ class TechnicianMainWindow(QMainWindow):
         )
 
         print("Account created.")
+
+    def verify_new_password(self, password):
+
+        upper = len(set(re.findall(r"[A-Z]", password)))
+        lower = len(set(re.findall(r"[a-z]", password)))
+        nums = len(set(re.findall(r"[0-9]", password)))
+        symbols = len(set(re.findall(r"[~!@#$%^&*()_+=-`]", password)))
+
+        if upper < 1 or lower < 1 or nums < 1 or symbols < 1:
+            msg = QMessageBox()
+            msg.about(
+                self,
+                "Error!",
+                "Make sure the password contains at least:\n\n"
+                "1 uppercase letter\n1 lowercase letter\n1 number\n1 symbolic character",
+            )
+            return
