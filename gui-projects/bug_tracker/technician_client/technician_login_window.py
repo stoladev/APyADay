@@ -52,4 +52,6 @@ class TechnicianLoginWindow(QDialog):
             if bcrypt.hashpw(key, salt) == lock:
                 self.accept()
             else:
-                QMessageBox.warning(self, "Error", "Password incorrect.")
+                QMessageBox.critical(self, "Error", "Password incorrect.")
+        else:
+            QMessageBox.critical(self, "Error", "No matching account found.")

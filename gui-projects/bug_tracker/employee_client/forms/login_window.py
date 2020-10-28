@@ -75,5 +75,5 @@ class LoginWindow(QMainWindow):
             # self.hide()
         else:
             msg = QMessageBox()
-            msg.setText("Login Failed.")
+            msg.critical(self, "Error!", "Login Failed.")
             msg.exec_()
