@@ -1,5 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QHeaderView, QLineEdit, QTableWidgetItem
+from PyQt5.QtWidgets import QHeaderView, QLineEdit, QTableView, QTableWidgetItem
+
+from modules.loaders import account_loader
 
 
 def load_all_widgets(window):
@@ -77,13 +79,15 @@ def load_buttons(window):
 
     window.create_account_button.setText("Create")
     window.create_account_button.setGeometry(QtCore.QRect(529, 200, 51, 24))
-    window.create_account_button.pressed.connect(window.create_account)
+    window.create_account_button.pressed.connect(window.create_new_account)
 
     window.reset_password_button.setText("Reset")
     window.reset_password_button.setGeometry(QtCore.QRect(530, 370, 51, 24))
+    window.reset_password_button.pressed.connect(window.reset_account_password)
 
     window.delete_account_button.setText("Delete Selected Account")
     window.delete_account_button.setGeometry(QtCore.QRect(430, 500, 150, 24))
+    window.delete_account_button.pressed.connect(window.delete_selected_account)
 
     window.update_report_button.setText("Update")
     window.update_report_button.setGeometry(QtCore.QRect(500, 500, 80, 24))
@@ -117,18 +121,19 @@ def load_tables(window):
     window.accounts_table.setHorizontalHeaderItem(2, item)
 
     # Column Settings
+    window.accounts_table.setSelectionBehavior(QTableView.SelectRows)
     item = window.accounts_table.horizontalHeaderItem(0)
     header = window.accounts_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)
-    header.setSectionResizeMode(0, QHeaderView.Stretch)
     item.setText("Account Name")
     item = window.accounts_table.horizontalHeaderItem(1)
-    header = window.accounts_table.horizontalHeader()
-    header.setSectionResizeMode(QHeaderView.ResizeToContents)
     header.setSectionResizeMode(1, QHeaderView.Stretch)
     item.setText("Email")
     item = window.accounts_table.horizontalHeaderItem(2)
-    item.setText("Last Login")
+    item.setText("Reports")
+
+    # Row Settings
+    account_loader.load_accounts(window)
 
     window.accounts_table.setSortingEnabled(True)
 

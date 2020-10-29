@@ -12,7 +12,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from modules import account_manager, widget_loaders
+from modules.loaders import widget_loader
+from modules.managers import account_manager
 
 
 class TechnicianMainWindow(QMainWindow):
@@ -71,8 +72,14 @@ class TechnicianMainWindow(QMainWindow):
         self.last_login_label = QLabel(self.accounts_tab)
         self.create_account_label = QLabel(self.accounts_tab)
 
-        widget_loaders.load_all_widgets(self)
+        widget_loader.load_all_widgets(self)
         self.show()
 
-    def create_account(self):
-        account_manager.create_account(self)
+    def create_new_account(self):
+        account_manager.create_new_account(self)
+
+    def delete_selected_account(self):
+        account_manager.delete_selected_account(self)
+
+    def reset_account_password(self):
+        account_manager.reset_account_password(self)

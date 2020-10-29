@@ -1,14 +1,12 @@
-import bcrypt
 from PyQt5.QtWidgets import (
     QDialog,
     QLabel,
     QLineEdit,
-    QMessageBox,
     QPushButton,
     QVBoxLayout,
 )
 
-from modules.mongo_connection import cluster
+from modules.managers import verification_manager
 
 
 class TechnicianLoginWindow(QDialog):
@@ -37,21 +35,4 @@ class TechnicianLoginWindow(QDialog):
         layout.addWidget(self.technician_login_button)
 
     def verify_technician(self):
-        username = self.technician_login_line.text()
-        password = self.technician_password_line.text()
-
-        db = cluster["bug_tracker_db"]
-        accounts = db.technicians
-
-        account = accounts.find_one({"username": username})
-
-        if account:
-            key = password.encode("utf-8")
-            salt = account["password"]
-            lock = account["password"]
-            if bcrypt.hashpw(key, salt) == lock:
-                self.accept()
-            else:
-                QMessageBox.critical(self, "Error", "Password incorrect.")
-        else:
-            QMessageBox.critical(self, "Error", "No matching account found.")
+        verification_manager.verify_technician(self)

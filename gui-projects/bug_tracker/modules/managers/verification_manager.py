@@ -3,63 +3,7 @@ import re
 import bcrypt
 from PyQt5.QtWidgets import QMessageBox
 
-from modules.mongo_connection import cluster
-
-
-def create_account(window):
-    account_name = window.account_name_line.text()
-    email = window.email_line.text()
-    employee_type = window.worker_type_combo_box.currentText()
-    password = window.password_line.text()
-
-    if verify_inputs(window, account_name, password, email):
-        insert_new_account(window, account_name, email, password, employee_type)
-
-
-def insert_new_account(window, account_name, email, password, worker_type):
-    hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-
-    question = QMessageBox().question(
-        window,
-        "Confirmation",
-        "You are about to create an account with the following details:\n\n"
-        "Account Name: "
-        + account_name
-        + "\nEmail: "
-        + email
-        + "\nWorker Type: "
-        + worker_type,
-        QMessageBox.Yes | QMessageBox.No,
-        QMessageBox.No,
-    )
-
-    if question == QMessageBox.No:
-        return
-
-    db = cluster["bug_tracker_db"]
-    accounts = db.accounts
-
-    if accounts.find_one({"account_name": account_name}) is None:
-        accounts.insert(
-            {
-                "account_name": account_name,
-                "email": email,
-                "employee_type": worker_type,
-                "password": hash_pass,
-                "reports_filed": 0,
-                "last_login": 0,
-            }
-        )
-        msg = QMessageBox()
-        msg.about(
-            window, "Account Created", "The account has been successfully created."
-        )
-    else:
-        msg = QMessageBox()
-        msg.critical(window, "Error!", "An account with this name already exists.")
-        return
-
-    print("Account created.")
+from modules.loaders.mongodb_loader import cluster
 
 
 def verify_inputs(window, account_name, password, email):
@@ -68,6 +12,31 @@ def verify_inputs(window, account_name, password, email):
             if verify_new_email(window, email):
                 return True
     return False
+
+
+def verify_technician(window):
+    username = window.technician_login_line.text()
+    password = window.technician_password_line.text()
+
+    db = cluster["bug_tracker_db"]
+    accounts = db.technicians
+
+    account = accounts.find_one({"username": username})
+
+    if account:
+        key = password.encode("utf-8")
+        salt = account["password"]
+        lock = account["password"]
+        if bcrypt.hashpw(key, salt) == lock:
+            window.accept()
+        else:
+            QMessageBox.warning(
+                window,
+                "Incorrect Password",
+                "The password you've provided is incorrect.",
+            )
+    else:
+        QMessageBox.warning(window, "No Match", "No matching account found.")
 
 
 def verify_new_account_name(window, account_name):
@@ -86,7 +55,7 @@ def verify_new_account_name(window, account_name):
 
     if error_found:
         msg = QMessageBox()
-        msg.critical(window, "Error!", error_message)
+        msg.warning(window, "Invalid Field", error_message)
         return False
 
     return True
@@ -123,12 +92,14 @@ def verify_new_password(window, password):
 
     if error_found:
         msg = QMessageBox()
-        msg.critical(window, "Error!", error_message)
+        msg.warning(window, "Invalid Field", error_message)
         return False
 
     return True
 
 
+# TODO
+# Improve on new email verification method
 def verify_new_email(window, email):
     symbols = len(set(re.findall(r"[~!#$%^&*()+=`]", email)))
 
@@ -153,7 +124,7 @@ def verify_new_email(window, email):
 
     if error_found:
         msg = QMessageBox()
-        msg.critical(window, "Error!", error_message)
+        msg.warning(window, "Invalid Field", error_message)
         return False
 
     return True

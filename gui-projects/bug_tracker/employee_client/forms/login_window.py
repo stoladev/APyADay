@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (
 )
 
 from employee_client.forms.main_window import MainWindow
-from modules import mongo_connection
+from modules.loaders import mongodb_loader
 
 
 class LoginWindow(QMainWindow):
@@ -69,7 +69,7 @@ class LoginWindow(QMainWindow):
 
         if username == "stoladev" and password == "password":
 
-            mongo_connection.verify_user(username, password)
+            mongodb_loader.verify_user(username, password)
             # print("Login Successful.")
             # self.main_app.show()
             # self.hide()
