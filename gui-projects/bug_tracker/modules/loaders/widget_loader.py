@@ -1,5 +1,11 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QHeaderView, QLineEdit, QTableView, QTableWidgetItem
+from PyQt5.QtWidgets import (
+    QAbstractItemView,
+    QHeaderView,
+    QLineEdit,
+    QTableView,
+    QTableWidgetItem,
+)
 
 from modules.loaders import account_loader
 
@@ -58,12 +64,16 @@ def load_text_lines(window):
     window.last_login_line.setAlignment(QtCore.Qt.AlignCenter)
     window.last_login_line.setReadOnly(True)
 
-    window.new_pass_id_line.setPlaceholderText("Account Name/Email Address")
+    window.new_pass_id_line.setPlaceholderText("Account Name")
     window.new_pass_id_line.setGeometry(QtCore.QRect(401, 310, 181, 24))
 
     window.new_password_line.setPlaceholderText("New Password")
     window.new_password_line.setEchoMode(QLineEdit.Password)
     window.new_password_line.setGeometry(QtCore.QRect(401, 340, 181, 24))
+
+    window.new_password_2_line.setPlaceholderText("Verify New Password")
+    window.new_password_2_line.setEchoMode(QLineEdit.Password)
+    window.new_password_2_line.setGeometry(QtCore.QRect(401, 370, 181, 24))
 
     window.search_reports_line.setPlaceholderText("Search reports for...")
     window.search_reports_line.setGeometry(QtCore.QRect(340, 190, 241, 24))
@@ -82,7 +92,7 @@ def load_buttons(window):
     window.create_account_button.pressed.connect(window.create_new_account)
 
     window.reset_password_button.setText("Reset")
-    window.reset_password_button.setGeometry(QtCore.QRect(530, 370, 51, 24))
+    window.reset_password_button.setGeometry(QtCore.QRect(530, 400, 51, 24))
     window.reset_password_button.pressed.connect(window.reset_account_password)
 
     window.delete_account_button.setText("Delete Selected Account")
@@ -122,6 +132,7 @@ def load_tables(window):
 
     # Column Settings
     window.accounts_table.setSelectionBehavior(QTableView.SelectRows)
+    window.accounts_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
     item = window.accounts_table.horizontalHeaderItem(0)
     header = window.accounts_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)

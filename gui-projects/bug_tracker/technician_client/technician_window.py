@@ -41,6 +41,7 @@ class TechnicianMainWindow(QMainWindow):
         # Reset Password
         self.new_pass_id_line = QLineEdit(self.accounts_tab)
         self.new_password_line = QLineEdit(self.accounts_tab)
+        self.new_password_2_line = QLineEdit(self.accounts_tab)
         self.reset_password_button = QPushButton(self.accounts_tab)
 
         # Delete Selected Account

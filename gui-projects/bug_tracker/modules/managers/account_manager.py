@@ -1,9 +1,8 @@
 import bcrypt
 from PyQt5.QtWidgets import QMessageBox
 
-from modules.loaders import account_loader
-from modules.loaders.mongodb_loader import cluster
-from modules.managers.verification_manager import verify_inputs
+from modules.loaders import account_loader, mongodb_loader
+from modules.managers import verification_manager
 
 
 def create_new_account(window):
@@ -12,7 +11,29 @@ def create_new_account(window):
     worker_type = window.worker_type_combo_box.currentText()
     password = window.password_line.text()
 
-    if verify_inputs(window, account_name, password, email):
+    if verification_manager.verify_inputs(window, account_name, password, email):
+
+        db = mongodb_loader.cluster["bug_tracker_db"]
+        accounts = db.accounts
+
+        if accounts.find_one({"account_name": account_name}) is not None:
+            msg = QMessageBox()
+            msg.warning(
+                window,
+                "Account Exists",
+                "Name Issue - an account with this name already exists.",
+            )
+            return
+
+        if accounts.find_one({"email": email}) is not None:
+            msg = QMessageBox()
+            msg.warning(
+                window,
+                "Email In Use",
+                "Email Issue - an account with this email already exists.",
+            )
+            return
+
         hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
         question = QMessageBox().question(
@@ -32,43 +53,62 @@ def create_new_account(window):
         if question == QMessageBox.No:
             return
 
-        db = cluster["bug_tracker_db"]
-        accounts = db.accounts
+        accounts.insert(
+            {
+                "account_name": account_name,
+                "email": email,
+                "employee_type": worker_type,
+                "password": hash_pass,
+                "reports_filed": 0,
+                "last_login": 0,
+            }
+        )
 
-        if accounts.find_one({"account_name": account_name}) is None:
-            accounts.insert(
-                {
-                    "account_name": account_name,
-                    "email": email,
-                    "employee_type": worker_type,
-                    "password": hash_pass,
-                    "reports_filed": 0,
-                    "last_login": 0,
-                }
-            )
-            msg = QMessageBox()
-            msg.about(window, "Success", "The account has been successfully created.")
-            account_loader.load_accounts(window)
-        else:
-            msg = QMessageBox()
-            msg.warning(
-                window, "Account Exists", "An account with this name already exists."
-            )
-            return
+        msg = QMessageBox()
+        msg.about(window, "Success", "The account has been successfully created.")
+        account_loader.load_accounts(window)
 
 
 def reset_account_password(window):
+    password = window.new_password_line.text()
+    password_verified = window.new_password_2_line.text()
+
+    if not verification_manager.verify_new_password(window, password):
+        return
+
+    if password != password_verified:
+        msg = QMessageBox()
+        msg.warning(
+            window, "Mismatch", "The new password doesn't match its verification."
+        )
+        return
+
     account_name = window.new_pass_id_line.text()
-    password = window.password_line.text()
     hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-    db = cluster["bug_tracker_db"]
+    db = mongodb_loader.cluster["bug_tracker_db"]
     accounts = db.accounts
-
     account = accounts.find_one({"account_name": account_name})
-    if account is not None:
-        accounts.update(account, {"password": hash_pass, "reports_filed": 10})
-        account_loader.load_accounts(window)
+
+    if account is None:
+        msg = QMessageBox()
+        msg.warning(
+            window,
+            "Account Not Found",
+            "No account has been found with the provided account name.",
+        )
+        return
+
+    accounts.update(account, {"$set": {"password": hash_pass}})
+
+    msg = QMessageBox()
+    msg.about(
+        window,
+        "Success",
+        account_name + "'s password has been successfully reset.",
+    )
+
+    account_loader.load_accounts(window)
 
 
 def delete_selected_account(window):
@@ -99,7 +139,7 @@ def delete_selected_account(window):
         if question == QMessageBox.No:
             return
 
-        db = cluster["bug_tracker_db"]
+        db = mongodb_loader.cluster["bug_tracker_db"]
         accounts = db.accounts
 
         accounts.remove({"account_name": account_name})

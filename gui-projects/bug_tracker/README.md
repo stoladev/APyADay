@@ -27,4 +27,5 @@
 - [ ] Create executables/packages for each OS
 ##### Functionality
 - [ ] New/old/fixed statuses
-- [ ] Sorting by time reported, severity, issue type, questionaire
+- [ ] Report sorting by time reported, severity, issue type, questionaire
+- [ ] Automatic severity level depending on what the selected issues are

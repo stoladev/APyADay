@@ -3,7 +3,7 @@ import re
 import bcrypt
 from PyQt5.QtWidgets import QMessageBox
 
-from modules.loaders.mongodb_loader import cluster
+from modules.loaders import mongodb_loader
 
 
 def verify_inputs(window, account_name, password, email):
@@ -18,7 +18,7 @@ def verify_technician(window):
     username = window.technician_login_line.text()
     password = window.technician_password_line.text()
 
-    db = cluster["bug_tracker_db"]
+    db = mongodb_loader.cluster["bug_tracker_db"]
     accounts = db.technicians
 
     account = accounts.find_one({"username": username})
@@ -45,8 +45,8 @@ def verify_new_account_name(window, account_name):
     error_found = False
     error_message = "The account name is invalid.\n\nErrors:\n"
 
-    if len(account_name) < 6:
-        error_message += "short account name length (6-char minimum)\n"
+    if (len(account_name) < 6) | (len(account_name) > 15):
+        error_message += "account name length (6-15 chars)\n"
         error_found = True
 
     if symbols > 0:
