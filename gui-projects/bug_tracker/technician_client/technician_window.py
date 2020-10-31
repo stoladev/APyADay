@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QComboBox,
     QGraphicsView,
@@ -12,7 +13,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from modules.loaders import widget_loader
+from modules.loaders import menu_loader, widget_loader
 from modules.managers import account_manager
 
 
@@ -75,6 +76,13 @@ class TechnicianMainWindow(QMainWindow):
 
         widget_loader.load_all_widgets(self)
         self.show()
+
+    def contextMenuEvent(self, event):
+        menu_loader.accounts_menu(self, event)
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Delete:
+            account_manager.delete_selected_account(self)
 
     def create_new_account(self):
         account_manager.create_new_account(self)

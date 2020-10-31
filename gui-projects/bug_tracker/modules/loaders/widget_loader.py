@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
     QLineEdit,
+    QMainWindow,
     QTableView,
     QTableWidgetItem,
 )
@@ -117,60 +118,62 @@ def load_labels(window):
     window.reset_password_label.setGeometry(QtCore.QRect(401, 290, 91, 16))
 
 
-def load_tables(window):
-    window.accounts_table.setGeometry(QtCore.QRect(10, 10, 381, 391))
-    window.accounts_table.setRowCount(0)
-    window.accounts_table.setColumnCount(3)
+def load_tables(window: QMainWindow):
+    accounts_table: QTableView = window.accounts_table
+    reports_table: QTableView = window.reports_table
+
+    accounts_table.setGeometry(QtCore.QRect(10, 10, 381, 391))
+    accounts_table.setRowCount(0)
+    accounts_table.setColumnCount(3)
 
     # Columns
     item = QTableWidgetItem()
-    window.accounts_table.setHorizontalHeaderItem(0, item)
+    accounts_table.setHorizontalHeaderItem(0, item)
     item = QTableWidgetItem()
-    window.accounts_table.setHorizontalHeaderItem(1, item)
+    accounts_table.setHorizontalHeaderItem(1, item)
     item = QTableWidgetItem()
-    window.accounts_table.setHorizontalHeaderItem(2, item)
+    accounts_table.setHorizontalHeaderItem(2, item)
 
     # Column Settings
-    window.accounts_table.setSelectionBehavior(QTableView.SelectRows)
-    window.accounts_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-    item = window.accounts_table.horizontalHeaderItem(0)
-    header = window.accounts_table.horizontalHeader()
+    accounts_table.setSelectionBehavior(QTableView.SelectRows)
+    accounts_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    item = accounts_table.horizontalHeaderItem(0)
+    header = accounts_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)
     item.setText("Account Name")
-    item = window.accounts_table.horizontalHeaderItem(1)
+    item = accounts_table.horizontalHeaderItem(1)
     header.setSectionResizeMode(1, QHeaderView.Stretch)
     item.setText("Email")
-    item = window.accounts_table.horizontalHeaderItem(2)
+    item = accounts_table.horizontalHeaderItem(2)
     item.setText("Reports")
 
     # Row Settings
     account_loader.load_accounts(window)
-
-    window.accounts_table.setSortingEnabled(True)
+    accounts_table.setSortingEnabled(True)
 
     # Reports Table
-    window.reports_table.setGeometry(QtCore.QRect(10, 10, 571, 171))
-    window.reports_table.setColumnCount(4)
-    window.reports_table.setRowCount(0)
+    reports_table.setGeometry(QtCore.QRect(10, 10, 571, 171))
+    reports_table.setColumnCount(4)
+    reports_table.setRowCount(0)
     item = QTableWidgetItem()
-    header = window.reports_table.horizontalHeader()
+    header = reports_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)
     header.setSectionResizeMode(0, QHeaderView.Stretch)
-    window.reports_table.setHorizontalHeaderItem(0, item)
+    reports_table.setHorizontalHeaderItem(0, item)
     item = QTableWidgetItem()
-    window.reports_table.setHorizontalHeaderItem(1, item)
+    reports_table.setHorizontalHeaderItem(1, item)
     header.setSectionResizeMode(1, QHeaderView.Stretch)
     item = QTableWidgetItem()
-    window.reports_table.setHorizontalHeaderItem(2, item)
+    reports_table.setHorizontalHeaderItem(2, item)
     item = QTableWidgetItem()
-    window.reports_table.setHorizontalHeaderItem(3, item)
-    item = window.reports_table.horizontalHeaderItem(0)
+    reports_table.setHorizontalHeaderItem(3, item)
+    item = reports_table.horizontalHeaderItem(0)
     item.setText("Submitter")
-    item = window.reports_table.horizontalHeaderItem(1)
+    item = reports_table.horizontalHeaderItem(1)
     item.setText("Issue Type")
-    item = window.reports_table.horizontalHeaderItem(2)
+    item = reports_table.horizontalHeaderItem(2)
     item.setText(" Severity ")
-    item = window.reports_table.horizontalHeaderItem(3)
+    item = reports_table.horizontalHeaderItem(3)
     item.setText(" Reported On ")
 
 
