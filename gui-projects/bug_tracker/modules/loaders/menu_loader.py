@@ -1,4 +1,3 @@
-from PyQt5.QtGui import QContextMenuEvent, QMouseEvent
 from PyQt5.QtWidgets import QMenu, QTableWidget
 from pandas.core import indexes
 
@@ -9,32 +8,26 @@ from pandas.core import indexes
 from modules.managers import account_manager
 
 
-def accounts_menu(window, event):
+def load_accounts_menu(window, event):
     table: QTableWidget = window.accounts_table
     index: indexes = table.selectionModel().selection().indexes()
-    mouse_press: QMouseEvent = event.MouseButtonPress
-    event: QContextMenuEvent = event
-
-    # row = self.tableWidget.rowAt(event.y())
+    mouse_on_table = window.accounts_table.underMouse()
 
     # FIGURE THIS OUT, KING.
     if index:
-        if mouse_press.NonClientAreaMouseButtonPress:
-            print("yo")
-        # for i in index:
-        #     row, column = i.row(), i.column()
-        row = table.rowAt(event.y())
-        menu = QMenu()
-        open_action = menu.addAction("Open")
-        delete_action = menu.addAction("Delete")
-        rename_action = menu.addAction("Rename")
-        action = menu.exec_(window.mapToGlobal(event.pos()))
+        if mouse_on_table:
+            row = table.rowAt(event.y())
+            menu = QMenu()
+            open_action = menu.addAction("Open")
+            delete_action = menu.addAction("Delete")
+            rename_action = menu.addAction("Rename")
+            action = menu.exec_(window.mapToGlobal(event.pos()))
 
-        if action == open_action:
-            window.openAction(table.rowAt(event.y()))
+            if action == open_action:
+                window.openAction(table.rowAt(event.y()))
 
-        if action == delete_action:
-            account_manager.delete_selected_account(window)
+            if action == delete_action:
+                account_manager.delete_selected_account(window)
 
 
 def openAction(self, row, column):

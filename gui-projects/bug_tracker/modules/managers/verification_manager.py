@@ -101,7 +101,7 @@ def verify_new_password(window, password):
 # TODO
 # Improve on new email verification method
 def verify_new_email(window, email):
-    symbols = len(set(re.findall(r"[~!#$%^&*()+=`]", email)))
+    symbols = len(set(re.findall(r"[~!#$%^&*()+=`\/\\]", email)))
 
     error_found = False
     error_message = "The email is incomplete.\n\nErrors:\n"

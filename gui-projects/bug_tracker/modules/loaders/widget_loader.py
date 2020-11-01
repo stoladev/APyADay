@@ -122,6 +122,9 @@ def load_tables(window: QMainWindow):
     accounts_table: QTableView = window.accounts_table
     reports_table: QTableView = window.reports_table
 
+    accounts_table.setSelectionBehavior(QTableView.SelectRows)
+    accounts_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    accounts_table.setSelectionMode(QAbstractItemView.SingleSelection)
     accounts_table.setGeometry(QtCore.QRect(10, 10, 381, 391))
     accounts_table.setRowCount(0)
     accounts_table.setColumnCount(3)
@@ -135,8 +138,7 @@ def load_tables(window: QMainWindow):
     accounts_table.setHorizontalHeaderItem(2, item)
 
     # Column Settings
-    accounts_table.setSelectionBehavior(QTableView.SelectRows)
-    accounts_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
     item = accounts_table.horizontalHeaderItem(0)
     header = accounts_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)
