@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLineEdit
 
 from modules.loaders import mongodb_loader
@@ -27,4 +28,21 @@ def search_accounts_table(window):
     # Grab the current items in the table
     # Check for the nearest match in the item list according to find_account_line
     # Hide the rest of the results, auto select the best fit
-    print("Test")
+    # THIS IS JUST A PROTOTYPE. CLEAN UP THIS CODE LATER
+
+    table = window.accounts_table
+
+    for row in range(table.rowCount()):
+        for column in range(table.columnCount()):
+            item = table.item(row, column)
+            if window.find_account_line.text() == "":
+                return clear_found_fields(window)
+            if window.find_account_line.text() in item.data(Qt.DisplayRole):
+                return table.setCurrentItem(item)
+    return print("Nothing found.")
+
+
+def clear_found_fields(window):
+    window.found_account_line.setText("")
+    window.found_email_line.setText("")
+    window.accounts_table.clearSelection()
