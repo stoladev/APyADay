@@ -18,26 +18,8 @@ def load_accounts_menu(window, event):
         if mouse_on_table:
             row = table.rowAt(event.y())
             menu = QMenu()
-            open_action = menu.addAction("Open")
             delete_action = menu.addAction("Delete")
-            rename_action = menu.addAction("Rename")
             action = menu.exec_(window.mapToGlobal(event.pos()))
-
-            if action == open_action:
-                window.openAction(table.rowAt(event.y()))
 
             if action == delete_action:
                 account_manager.delete_selected_account(window)
-
-
-def openAction(self, row, column):
-    if self._slideShowWin:
-        self._slideShowWin.showImageByPath(self._twoDLst[row][column])
-        self._animateUpOpen()
-
-
-# TODO
-# Delete multiple accounts when selected.
-def deleteSelected(self):
-    # TODO
-    pass

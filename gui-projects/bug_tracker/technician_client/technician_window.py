@@ -90,7 +90,7 @@ class TechnicianMainWindow(QMainWindow):
         keypress_manager.check_keypress(self, event)
 
     def search_accounts_table(self):
-        selection_manager.search_accounts_table(self)
+        selection_manager.find_account_match(self)
 
     def check_new_selection(self):
         selection_manager.check_account_selection(self)

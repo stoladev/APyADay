@@ -69,7 +69,8 @@ def create_new_account(window):
         account_loader.load_accounts(window)
 
 
-def reset_account_password(window):
+def reset_account_password(window, **kwargs):
+    username = kwargs.get("account", None)
     password = window.new_password_line.text()
     password_verified = window.new_password_2_line.text()
 
