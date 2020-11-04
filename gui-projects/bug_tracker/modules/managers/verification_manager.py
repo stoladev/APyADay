@@ -1,3 +1,11 @@
+"""
+Handles verifications ranging from acceptable new inputs to connecting with MongoDB to verify
+authenticity of existing details.
+
+TODO Connect to MongoDB in a more secure manner
+TODO Rewrite email requirements, must be a simpler way
+"""
+
 import re
 
 import bcrypt

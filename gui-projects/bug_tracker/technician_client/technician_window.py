@@ -77,6 +77,10 @@ class TechnicianMainWindow(QMainWindow):
 
         self.show()
 
+        # Button actions on Accounts Tab
+        self.change_account_button.pressed.connect(self.change_account_name)
+        self.change_email_button.pressed.connect(self.change_email)
+
         # Checks for item selection changes
         self.accounts_table.itemSelectionChanged.connect(self.check_new_selection)
 
@@ -103,3 +107,9 @@ class TechnicianMainWindow(QMainWindow):
 
     def reset_account_password(self):
         account_manager.reset_account_password(self)
+
+    def change_account_name(self):
+        account_manager.change_account_name(self)
+
+    def change_email(self):
+        account_manager.change_email(self)

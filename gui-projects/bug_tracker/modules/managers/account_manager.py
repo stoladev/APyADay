@@ -1,5 +1,5 @@
 import bcrypt
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QInputDialog, QLineEdit, QMessageBox
 
 from modules.loaders import account_loader, mongodb_loader
 from modules.managers import verification_manager
@@ -152,3 +152,51 @@ def delete_selected_account(window):
         if table.currentItem() is None:
             next_index = table.model().index(row - 1, 0)
             table.setCurrentIndex(next_index)
+
+
+def change_account_name(window):
+    account_name: QLineEdit = window.found_account_line.text()
+
+    if account_name is None:
+        msg = QMessageBox()
+        msg.warning(
+            window,
+            "No Account Selected",
+            "Please make sure you have selected an account from the list.",
+        )
+        return
+
+    db = mongodb_loader.cluster["bug_tracker_db"]
+    accounts = db.accounts
+    account = accounts.find_one({"account_name": account_name})
+
+    if account is None:
+        msg = QMessageBox()
+        msg.warning(
+            window,
+            "Account Not Found",
+            "No account has been found with the provided account name.",
+        )
+        return
+
+    new_account_name, ok = QInputDialog.getText(
+        window, "New Account Name", "New Account Name:"
+    )
+
+    if not ok:
+        return
+
+    if verification_manager.verify_new_account_name(window, new_account_name):
+        accounts.update(account, {"$set": {"account_name": new_account_name}})
+
+    msg = QMessageBox()
+    msg.about(
+        window,
+        "Success",
+        account_name + "'s password has been successfully reset.",
+    )
+
+    account_loader.load_accounts(window)
+
+
+# def change_email(window):
