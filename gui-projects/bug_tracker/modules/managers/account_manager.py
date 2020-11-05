@@ -186,8 +186,10 @@ def change_account_name(window):
     if not ok:
         return
 
-    if verification_manager.verify_new_account_name(window, new_account_name):
-        accounts.update(account, {"$set": {"account_name": new_account_name}})
+    if not verification_manager.verify_new_account_name(window, new_account_name):
+        return
+
+    accounts.update(account, {"$set": {"account_name": new_account_name}})
 
     msg = QMessageBox()
     msg.about(
@@ -196,6 +198,7 @@ def change_account_name(window):
         account_name + "'s password has been successfully reset.",
     )
 
+    # window.accounts_table.clearSelection()
     account_loader.load_accounts(window)
 
 

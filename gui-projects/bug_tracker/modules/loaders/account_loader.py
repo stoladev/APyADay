@@ -1,4 +1,3 @@
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem
 
 from modules.loaders.mongodb_loader import cluster
@@ -10,8 +9,9 @@ from modules.loaders.mongodb_loader import cluster
 #
 def load_accounts(window):
     table = window.accounts_table
+
+    table.clearSelection()
     table.setRowCount(0)
-    table.sortItems(2, Qt.DescendingOrder)
 
     db = cluster["bug_tracker_db"]
     collection = db.accounts
