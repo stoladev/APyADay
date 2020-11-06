@@ -25,7 +25,6 @@ def load_accounts_menu(window, event):
     index: indexes = table.selectionModel().selection().indexes()
     mouse_on_table = window.accounts_table.underMouse()
 
-    # FIGURE THIS OUT, KING.
     if index:
         if mouse_on_table:
             menu = QMenu()
