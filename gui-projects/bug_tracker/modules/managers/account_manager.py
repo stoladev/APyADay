@@ -1,3 +1,6 @@
+"""
+Manages all interactions with an account, from creation to modification to deletion.
+"""
 import bcrypt
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QMessageBox
 
@@ -6,6 +9,12 @@ from modules.managers import verification_manager
 
 
 def create_new_account(window):
+    """
+    Creates a new account using the information in the respective textbox lines.
+
+    :param window: The QMainWindow in use.
+    :return: A new account or a QMessageBox with error details.
+    """
     account_name = window.account_name_line.text()
     email = window.email_line.text()
     worker_type = window.worker_type_combo_box.currentText()
@@ -13,8 +22,8 @@ def create_new_account(window):
 
     if verification_manager.verify_inputs(window, account_name, password, email):
 
-        db = mongodb_loader.cluster["bug_tracker_db"]
-        accounts = db.accounts
+        database = mongodb_loader.cluster["bug_tracker_db"]
+        accounts = database.accounts
 
         if accounts.find_one({"account_name": account_name}) is not None:
             msg = QMessageBox()
@@ -69,8 +78,13 @@ def create_new_account(window):
         account_loader.load_accounts(window)
 
 
-def reset_account_password(window, **kwargs):
-    username = kwargs.get("account", None)
+def reset_account_password(window):
+    """
+    Resets an account's password using the textbox line data.
+
+    :param window: The QMainWindow in use.
+    :return: A new password for the selected account.
+    """
     password = window.new_password_line.text()
     password_verified = window.new_password_2_line.text()
 
@@ -87,8 +101,8 @@ def reset_account_password(window, **kwargs):
     account_name = window.new_pass_id_line.text()
     hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-    db = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = db.accounts
+    database = mongodb_loader.cluster["bug_tracker_db"]
+    accounts = database.accounts
     account = accounts.find_one({"account_name": account_name})
 
     if account is None:
@@ -113,6 +127,12 @@ def reset_account_password(window, **kwargs):
 
 
 def delete_selected_account(window):
+    """
+    Deletes the selected account.
+
+    :param window: The QMainWindow in use.
+    :return: Deletes the selected account, or cancels the request.
+    """
     table = window.accounts_table
 
     if table.currentItem() is None:
@@ -121,40 +141,46 @@ def delete_selected_account(window):
             window, "No Account Selected", "Please select an account to delete."
         )
         return
-    else:
-        row = table.currentItem().row()
-        account_name = table.item(row, 0).text()
-        email = table.item(row, 1).text()
 
-        question = QMessageBox().question(
-            window,
-            "Confirmation",
-            "You are about to delete:\n\n"
-            "Account Name: " + account_name + "\n"
-            "Email: " + email + "\n\n"
-            "Are you sure you want to delete this account?",
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.Yes,
-        )
+    row = table.currentItem().row()
+    account_name = table.item(row, 0).text()
+    email = table.item(row, 1).text()
 
-        if question == QMessageBox.No:
-            return
+    question = QMessageBox().question(
+        window,
+        "Confirmation",
+        "You are about to delete:\n\n"
+        "Account Name: " + account_name + "\n"
+        "Email: " + email + "\n\n"
+        "Are you sure you want to delete this account?",
+        QMessageBox.Yes | QMessageBox.No,
+        QMessageBox.Yes,
+    )
 
-        db = mongodb_loader.cluster["bug_tracker_db"]
-        accounts = db.accounts
+    if question == QMessageBox.No:
+        return
 
-        accounts.remove({"account_name": account_name})
+    database = mongodb_loader.cluster["bug_tracker_db"]
+    accounts = database.accounts
 
-        account_loader.load_accounts(window)
+    accounts.remove({"account_name": account_name})
 
-        next_index = table.model().index(row, 0)
+    account_loader.load_accounts(window)
+
+    next_index = table.model().index(row, 0)
+    table.setCurrentIndex(next_index)
+    if table.currentItem() is None:
+        next_index = table.model().index(row - 1, 0)
         table.setCurrentIndex(next_index)
-        if table.currentItem() is None:
-            next_index = table.model().index(row - 1, 0)
-            table.setCurrentIndex(next_index)
 
 
 def change_account_name(window):
+    """
+    Changes the selected account name.
+
+    :param window: The QMainWindow in use.
+    :return: Changes the account name, or cancels the change.
+    """
     account_name: QLineEdit = window.found_account_line.text()
 
     if account_name is None:
@@ -166,8 +192,8 @@ def change_account_name(window):
         )
         return
 
-    db = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = db.accounts
+    database = mongodb_loader.cluster["bug_tracker_db"]
+    accounts = database.accounts
     account = accounts.find_one({"account_name": account_name})
 
     if account is None:
@@ -179,9 +205,11 @@ def change_account_name(window):
         )
         return
 
-    new_account_name, ok = QInputDialog.getText(window, "Prompt", "New Account Name:")
+    new_account_name, ok_button_pressed = QInputDialog.getText(
+        window, "Prompt", "New Account Name:"
+    )
 
-    if not ok:
+    if not ok_button_pressed:
         return
 
     if not verification_manager.verify_new_account_name(window, new_account_name):
@@ -201,6 +229,12 @@ def change_account_name(window):
 
 
 def change_email(window):
+    """
+    Changes the selected account's email.
+
+    :param window: The QMainWindow in use.
+    :return: Changes the account's email, or cancels the change.
+    """
     email: QLineEdit = window.found_email_line.text()
 
     if email is None:
@@ -212,8 +246,8 @@ def change_email(window):
         )
         return
 
-    db = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = db.accounts
+    database = mongodb_loader.cluster["bug_tracker_db"]
+    accounts = database.accounts
     account = accounts.find_one({"email": email})
 
     if account is None:
@@ -225,9 +259,11 @@ def change_email(window):
         )
         return
 
-    new_email_name, ok = QInputDialog.getText(window, "Prompt", "New Email:")
+    new_email_name, okay_button_pressed = QInputDialog.getText(
+        window, "Prompt", "New Email:"
+    )
 
-    if not ok:
+    if not okay_button_pressed:
         return
 
     if not verification_manager.verify_new_email(window, new_email_name):
