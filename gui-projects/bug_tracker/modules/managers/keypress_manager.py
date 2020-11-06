@@ -1,9 +1,20 @@
+"""
+Manages all keypress events caught by the QMainWindow.
+"""
+
 from PyQt5 import QtCore
 
 from modules.managers import account_manager
 
 
 def check_keypress(window, event):
+    """
+    Checks the type of keypress and performs the corresponding action.
+
+    :param window: The QMainWindow in use.
+    :param event: The keypress event caught by QMainWindow.
+    :return: The appropriate action or nothing.
+    """
     return_key_pressed = event.key() == QtCore.Qt.Key_Return
     del_key_pressed = event.key() == QtCore.Qt.Key_Delete
 
