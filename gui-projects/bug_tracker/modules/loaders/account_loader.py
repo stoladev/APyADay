@@ -1,3 +1,7 @@
+"""
+Loads all data regarding accounts.
+"""
+
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 from modules.loaders.mongodb_loader import cluster
@@ -8,6 +12,11 @@ from modules.loaders.mongodb_loader import cluster
 # Center all fields
 #
 def load_accounts(window):
+    """
+    Loads/reloads the accounts for the accounts table, grabbing the necessary data from MongoDB.
+    :param window: The QMainWindow in use.
+    :return: Returns all existing accounts with their current data.
+    """
     table: QTableWidget = window.accounts_table
 
     selection = table.selectionModel().currentIndex()
@@ -15,8 +24,8 @@ def load_accounts(window):
 
     table.setRowCount(0)
 
-    db = cluster["bug_tracker_db"]
-    collection = db.accounts
+    database = cluster["bug_tracker_db"]
+    collection = database.accounts
 
     accounts = collection.find({})
 
