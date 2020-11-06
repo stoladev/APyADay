@@ -5,7 +5,7 @@ Loads menus for tables or general context-menu event calls.
 from PyQt5.QtWidgets import QMenu, QTableWidget
 from pandas.core import indexes
 
-from modules.managers import account_manager
+from technician_client.modules.managers import account_manager
 
 
 # TODO

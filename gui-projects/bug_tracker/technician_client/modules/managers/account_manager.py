@@ -4,8 +4,8 @@ Manages all interactions with an account, from creation to modification to delet
 import bcrypt
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QMessageBox
 
-from modules.loaders import account_loader, mongodb_loader
-from modules.managers import verification_manager
+from technician_client.modules.loaders import account_loader, mongodb_loader
+from technician_client.modules.managers import verification_manager
 
 
 def create_new_account(window):

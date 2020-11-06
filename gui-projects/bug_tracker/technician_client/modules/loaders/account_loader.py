@@ -4,7 +4,7 @@ Loads all data regarding accounts.
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-from modules.loaders.mongodb_loader import cluster
+from technician_client.modules.loaders.mongodb_loader import cluster
 
 
 # TODO

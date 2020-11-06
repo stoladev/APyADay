@@ -11,7 +11,7 @@ import re
 import bcrypt
 from PyQt5.QtWidgets import QMessageBox
 
-from modules.loaders import mongodb_loader
+from technician_client.modules.loaders import mongodb_loader
 
 
 def verify_inputs(window, account_name, password, email):

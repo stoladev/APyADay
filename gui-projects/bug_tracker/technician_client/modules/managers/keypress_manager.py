@@ -4,7 +4,7 @@ Manages all keypress events caught by the QMainWindow.
 
 from PyQt5 import QtCore
 
-from modules.managers import account_manager
+from technician_client.modules.managers import account_manager
 
 
 def check_keypress(window, event):

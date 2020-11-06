@@ -7,7 +7,7 @@ TODO Clear find line if an item is clicked manually
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLineEdit
 
-from modules.loaders import mongodb_loader
+from technician_client.modules.loaders import mongodb_loader
 
 
 def check_account_selection(window):

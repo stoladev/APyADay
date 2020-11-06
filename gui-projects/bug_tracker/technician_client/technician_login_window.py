@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
 )
 
-from modules.managers import verification_manager
+from technician_client.modules.managers import verification_manager
 
 
 class TechnicianLoginWindow(QDialog):

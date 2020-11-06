@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (
     QTableWidgetItem,
 )
 
-from modules.loaders import account_loader
+from technician_client.modules.loaders import account_loader
 
 
 def load_all_widgets(window):

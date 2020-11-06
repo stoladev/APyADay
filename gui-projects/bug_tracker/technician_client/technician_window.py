@@ -12,8 +12,12 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from modules.loaders import menu_loader, widget_loader
-from modules.managers import account_manager, keypress_manager, selection_manager
+from technician_client.modules.loaders import menu_loader, widget_loader
+from technician_client.modules.managers import (
+    account_manager,
+    keypress_manager,
+    selection_manager,
+)
 
 
 class TechnicianMainWindow(QMainWindow):
