@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 from modules.loaders.mongodb_loader import cluster
 
@@ -8,9 +8,11 @@ from modules.loaders.mongodb_loader import cluster
 # Center all fields
 #
 def load_accounts(window):
-    table = window.accounts_table
+    table: QTableWidget = window.accounts_table
 
+    selection = table.selectionModel().currentIndex()
     table.clearSelection()
+
     table.setRowCount(0)
 
     db = cluster["bug_tracker_db"]
@@ -25,3 +27,6 @@ def load_accounts(window):
         table.setItem(i, 1, QTableWidgetItem(document["email"]))
         table.setItem(i, 2, QTableWidgetItem(str(document["reports_filed"])))
         i += 1
+
+    if selection is not None:
+        table.setCurrentIndex(selection)

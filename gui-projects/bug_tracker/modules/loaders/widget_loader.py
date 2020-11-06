@@ -1,5 +1,4 @@
 from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
@@ -140,7 +139,7 @@ def load_tables(window: QMainWindow):
 
     # Column Settings
 
-    accounts_table.sortItems(2, Qt.DescendingOrder)
+    # accounts_table.sortItems(2, Qt.DescendingOrder)
     item = accounts_table.horizontalHeaderItem(0)
     header = accounts_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)

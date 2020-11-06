@@ -179,9 +179,7 @@ def change_account_name(window):
         )
         return
 
-    new_account_name, ok = QInputDialog.getText(
-        window, "New Account Name", "New Account Name:"
-    )
+    new_account_name, ok = QInputDialog.getText(window, "Prompt", "New Account Name:")
 
     if not ok:
         return
@@ -202,4 +200,46 @@ def change_account_name(window):
     account_loader.load_accounts(window)
 
 
-# def change_email(window):
+def change_email(window):
+    email: QLineEdit = window.found_email_line.text()
+
+    if email is None:
+        msg = QMessageBox()
+        msg.warning(
+            window,
+            "No Account Selected",
+            "Please make sure you have selected an account from the list.",
+        )
+        return
+
+    db = mongodb_loader.cluster["bug_tracker_db"]
+    accounts = db.accounts
+    account = accounts.find_one({"email": email})
+
+    if account is None:
+        msg = QMessageBox()
+        msg.warning(
+            window,
+            "Account Not Found",
+            "No account has been found with the provided account name.",
+        )
+        return
+
+    new_email_name, ok = QInputDialog.getText(window, "Prompt", "New Email:")
+
+    if not ok:
+        return
+
+    if not verification_manager.verify_new_email(window, new_email_name):
+        return
+
+    accounts.update(account, {"$set": {"email": new_email_name}})
+
+    msg = QMessageBox()
+    msg.about(
+        window,
+        "Success",
+        email + "'s email has been successfully reset to " + new_email_name + ".",
+    )
+
+    account_loader.load_accounts(window)
