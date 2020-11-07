@@ -1,3 +1,8 @@
+"""
+Handles the login process of an employee, verifying their information with MongoDB, proceeding to
+open the main program after successful verification.
+"""
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QLineEdit,
@@ -8,11 +13,15 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from employee_client.forms.main_window import MainWindow
-from modules.loaders import mongodb_loader
+from employee_client.employee_window import MainWindow
+from technician_client.modules.loaders import mongodb_loader
 
 
 class LoginWindow(QMainWindow):
+    """
+    Handles the initiation of the login window used to log in the employee.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -34,7 +43,11 @@ class LoginWindow(QMainWindow):
         self.show()
 
     def sizing_policy_setup(self):
-        # SIZING POLICY
+        """
+        Sets up the sizing, specifications, and restrictions.
+
+        :return: A compiled sizing policy.
+        """
         size = QSizePolicy
         size_policy = QSizePolicy(size.Fixed, size.Fixed)
         size_policy.setHorizontalStretch(0)
@@ -43,6 +56,11 @@ class LoginWindow(QMainWindow):
         self.setSizePolicy(size_policy)
 
     def widget_setup(self):
+        """
+        Sets up all widgets used in the login window.
+
+        :return: A compiled widget specification per widget.
+        """
         # CENTRAL WIDGET
         self.central_widget.setObjectName("central_widget")
         self.setCentralWidget(self.central_widget)
@@ -64,15 +82,17 @@ class LoginWindow(QMainWindow):
         self.login_button.clicked.connect(self.verify_login)
 
     def verify_login(self):
+        """
+        Verifies the login information using MongoDB for the employee login.
+
+        :return: A success or fail result upon verification.
+        """
         username = self.id_line.text()
         password = self.password_line.text()
 
         if username == "stoladev" and password == "password":
 
             mongodb_loader.verify_user(username, password)
-            # print("Login Successful.")
-            # self.main_app.show()
-            # self.hide()
         else:
             msg = QMessageBox()
             msg.critical(self, "Error!", "Login Failed.")
