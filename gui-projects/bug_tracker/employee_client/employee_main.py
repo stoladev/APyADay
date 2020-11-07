@@ -1,3 +1,7 @@
+"""
+The main file to execute for the employee client.
+"""
+
 import sys
 
 from PyQt5.QtWidgets import QApplication
