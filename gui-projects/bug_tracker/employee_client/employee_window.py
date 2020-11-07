@@ -1,3 +1,8 @@
+"""
+Initializes window widgets for the employee application. Points to and runs customizations and
+specifications of execution/registered events.
+"""
+
 import os
 import platform
 from zipfile import ZipFile
@@ -24,6 +29,11 @@ from PyQt5.QtWidgets import (
 
 
 class MainWindow(QMainWindow):
+    """
+    Handles the initiation of the main employee window, along with calling any setup
+    configurations and/or event updates.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -36,27 +46,27 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
         # WIDGET INITIALIZATION
-        self.gridLayoutWidget = QWidget(self.central_widget)
-        self.gridLayoutWidget_2 = QWidget(self.central_widget)
-        self.data_layout = QGridLayout(self.gridLayoutWidget)
-        self.questions_layout = QGridLayout(self.gridLayoutWidget_2)
+        self.grid_layout_widget = QWidget(self.central_widget)
+        self.grid_layout_widget_2 = QWidget(self.central_widget)
+        self.data_layout = QGridLayout(self.grid_layout_widget)
+        self.questions_layout = QGridLayout(self.grid_layout_widget_2)
         self.report_view = QTextBrowser(self.central_widget)
         self.screenshot_view = QGraphicsView(self.central_widget)
         self.generate_button = QPushButton(self.central_widget)
         self.screenshot_button = QPushButton(self.central_widget)
         self.add_info_box = QTextEdit(self.central_widget)
         self.preview_label = QLabel(self.central_widget)
-        self.data_label = QLabel(self.gridLayoutWidget)
-        self.questions_label = QLabel(self.gridLayoutWidget_2)
+        self.data_label = QLabel(self.grid_layout_widget)
+        self.questions_label = QLabel(self.grid_layout_widget_2)
         self.menu_bar = QMenuBar(self)
-        self.env_checkbox = QCheckBox(self.gridLayoutWidget)
-        self.site_checkbox = QCheckBox(self.gridLayoutWidget)
-        self.program_checkbox = QCheckBox(self.gridLayoutWidget)
-        self.crash_checkbox = QCheckBox(self.gridLayoutWidget)
-        self.reproducible_checkbox = QCheckBox(self.gridLayoutWidget_2)
-        self.profits_checkbox = QCheckBox(self.gridLayoutWidget_2)
-        self.leak_checkbox = QCheckBox(self.gridLayoutWidget_2)
-        self.security_checkbox = QCheckBox(self.gridLayoutWidget_2)
+        self.env_checkbox = QCheckBox(self.grid_layout_widget)
+        self.site_checkbox = QCheckBox(self.grid_layout_widget)
+        self.program_checkbox = QCheckBox(self.grid_layout_widget)
+        self.crash_checkbox = QCheckBox(self.grid_layout_widget)
+        self.reproducible_checkbox = QCheckBox(self.grid_layout_widget_2)
+        self.profits_checkbox = QCheckBox(self.grid_layout_widget_2)
+        self.leak_checkbox = QCheckBox(self.grid_layout_widget_2)
+        self.security_checkbox = QCheckBox(self.grid_layout_widget_2)
 
         # CLEAR ANY CURRENT SCREENSHOTS
         self.report_path = "report/report.txt"
@@ -78,8 +88,8 @@ class MainWindow(QMainWindow):
 
     def widget_setup(self):
         # GRID LAYOUT
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 20, 165, 131))
-        self.gridLayoutWidget_2.setGeometry(QtCore.QRect(180, 20, 159, 131))
+        self.grid_layout_widget.setGeometry(QtCore.QRect(10, 20, 165, 131))
+        self.grid_layout_widget_2.setGeometry(QtCore.QRect(180, 20, 159, 131))
         # DATA LAYOUT
         self.data_label.setText("Need-To-Know Data")
         self.data_layout.setContentsMargins(0, 0, 0, 0)

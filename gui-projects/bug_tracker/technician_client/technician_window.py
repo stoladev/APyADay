@@ -1,3 +1,8 @@
+"""
+Initializes window widgets for the technician application. Points to and runs customizations and
+specifications of execution/registered events.
+"""
+
 from PyQt5.QtWidgets import (
     QComboBox,
     QGraphicsView,
@@ -21,6 +26,11 @@ from technician_client.modules.managers import (
 
 
 class TechnicianMainWindow(QMainWindow):
+    """
+    Handles the initiation of the main technician window, along with calling any setup
+    configurations and/or event updates.
+    """
+
     def __init__(self):
         super().__init__()
 
