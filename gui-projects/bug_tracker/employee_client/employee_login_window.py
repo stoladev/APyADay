@@ -13,11 +13,11 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from employee_client.employee_window import MainWindow
+from employee_client.employee_window import EmployeeMainWindow
 from technician_client.modules.loaders import mongodb_loader
 
 
-class LoginWindow(QMainWindow):
+class EmployeeLoginWindow(QMainWindow):
     """
     Handles the initiation of the login window used to log in the employee.
     """
@@ -29,7 +29,7 @@ class LoginWindow(QMainWindow):
         self.setWindowTitle("Login Window")
         self.setEnabled(True)
         self.setFixedSize(300, 100)
-        self.main_app = MainWindow()
+        self.main_app = EmployeeMainWindow()
 
         # WIDGET INITIALIZATION
         self.central_widget = QWidget(self)

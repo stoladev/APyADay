@@ -4,11 +4,26 @@ The main file to execute for the employee client.
 
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QDialog
 
-from employee_client.employee_login_window import LoginWindow
+from employee_client.employee_login_window import EmployeeLoginWindow
+from employee_client.employee_window import EmployeeMainWindow
 
 if __name__ == "__main__":
+
+    # app = QApplication(sys.argv)
+    # # technician_login_window = TechnicianLoginWindow()
+    #
+    # # if technician_login_window.exec_() == QDialog.Accepted:
+    # technician_main_window = TechnicianMainWindow()
+    # technician_main_window.show()
+    # sys.exit(app.exec_())
+
     app = QApplication(sys.argv)
-    login_window = LoginWindow()
+    employee_login_window = EmployeeLoginWindow()
+
+    if employee_login_window.exec_() == QDialog.Accepted:
+        employee_main_window = EmployeeMainWindow()
+        employee_main_window.show()
+
     sys.exit(app.exec())

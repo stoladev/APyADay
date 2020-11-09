@@ -28,7 +28,7 @@ from PyQt5.QtWidgets import (
 )
 
 
-class MainWindow(QMainWindow):
+class EmployeeMainWindow(QMainWindow):
     """
     Handles the initiation of the main employee window, along with calling any setup
     configurations and/or event updates.
