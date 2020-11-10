@@ -20,14 +20,14 @@ def run_login_window(app_in_use):
     technician_login_window = TechnicianLoginWindow()
 
     if technician_login_window.exec_() == QDialog.Accepted:
-        run_main_window(app_in_use)
+        run_main_window()
     else:
         return
 
     # sys.exit(app_in_use.exec_())
 
 
-def run_main_window(app_in_use):
+def run_main_window():
     """
     Runs the main technician client through the technician's main window class.
 

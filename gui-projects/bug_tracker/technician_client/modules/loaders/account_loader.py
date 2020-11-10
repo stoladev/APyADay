@@ -7,13 +7,10 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from technician_client.modules.loaders.mongodb_loader import cluster
 
 
-# TODO
-# Make rows read-only
-# Center all fields
-#
 def load_accounts(window):
     """
     Loads/reloads the accounts for the accounts table, grabbing the necessary data from MongoDB.
+
     :param window: The QMainWindow in use.
     :return: Returns all existing accounts with their current data.
     """

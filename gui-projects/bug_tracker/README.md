@@ -21,6 +21,7 @@
 ## TODO
 ##### Security
 - [ ] Secure Login Authentication through MongoDB
+- [ ] Create a separate file location for MongoDB connection data
 ##### Networking/Upload/Download
 - [ ] Zipped report automatic upload to FTP
 ##### Compatibility
