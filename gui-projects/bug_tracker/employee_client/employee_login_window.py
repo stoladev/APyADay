@@ -2,98 +2,71 @@
 Handles the login process of an employee, verifying their information with MongoDB, proceeding to
 open the main program after successful verification.
 """
-
-from PyQt5 import QtCore
+import pymongo
 from PyQt5.QtWidgets import (
+    QDialog,
+    QLabel,
     QLineEdit,
-    QMainWindow,
     QMessageBox,
     QPushButton,
-    QSizePolicy,
-    QWidget,
+    QVBoxLayout,
 )
 
-from employee_client.employee_window import EmployeeMainWindow
-from technician_client.modules.loaders import mongodb_loader
+from employee_client.modules.managers import verification_manager
 
 
-class EmployeeLoginWindow(QMainWindow):
+class EmployeeLoginWindow(QDialog):
     """
     Handles the initiation of the login window used to log in the employee.
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(EmployeeLoginWindow, self).__init__(parent)
 
-        # GENERAL SETTINGS
-        self.setWindowTitle("Login Window")
-        self.setEnabled(True)
-        self.setFixedSize(300, 100)
-        self.main_app = EmployeeMainWindow()
+        # Initializations
+        self.setWindowTitle("Employee Login")
+        self.employee_login_line = QLineEdit(self)
+        self.employee_password_line = QLineEdit(self)
+        self.employee_login_button = QPushButton(self)
+        self.employee_label = QLabel(self)
 
-        # WIDGET INITIALIZATION
-        self.central_widget = QWidget(self)
-        self.id_line = QLineEdit(self.central_widget)
-        self.password_line = QLineEdit(self.central_widget)
-        self.login_button = QPushButton(self.central_widget)
+        # Text Lines
+        self.employee_login_line.setPlaceholderText("Account Name/Email Address")
+        self.employee_password_line.setPlaceholderText("Password")
+        self.employee_password_line.setEchoMode(QLineEdit.Password)
 
-        # ACTIVATION
-        self.widget_setup()
-        QtCore.QMetaObject.connectSlotsByName(self)
-        self.show()
+        # Buttons
+        self.employee_login_button.setText("Login")
+        self.employee_login_button.clicked.connect(self.verify_employee)
 
-    def sizing_policy_setup(self):
-        """
-        Sets up the sizing, specifications, and restrictions.
+        # Layout
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.employee_login_line)
+        layout.addWidget(self.employee_password_line)
+        layout.addWidget(self.employee_login_button)
 
-        :return: A compiled sizing policy.
-        """
-        size = QSizePolicy
-        size_policy = QSizePolicy(size.Fixed, size.Fixed)
-        size_policy.setHorizontalStretch(0)
-        size_policy.setVerticalStretch(0)
-        size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
-        self.setSizePolicy(size_policy)
+        # MongoDB Connection
+        mongodb_url = open("../mongo_cluster.txt", "r")
+        connection = mongodb_url.read()
+        cluster = pymongo.MongoClient(connection)
+        self.db = cluster["bug_tracker_db"]
 
-    def widget_setup(self):
-        """
-        Sets up all widgets used in the login window.
-
-        :return: A compiled widget specification per widget.
-        """
-        # CENTRAL WIDGET
-        self.central_widget.setObjectName("central_widget")
-        self.setCentralWidget(self.central_widget)
-        # USERNAME FIELD
-        self.id_line.setObjectName(u"id_line")
-        self.id_line.setGeometry(QtCore.QRect(10, 10, 281, 24))
-        self.id_line.returnPressed.connect(self.verify_login)
-        self.id_line.setPlaceholderText("Employee ID")
-        # PASSWORD FIELD
-        self.password_line.setObjectName(u"password_line")
-        self.password_line.setGeometry(QtCore.QRect(10, 40, 281, 24))
-        self.password_line.setEchoMode(QLineEdit.Password)
-        self.password_line.returnPressed.connect(self.verify_login)
-        self.password_line.setPlaceholderText("Password")
-        # LOGIN BUTTON
-        self.login_button.setObjectName(u"login_button")
-        self.login_button.setGeometry(QtCore.QRect(210, 70, 80, 24))
-        self.login_button.setText("Login")
-        self.login_button.clicked.connect(self.verify_login)
-
-    def verify_login(self):
+    def verify_employee(self):
         """
         Verifies the login information using MongoDB for the employee login.
 
         :return: A success or fail result upon verification.
         """
-        username = self.id_line.text()
-        password = self.password_line.text()
 
-        if username == "stoladev" and password == "password":
+        account_name = self.employee_login_line.text()
+        password = self.employee_password_line.text()
 
-            mongodb_loader.verify_user(username, password)
+        account_list = self.db.accounts
+        account = account_list.find_one({"account_name": account_name})
+
+        print(account_name)
+
+        if account:
+            verification_manager.verify_employee(self, account, password)
         else:
-            msg = QMessageBox()
-            msg.critical(self, "Error!", "Login Failed.")
-            msg.exec_()
+            QMessageBox.warning(self, "No Match", "No matching account found.")
