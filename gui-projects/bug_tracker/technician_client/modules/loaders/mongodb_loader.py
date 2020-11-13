@@ -1,8 +1,8 @@
 """
-Loads the mongodb login information to connect to the necessary cluster.
+Loads the mongodb login information for technicians to connect to the necessary cluster.
 """
 
 from pymongo import MongoClient
 
-connection = open("../modules/loaders/mongo_cluster.txt", "r")
+connection = open("../../../mongo_cluster.txt", "r")
 cluster = MongoClient(connection.read())

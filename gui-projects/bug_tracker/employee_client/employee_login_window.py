@@ -20,8 +20,9 @@ class EmployeeLoginWindow(QDialog):
     Handles the initiation of the login window used to log in the employee.
     """
 
-    def __init__(self, parent=None):
-        super(EmployeeLoginWindow, self).__init__(parent)
+    def __init__(self):
+        super().__init__()
+        # super(EmployeeLoginWindow, self).__init__(parent)
 
         # Initializations
         self.setWindowTitle("Employee Login")
@@ -49,7 +50,7 @@ class EmployeeLoginWindow(QDialog):
         mongodb_url = open("../mongo_cluster.txt", "r")
         connection = mongodb_url.read()
         cluster = pymongo.MongoClient(connection)
-        self.db = cluster["bug_tracker_db"]
+        self.database = cluster["bug_tracker_db"]
 
     def verify_employee(self):
         """
@@ -61,7 +62,7 @@ class EmployeeLoginWindow(QDialog):
         account_name = self.employee_login_line.text()
         password = self.employee_password_line.text()
 
-        account_list = self.db.accounts
+        account_list = self.database.accounts
         account = account_list.find_one({"account_name": account_name})
 
         print(account_name)

@@ -1,3 +1,6 @@
+# TODO
+# Simplify MongoDB load and make it more secure.
+
 from PyQt5.QtWidgets import (
     QDialog,
     QLabel,
