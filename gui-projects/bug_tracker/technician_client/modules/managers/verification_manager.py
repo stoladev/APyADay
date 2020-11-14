@@ -11,8 +11,6 @@ import re
 import bcrypt
 from PyQt5.QtWidgets import QMessageBox
 
-from technician_client.modules.loaders import mongodb_loader
-
 
 def verify_inputs(window, account_name, password, email):
     if verify_new_account_name(window, account_name):
@@ -26,8 +24,7 @@ def verify_technician(window):
     username = window.technician_login_line.text()
     password = window.technician_password_line.text()
 
-    db = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = db.technicians
+    accounts = window.database.technicians
 
     account = accounts.find_one({"username": username})
 

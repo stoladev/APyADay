@@ -4,8 +4,6 @@ Loads all data regarding accounts.
 
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-from technician_client.modules.loaders.mongodb_loader import cluster
-
 
 def load_accounts(window):
     """
@@ -21,8 +19,7 @@ def load_accounts(window):
 
     table.setRowCount(0)
 
-    database = cluster["bug_tracker_db"]
-    collection = database.accounts
+    collection = window.database.accounts
 
     accounts = collection.find({})
 

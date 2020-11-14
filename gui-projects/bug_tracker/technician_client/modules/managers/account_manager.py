@@ -4,7 +4,7 @@ Manages all interactions with an account, from creation to modification to delet
 import bcrypt
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QMessageBox
 
-from technician_client.modules.loaders import account_loader, mongodb_loader
+from technician_client.modules.loaders import account_loader
 from technician_client.modules.managers import verification_manager
 
 
@@ -22,8 +22,7 @@ def create_new_account(window):
 
     if verification_manager.verify_inputs(window, account_name, password, email):
 
-        database = mongodb_loader.cluster["bug_tracker_db"]
-        accounts = database.accounts
+        accounts = window.database.accounts
 
         if accounts.find_one({"account_name": account_name}) is not None:
             msg = QMessageBox()
@@ -101,8 +100,7 @@ def reset_account_password(window):
     account_name = window.new_pass_id_line.text()
     hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-    database = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = database.accounts
+    accounts = window.database.accounts
     account = accounts.find_one({"account_name": account_name})
 
     if account is None:
@@ -160,8 +158,7 @@ def delete_selected_account(window):
     if question == QMessageBox.No:
         return
 
-    database = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = database.accounts
+    accounts = window.database.accounts
 
     accounts.remove({"account_name": account_name})
 
@@ -192,8 +189,7 @@ def change_account_name(window):
         )
         return
 
-    database = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = database.accounts
+    accounts = window.database.accounts
     account = accounts.find_one({"account_name": account_name})
 
     if account is None:
@@ -246,8 +242,7 @@ def change_email(window):
         )
         return
 
-    database = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = database.accounts
+    accounts = window.database.accounts
     account = accounts.find_one({"email": email})
 
     if account is None:

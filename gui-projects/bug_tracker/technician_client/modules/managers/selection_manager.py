@@ -7,8 +7,6 @@ TODO Clear find line if an item is clicked manually
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLineEdit
 
-from technician_client.modules.loaders import mongodb_loader
-
 
 def check_account_selection(window):
     row = window.accounts_table.currentRow()
@@ -19,8 +17,7 @@ def check_account_selection(window):
     last_login_line: QLineEdit = window.last_login_line
     new_pass_id_line: QLineEdit = window.new_pass_id_line
 
-    db = mongodb_loader.cluster["bug_tracker_db"]
-    accounts = db.accounts
+    accounts = window.database.accounts
     selected_account = accounts.find_one({"account_name": selected_account_name})
 
     if selected_account:
