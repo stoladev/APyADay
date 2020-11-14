@@ -27,6 +27,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from employee_client.modules.loaders import widget_loader
+
 
 class EmployeeMainWindow(QMainWindow):
     """
@@ -76,7 +78,7 @@ class EmployeeMainWindow(QMainWindow):
             os.remove(self.screenshot_path)
 
         # ACTIVATION
-        self.widget_setup()
+        widget_loader.load_all_widgets(self)
         self.update_preview()
 
     def size_policy_setup(self):
@@ -85,87 +87,6 @@ class EmployeeMainWindow(QMainWindow):
         size_policy.setVerticalStretch(0)
         size_policy.setHeightForWidth(self.sizePolicy().hasHeightForWidth())
         self.setSizePolicy(size_policy)
-
-    def widget_setup(self):
-        # GRID LAYOUT
-        self.grid_layout_widget.setGeometry(QtCore.QRect(10, 20, 165, 131))
-        self.grid_layout_widget_2.setGeometry(QtCore.QRect(180, 20, 159, 131))
-        # DATA LAYOUT
-        self.data_label.setText("Need-To-Know Data")
-        self.data_layout.setContentsMargins(0, 0, 0, 0)
-        # QUESTIONS LAYOUT
-        self.questions_label.setText("Questionaire")
-        self.questions_layout.setContentsMargins(0, 0, 0, 0)
-
-        # TEXT VIEWER
-        self.report_view.setGeometry(QtCore.QRect(350, 20, 331, 371))
-        self.report_view.setLayoutDirection(QtCore.Qt.RightToLeft)
-        # GRAPHICS VIEWER
-        self.screenshot_view.setGeometry(QtCore.QRect(10, 280, 191, 111))
-
-        # SUBMIT BUTTON
-        self.generate_button.setText("Generate Report")
-        self.generate_button.setGeometry(QtCore.QRect(210, 320, 131, 71))
-        self.generate_button.pressed.connect(self.generate_report)
-        # SCREENSHOT BUTTON
-        self.screenshot_button.setText("Take A Screenshot")
-        self.screenshot_button.setGeometry(QtCore.QRect(210, 280, 131, 31))
-        self.screenshot_button.pressed.connect(self.take_screenshot)
-
-        # TEXT BOX
-        self.add_info_box.setPlaceholderText("Additional information...")
-        self.add_info_box.setGeometry(QtCore.QRect(10, 160, 331, 111))
-        self.add_info_box.textChanged.connect(self.update_preview)
-
-        # PREVIEW LABEL
-        self.preview_label.setText("Report Preview")
-        self.preview_label.setGeometry(QtCore.QRect(350, 0, 91, 17))
-        self.preview_label.setLayoutDirection(QtCore.Qt.RightToLeft)
-        # DATA LABEL
-        self.data_layout.addWidget(self.data_label, 0, 0, 1, 1)
-        # QUESTIONS LABEL
-        self.questions_layout.addWidget(self.questions_label, 0, 0, 1, 1)
-
-        # MENU BAR
-        self.menu_bar.setGeometry(QtCore.QRect(0, 0, 691, 21))
-        self.setMenuBar(self.menu_bar)
-
-        # ENVIRONMENT CHECKBOX
-        self.env_checkbox.setText("Environment")
-        self.data_layout.addWidget(self.env_checkbox, 2, 0, 1, 1)
-        self.env_checkbox.stateChanged.connect(self.update_preview)
-        # SITE CHECKBOX
-        self.site_checkbox.setText("Website Issue")
-        self.data_layout.addWidget(self.site_checkbox, 3, 0, 1, 1)
-        self.site_checkbox.stateChanged.connect(self.update_preview)
-        # PROGRAM CHECKBOX
-        self.program_checkbox.setText("Program Issue")
-        self.data_layout.addWidget(self.program_checkbox, 4, 0, 1, 1)
-        self.program_checkbox.stateChanged.connect(self.check_issue_type)
-        self.program_checkbox.stateChanged.connect(self.update_preview)
-        # CRASH CHECKBOX
-        self.crash_checkbox.setText("Crash Report")
-        self.data_layout.addWidget(self.crash_checkbox, 5, 0, 1, 1)
-        self.crash_checkbox.setEnabled(False)
-        self.crash_checkbox.stateChanged.connect(self.update_preview)
-        # REPRODUCIBLE CHECKBOX
-        self.reproducible_checkbox.setText("Reproducible?")
-        self.questions_layout.addWidget(self.reproducible_checkbox, 1, 0, 1, 1)
-        self.reproducible_checkbox.stateChanged.connect(self.update_preview)
-        # PROFITS CHECKBOX
-        self.profits_checkbox.setText("Affecting Profits?")
-        self.questions_layout.addWidget(self.profits_checkbox, 2, 0, 1, 1)
-        self.profits_checkbox.stateChanged.connect(self.update_preview)
-        # LEAK CHECKBOX
-        self.leak_checkbox.setText("Data Leak?")
-        self.questions_layout.addWidget(self.leak_checkbox, 4, 0, 1, 1)
-        self.leak_checkbox.stateChanged.connect(self.update_preview)
-        # SECURITY CHECKBOX
-        self.security_checkbox.setText("Security Risk?")
-        self.questions_layout.addWidget(self.security_checkbox, 3, 0, 1, 1)
-        self.security_checkbox.stateChanged.connect(self.update_preview)
-
-        QtCore.QMetaObject.connectSlotsByName(self)
 
     def check_issue_type(self):
         check_status = self.program_checkbox.isChecked()
