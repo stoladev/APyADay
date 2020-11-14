@@ -2,7 +2,7 @@
 Initializes window widgets for the technician application. Points to and runs customizations and
 specifications of execution/registered events.
 """
-
+import pymongo
 from PyQt5.QtWidgets import (
     QComboBox,
     QGraphicsView,
@@ -33,6 +33,12 @@ class TechnicianMainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
+        # MongoDB Connection
+        mongodb_url = open("../mongo_cluster.txt", "r")
+        connection = mongodb_url.read()
+        cluster = pymongo.MongoClient(connection)
+        self.database = cluster["bug_tracker_db"]
 
         # General Settings
         self.setWindowTitle("Login Window")

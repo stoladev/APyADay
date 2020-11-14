@@ -1,6 +1,6 @@
 # TODO
 # Simplify MongoDB load and make it more secure.
-
+import pymongo
 from PyQt5.QtWidgets import (
     QDialog,
     QLabel,
@@ -13,8 +13,14 @@ from technician_client.modules.managers import verification_manager
 
 
 class TechnicianLoginWindow(QDialog):
-    def __init__(self, parent=None):
-        super(TechnicianLoginWindow, self).__init__(parent)
+    def __init__(self):
+        super().__init__()
+
+        # MongoDB Connection
+        mongodb_url = open("../mongo_cluster.txt", "r")
+        connection = mongodb_url.read()
+        cluster = pymongo.MongoClient(connection)
+        self.database = cluster["bug_tracker_db"]
 
         # Initializations
         self.setWindowTitle("Technician Login")
