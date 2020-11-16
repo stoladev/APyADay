@@ -3,7 +3,6 @@ This is the manager of all report-related functions, ranging from checking what 
 report is, to finalizing and uploading the finished report to the appropriate MongoDB.
 """
 
-import os
 import platform
 
 import pyautogui
@@ -132,18 +131,32 @@ def generate_report(window):
     )
     if dialogue == QtWidgets.QMessageBox.Yes:
 
-        if os.path.exists(window.report_path):
-            os.remove(window.report_path)
-
         data = window.report_view.toPlainText()
+        reports = window.database.reports
 
-        # with open(window.report_path, "w") as report:
-        #     report.write(data)
-        #
-        # with ZipFile(window.zipfile_path, "w") as zip_object:
-        #     zip_object.write(window.report_path, "report.txt")
-        #     if os.path.exists(window.screenshot_path):
-        #         zip_object.write(window.screenshot_path, "screenshot.png")
+        if reports.find_one({"report": data}) is not None:
+            msg = QtWidgets.QMessageBox()
+            question = msg.question(
+                window,
+                "Similar Report Found",
+                "You've previously submitted a report with matching issues and details. "
+                "Would you like to replace it?",
+                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                QtWidgets.QMessageBox.Yes,
+            )
+            if question == QtWidgets.QMessageBox.Yes:
+                # TODO
+                # Have the report replace the matched report instead of inserting a new one.
+                print("Replacing...")
+
+            if question == QtWidgets.QMessageBox.No:
+                return
+
+        reports.insert({"report": data, "employee_name": "test_employee"})
+
+        # TODO
+        # Add a check for employee name, and after submission, add a 1 to the total reports they
+        # have filed.
 
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle("Success")

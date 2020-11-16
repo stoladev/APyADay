@@ -6,6 +6,7 @@ specifications of execution/registered events.
 import os
 import tempfile
 
+import pymongo
 from PyQt5.QtWidgets import (
     QCheckBox,
     QGraphicsView,
@@ -68,6 +69,12 @@ class EmployeeMainWindow(QMainWindow):
         self.screenshot_path = tempfile.NamedTemporaryFile(
             suffix=".png", prefix=os.path.basename(__file__), delete=True
         ).name
+
+        # MongoDB Connection
+        mongodb_url = open("../mongo_cluster.txt", "r")
+        connection = mongodb_url.read()
+        cluster = pymongo.MongoClient(connection)
+        self.database = cluster["bug_tracker_db"]
 
         # ACTIVATION
         widget_loader.load_all_widgets(self)

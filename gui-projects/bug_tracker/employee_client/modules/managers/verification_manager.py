@@ -24,6 +24,9 @@ def verify_employee(window, account, password):
         salt = account["password"]
         lock = account["password"]
         if bcrypt.hashpw(key, salt) == lock:
+
+            # TODO
+            # Update the last login date of the employee.
             window.accept()
         else:
             QMessageBox.warning(
