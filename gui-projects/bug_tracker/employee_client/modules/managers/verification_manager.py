@@ -24,9 +24,7 @@ def verify_employee(window, account, password):
         salt = account["password"]
         lock = account["password"]
         if bcrypt.hashpw(key, salt) == lock:
-
-            # TODO
-            # Update the last login date of the employee.
+            update_timestamp(window, account)
             window.accept()
         else:
             QMessageBox.warning(
@@ -36,3 +34,19 @@ def verify_employee(window, account, password):
             )
     else:
         QMessageBox.warning(window, "No Match", "No matching account found.")
+
+
+def update_timestamp(window, account):
+    """
+    Updates the login timestamp for the account that is logging in through MongoDB.
+
+    :param window: The QMainWindow in use.
+    :param account: The account to update.
+    :return: A success or failure on update.
+    """
+
+    account_list = window.database.accounts
+    account_list.update(
+        account,
+        {"$currentDate": {"last_login": True}},
+    )
