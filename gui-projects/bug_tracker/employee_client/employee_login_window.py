@@ -2,6 +2,10 @@
 Handles the login process of an employee, verifying their information with MongoDB, proceeding to
 open the main program after successful verification.
 """
+
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
 import pymongo
 from PyQt5.QtWidgets import (
     QDialog,
@@ -22,7 +26,6 @@ class EmployeeLoginWindow(QDialog):
 
     def __init__(self):
         super().__init__()
-        # super(EmployeeLoginWindow, self).__init__(parent)
 
         # Initializations
         self.setWindowTitle("Employee Login")
@@ -64,8 +67,6 @@ class EmployeeLoginWindow(QDialog):
 
         account_list = self.database.accounts
         account = account_list.find_one({"account_name": account_name})
-
-        print(account_name)
 
         if account:
             verification_manager.verify_employee(self, account, password)

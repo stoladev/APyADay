@@ -130,35 +130,73 @@ def generate_report(window):
         QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
     )
     if dialogue == QtWidgets.QMessageBox.Yes:
+        upload_report(window)
 
-        data = window.report_view.toPlainText()
-        reports = window.database.reports
 
-        if reports.find_one({"report": data}) is not None:
-            msg = QtWidgets.QMessageBox()
-            question = msg.question(
-                window,
-                "Similar Report Found",
-                "You've previously submitted a report with matching issues and details. "
-                "Would you like to replace it?",
-                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                QtWidgets.QMessageBox.Yes,
-            )
-            if question == QtWidgets.QMessageBox.Yes:
-                # TODO
-                # Have the report replace the matched report instead of inserting a new one.
-                print("Replacing...")
+def upload_report(window):
+    """
+    Uploads the report, first checking too see if there's a duplicate.
 
-            if question == QtWidgets.QMessageBox.No:
-                return
+    :param window: The QMainWindow in use.
+    :return: An uploaded or replaced report.
+    """
+    data = window.report_view.toPlainText()
+    reports = window.database.reports
+    report = reports.find_one({"report": data})
 
-        reports.insert({"report": data, "employee_name": "test_employee"})
+    if report is not None:
+        if not replace_report(window, reports, report, data):
+            return
 
-        # TODO
-        # Add a check for employee name, and after submission, add a 1 to the total reports they
-        # have filed.
+    reports.insert({"report": data, "employee_name": "test_employee"})
 
-        msg = QtWidgets.QMessageBox()
-        msg.setWindowTitle("Success")
-        msg.setText("Report successfully generated.")
-        msg.exec_()
+    update_reports_filed(window)
+
+    msg = QtWidgets.QMessageBox()
+    msg.setWindowTitle("Success")
+    msg.setText("Report successfully generated.")
+    msg.exec_()
+
+
+def replace_report(window, reports, report, data):
+    """
+    Replaces the similar report, overwriting any old data with any new data.
+
+    :param window: The QMainWindow in use.
+    :param reports: The reports collection on MongoDB.
+    :param report: The specific report that is to be replaced.
+    :param data: The new data that is to be overwritten.
+    :return: Either replaces the report, or cancels.
+    """
+    msg = QtWidgets.QMessageBox()
+
+    question = msg.question(
+        window,
+        "Similar Report Found",
+        "You've previously submitted a report with matching issues and details. "
+        "Would you like to replace it?",
+        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+        QtWidgets.QMessageBox.Yes,
+    )
+
+    if question == QtWidgets.QMessageBox.Yes:
+        reports.update(report, {"report": data})
+        return True
+
+    if question == QtWidgets.QMessageBox.No:
+        return False
+
+    return False
+
+
+def update_reports_filed(window):
+    """
+    Updates the number of an account's reports filed by 1.
+
+    :param window: The QMainWindow in use.
+    :return: An increase of 1 to an account's report's filed.
+    """
+    accounts = window.database.accounts
+    accounts.update(
+        {"account_name": window.account_name}, {"$inc": {"reports_filed": 1}}
+    )

@@ -3,6 +3,12 @@ Initializes window widgets for the employee application. Points to and runs cust
 specifications of execution/registered events.
 """
 
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
+# pylint: disable=too-many-instance-attributes
+# Reason: All these instances are necessary for the QMainWindow, since there is only 1.
+
 import os
 import tempfile
 
@@ -31,7 +37,7 @@ class EmployeeMainWindow(QMainWindow):
     configurations and/or event updates.
     """
 
-    def __init__(self):
+    def __init__(self, account_name):
         super().__init__()
 
         # GENERAL SETTINGS
@@ -76,11 +82,15 @@ class EmployeeMainWindow(QMainWindow):
         cluster = pymongo.MongoClient(connection)
         self.database = cluster["bug_tracker_db"]
 
-        # ACTIVATION
+        # General activations
         widget_loader.load_all_widgets(self)
+        self.account_name = account_name
         self.update_preview()
 
     def size_policy_setup(self):
+        """
+        Sets up the sizing policy for general options.
+        """
         size_policy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         size_policy.setHorizontalStretch(0)
         size_policy.setVerticalStretch(0)
@@ -88,13 +98,25 @@ class EmployeeMainWindow(QMainWindow):
         self.setSizePolicy(size_policy)
 
     def generate_report(self):
+        """
+        Hands of the report generation to the report manager.
+        """
         report_manager.generate_report(self)
 
     def take_screenshot(self):
+        """
+        Hands of taking the screenshot to the report manager.
+        """
         report_manager.take_screenshot(self)
 
     def update_preview(self):
+        """
+        Hands off updating the preview for the report to the report manager.
+        """
         report_manager.update_preview(self)
 
     def check_issue_type(self):
+        """
+        Hands off checking the issue type to the report manager.
+        """
         report_manager.check_issue_type(self)
