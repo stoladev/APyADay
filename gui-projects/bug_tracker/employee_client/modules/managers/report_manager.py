@@ -30,6 +30,8 @@ def check_issue_type(window):
     else:
         issue_type = ""
 
+    update_reports_filed(window)
+
     return issue_type
 
 
@@ -95,6 +97,7 @@ def take_screenshot(window):
         "to take a screenshot?",
         QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
     )
+
     if dialogue == QtWidgets.QMessageBox.Yes:
         pyautogui.screenshot(window.screenshot_path)
         pixmap = QtGui.QPixmap(window.screenshot_path)
@@ -129,6 +132,7 @@ def generate_report(window):
         "to generate the report?",
         QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
     )
+
     if dialogue == QtWidgets.QMessageBox.Yes:
         upload_report(window)
 
@@ -140,6 +144,7 @@ def upload_report(window):
     :param window: The QMainWindow in use.
     :return: An uploaded or replaced report.
     """
+    account_name = window.account_name
     data = window.report_view.toPlainText()
     reports = window.database.reports
     report = reports.find_one({"report": data})
@@ -148,7 +153,7 @@ def upload_report(window):
         if not replace_report(window, reports, report, data):
             return
 
-    reports.insert({"report": data, "employee_name": "test_employee"})
+    reports.insert({"report": data, "account_name": account_name})
 
     update_reports_filed(window)
 
@@ -194,9 +199,18 @@ def update_reports_filed(window):
     Updates the number of an account's reports filed by 1.
 
     :param window: The QMainWindow in use.
+
     :return: An increase of 1 to an account's report's filed.
     """
+    account_name = window.account_name
+    reports = window.database.reports
     accounts = window.database.accounts
+
+    matched_reports = reports.find({"account_name": account_name})
+    report_count = matched_reports.count()
+
     accounts.update(
-        {"account_name": window.account_name}, {"$inc": {"reports_filed": 1}}
+        {"account_name": account_name}, {"$set": {"reports_filed": report_count}}
     )
+
+    print(report_count)
