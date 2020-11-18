@@ -28,7 +28,7 @@ from PyQt5.QtWidgets import (
 )
 
 from employee_client.modules.loaders import widget_loader
-from employee_client.modules.managers import report_manager
+from employee_client.modules.managers import action_manager, report_manager
 
 
 class EmployeeMainWindow(QMainWindow):
@@ -105,18 +105,18 @@ class EmployeeMainWindow(QMainWindow):
 
     def take_screenshot(self):
         """
-        Hands of taking the screenshot to the report manager.
+        Hands of taking the screenshot to the action manager.
         """
-        report_manager.take_screenshot(self)
+        action_manager.take_screenshot(self)
 
     def update_preview(self):
         """
-        Hands off updating the preview for the report to the report manager.
+        Hands off updating the preview for the report to the action manager.
         """
-        report_manager.update_preview(self)
+        action_manager.update_preview(self)
 
     def check_issue_type(self):
         """
-        Hands off checking the issue type to the report manager.
+        Hands off checking the issue type to the action manager.
         """
-        report_manager.check_issue_type(self)
+        action_manager.check_issue_type(self)
