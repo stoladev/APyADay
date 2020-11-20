@@ -1,7 +1,7 @@
 """
 Handles all actions that do specific operations for checking, generating, updating, or similar.
 """
-
+import base64
 import platform
 
 import pyautogui
@@ -111,3 +111,29 @@ def take_screenshot(window):
         msg.setWindowTitle("Success")
         msg.setText("Screenshot successfully taken.")
         msg.exec_()
+
+
+def png_to_base64(image):
+    """
+    Converts a screenshot into bas64 code.
+
+    :param image: The image to convert.
+    :return: Base64 code of the image.
+    """
+
+    with open(image, "rb") as image_file:
+        base_64_data = base64.b64encode(image_file.read())
+
+    return base_64_data
+
+
+def base64_to_png(base_64_data):
+    """
+    Converts base64 data to a PNG file.
+
+    :param base_64_data: The base64 data to convert.
+    :return: An image.
+    """
+
+    with open("image.png", "wb") as image_file:
+        return image_file.write(base64.decodebytes(base_64_data))

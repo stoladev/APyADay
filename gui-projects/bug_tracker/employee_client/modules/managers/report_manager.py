@@ -5,6 +5,8 @@ report is, to finalizing and uploading the finished report to the appropriate Mo
 
 from PyQt5 import QtWidgets
 
+from employee_client.modules.managers import action_manager
+
 
 def generate_report(window):
     """
@@ -25,6 +27,14 @@ def generate_report(window):
 
     if dialogue == QtWidgets.QMessageBox.Yes:
         upload_report(window)
+    else:
+        screenshot = window.screenshot_path
+
+        try:
+            encoded_image = action_manager.png_to_base64(screenshot)
+            # decoded_image = action_manager.base64_to_png(encoded_image)
+        except FileNotFoundError:
+            print("No suitable image found.")
 
 
 def upload_report(window):
