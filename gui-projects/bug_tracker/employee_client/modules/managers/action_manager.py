@@ -137,3 +137,28 @@ def base64_to_png(base_64_data):
 
     with open("image.png", "wb") as image_file:
         return image_file.write(base64.decodebytes(base_64_data))
+
+
+def process_screenshot(window):
+    """
+    Processes the screenshot, if applicable, to base64 for easier MongoDB upload.
+    :param window: The QMainWindow in use.
+    :return: Either the encoded image in base64, or null.
+    """
+    screenshot = window.screenshot_path
+
+    try:
+        encoded_image = png_to_base64(screenshot)
+        return encoded_image
+    except FileNotFoundError:
+        msg = QtWidgets.QMessageBox()
+        msg.question(
+            window,
+            "No Screenshot Attached",
+            "Are you sure you want to continue with "
+            "the report upload without a screenshot of the issue?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+            QtWidgets.QMessageBox.No,
+        )
+        if msg == QtWidgets.QMessageBox.No:
+            return None

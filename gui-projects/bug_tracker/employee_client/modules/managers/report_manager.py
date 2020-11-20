@@ -3,6 +3,9 @@ This is the manager of all report-related functions, ranging from checking what 
 report is, to finalizing and uploading the finished report to the appropriate MongoDB.
 """
 
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
 from PyQt5 import QtWidgets
 
 from employee_client.modules.managers import action_manager
@@ -16,41 +19,46 @@ def generate_report(window):
     :param window: The QApplication in use.
     :return: Uploads the report to MongoDB.
     """
-    dialogue = QtWidgets.QMessageBox.question(
-        window,
-        "Confirmation",
-        "A zip file containing your report and screenshot, if taken, will be generated "
-        "in the same directory you are running this executable from.\n\nAre you ready "
-        "to generate the report?",
-        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-    )
 
-    if dialogue == QtWidgets.QMessageBox.Yes:
-        upload_report(window)
-    else:
-        screenshot = window.screenshot_path
-
-        try:
-            encoded_image = action_manager.png_to_base64(screenshot)
-            # decoded_image = action_manager.base64_to_png(encoded_image)
-        except FileNotFoundError:
-            print("No suitable image found.")
-
-
-def upload_report(window):
-    """
-    Uploads the report, first checking too see if there's a duplicate.
-
-    :param window: The QMainWindow in use.
-    :return: An uploaded or replaced report.
-    """
+    reports = window.database.reports
     account_name = window.account_name
     data = window.report_view.toPlainText()
-    reports = window.database.reports
 
-    reports.insert({"report": data, "account_name": account_name})
+    encoded_image = action_manager.process_screenshot(window)
 
-    update_reports_filed(window)
+    if encoded_image is not None:
+        upload_report(window, reports, account_name, data, encoded_image)
+    else:
+        return
+
+
+def upload_report(window, reports, account_name, data, encoded_image):
+    """
+    Uploads the generated report to MongoDB.
+
+    :param window: The QMainWindow in use.
+    :param reports: The reports collection used for inserting the new report.
+    :param account_name: The account name of the uploader.
+    :param data: The data for the report to be uploaded.
+    :param encoded_image: The image to upload, which is either 0 or encoded in base64.
+    :return: A successful report upload.
+    """
+
+    reports.insert(
+        {
+            "account_name": account_name,
+            "report": data,
+            "screenshot": encoded_image,
+            "submitted_on": 0,
+        }
+    )
+
+    reports.update(
+        {"account_name": account_name, "submitted_on": 0},
+        {"$currentDate": {"submitted_on": True}},
+    )
+
+    update_reports_filed(window, account_name, reports)
 
     msg = QtWidgets.QMessageBox()
     msg.setWindowTitle("Success")
@@ -58,16 +66,16 @@ def upload_report(window):
     msg.exec_()
 
 
-def update_reports_filed(window):
+def update_reports_filed(window, account_name, reports):
     """
     Updates the number of an account's reports filed by 1.
 
     :param window: The QMainWindow in use.
-
+    :param account_name: The account name to update the amount of reports they have filed.
+    :param reports: The list of reports to count against when updating.
     :return: An increase of 1 to an account's report's filed.
     """
-    account_name = window.account_name
-    reports = window.database.reports
+
     accounts = window.database.accounts
 
     matched_reports = reports.find({"account_name": account_name})
