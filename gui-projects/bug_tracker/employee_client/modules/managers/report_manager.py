@@ -20,11 +20,20 @@ def generate_report(window):
     :return: Uploads the report to MongoDB.
     """
 
+    issue_type = action_manager.check_issue_type(window)
+
+    if issue_type is None:
+        QtWidgets.QMessageBox.warning(
+            window,
+            "Issue Not Selected",
+            "You must specify what "
+            "type of issue this bug report is concerning. You can choose between it being a:\n\n"
+            "Website Issue\nProgram Issue\n\n...or both.",
+        )
+        return
+
     reports = window.database.reports
     account_name = window.account_name
-    data = window.report_view.toPlainText()
-
-    encoded_image = action_manager.process_screenshot(window)
 
     active_reports = check_open_reports(account_name, reports)
 
@@ -38,27 +47,41 @@ def generate_report(window):
         )
         return
 
+    encoded_image = action_manager.process_screenshot(window)
+
     if encoded_image is not None:
-        upload_report(window, reports, account_name, data, encoded_image)
+        upload_report(
+            window,
+            account_name,
+            issue_type,
+            encoded_image,
+        )
     else:
         return
 
 
-def upload_report(window, reports, account_name, data, encoded_image):
+def upload_report(window, account_name, issue_type, encoded_image):
     """
     Uploads the generated report to MongoDB.
 
     :param window: The QMainWindow in use.
-    :param reports: The reports collection used for inserting the new report.
     :param account_name: The account name of the uploader.
-    :param data: The data for the report to be uploaded.
+    :param issue_type: The report's issue type.
     :param encoded_image: The image to upload, which is either 0 or encoded in base64.
     :return: A successful report upload.
     """
 
+    reports = window.database.reports
+    accounts = window.database.accounts
+    account = accounts.find_one({"account_name": account_name})
+    employee_type = account["employee_type"]
+    data = window.report_view.toPlainText()
+
     reports.insert(
         {
             "account_name": account_name,
+            "employee_type": employee_type,
+            "issue_type": issue_type,
             "report": data,
             "screenshot": encoded_image,
             "submitted_on": 0,
