@@ -26,6 +26,18 @@ def generate_report(window):
 
     encoded_image = action_manager.process_screenshot(window)
 
+    active_reports = check_open_reports(account_name, reports)
+
+    if active_reports >= 5:
+        warning = QtWidgets.QMessageBox()
+        warning.warning(
+            window,
+            "Maximum Reports Reached",
+            "You are already at the maximum amount of active bug reports (5).\n\nPlease wait "
+            "until 1 or more of your currently open reports are completed/closed.",
+        )
+        return
+
     if encoded_image is not None:
         upload_report(window, reports, account_name, data, encoded_image)
     else:
@@ -60,10 +72,27 @@ def upload_report(window, reports, account_name, data, encoded_image):
 
     update_reports_filed(window, account_name, reports)
 
+    open_reports = check_open_reports(account_name, reports)
+    remaining_reports = str(open_reports) + "/5 open bug reports."
+
     msg = QtWidgets.QMessageBox()
     msg.setWindowTitle("Success")
-    msg.setText("Report successfully generated.")
+    msg.setText("Report successfully generated.\n\nYou now have " + remaining_reports)
     msg.exec_()
+
+
+def check_open_reports(account_name, reports):
+    """
+    Checks the remaining number of reports an account has.
+    :param account_name: The account name of the submitter.
+    :param reports: The reports collection to count against.
+    :return: A string with the calculated reports filed / reports max.
+    """
+
+    matched_reports = reports.find({"account_name": account_name})
+    report_count = matched_reports.count()
+
+    return report_count
 
 
 def update_reports_filed(window, account_name, reports):
@@ -78,8 +107,7 @@ def update_reports_filed(window, account_name, reports):
 
     accounts = window.database.accounts
 
-    matched_reports = reports.find({"account_name": account_name})
-    report_count = matched_reports.count()
+    report_count = check_open_reports(account_name, reports)
 
     accounts.update(
         {"account_name": account_name}, {"$set": {"reports_filed": report_count}}
