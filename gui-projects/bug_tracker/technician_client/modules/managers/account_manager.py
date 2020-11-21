@@ -1,6 +1,10 @@
 """
 Manages all interactions with an account, from creation to modification to deletion.
 """
+
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
 import bcrypt
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QMessageBox
 
@@ -217,10 +221,12 @@ def change_account_name(window):
     msg.about(
         window,
         "Success",
-        account_name + "'s password has been successfully reset.",
+        account_name
+        + "'s username has been successfully changed to "
+        + new_account_name
+        + ".",
     )
 
-    # window.accounts_table.clearSelection()
     account_loader.load_accounts(window)
 
 
