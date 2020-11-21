@@ -9,9 +9,6 @@ specifications of execution/registered events.
 # pylint: disable=too-many-instance-attributes
 # Reason: All these instances are necessary for the QMainWindow, since there is only 1.
 
-import os
-import tempfile
-
 import pymongo
 from PyQt5.QtWidgets import (
     QCheckBox,
@@ -70,11 +67,6 @@ class EmployeeMainWindow(QMainWindow):
         self.profits_checkbox = QCheckBox(self.grid_layout_widget_2)
         self.leak_checkbox = QCheckBox(self.grid_layout_widget_2)
         self.security_checkbox = QCheckBox(self.grid_layout_widget_2)
-
-        # TEMPORARY PNG FILE
-        self.screenshot_path = tempfile.NamedTemporaryFile(
-            suffix=".png", prefix=os.path.basename(__file__), delete=True
-        ).name
 
         # MongoDB Connection
         mongodb_url = open("../mongo_cluster.txt", "r")
