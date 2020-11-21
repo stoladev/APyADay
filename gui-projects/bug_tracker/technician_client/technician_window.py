@@ -2,6 +2,16 @@
 Initializes window widgets for the technician application. Points to and runs customizations and
 specifications of execution/registered events.
 """
+
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
+# pylint: disable=too-many-instance-attributes
+# Reason: This number of attributes is necessary because of the scope of the application.
+
+# pylint: disable=invalid-name
+# Reason: The 2 invalid names are overrides.
+
 import pymongo
 from PyQt5.QtWidgets import (
     QComboBox,
@@ -17,7 +27,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from technician_client.modules.loaders import menu_loader, widget_loader
+from technician_client.modules.loaders import menu_loader, report_loader, widget_loader
 from technician_client.modules.managers import (
     account_manager,
     keypress_manager,
@@ -94,6 +104,7 @@ class TechnicianMainWindow(QMainWindow):
         self.create_account_label = QLabel(self.accounts_tab)
 
         widget_loader.load_all_widgets(self)
+        report_loader.load_reports(self)
 
         self.show()
 
@@ -108,28 +119,71 @@ class TechnicianMainWindow(QMainWindow):
         self.find_account_line.textChanged.connect(self.search_accounts_table)
 
     def contextMenuEvent(self, event):
+        """
+        Overrides context menu events to load the account table's menu.
+        """
+
         menu_loader.load_accounts_menu(self, event)
 
     def keyPressEvent(self, event):
+        """
+        Overrides key press events to check for special key presses.
+        """
+
         keypress_manager.check_keypress(self, event)
 
     def search_accounts_table(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         selection_manager.find_account_match(self)
 
     def check_new_selection(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         selection_manager.check_account_selection(self)
 
+    def check_report_selection(self):
+        """
+        Forwards this self function to a manager.
+        """
+
+        selection_manager.check_report_selection(self)
+
     def create_new_account(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         account_manager.create_new_account(self)
 
     def delete_selected_account(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         account_manager.delete_selected_account(self)
 
     def reset_account_password(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         account_manager.reset_account_password(self)
 
     def change_account_name(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         account_manager.change_account_name(self)
 
     def change_email(self):
+        """
+        Forwards this self function to a manager.
+        """
+
         account_manager.change_email(self)

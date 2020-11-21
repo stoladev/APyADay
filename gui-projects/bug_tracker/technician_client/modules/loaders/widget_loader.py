@@ -1,3 +1,13 @@
+"""
+Loads all specifications for the widgets used within the technician application.
+"""
+
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
+# pylint: disable=too-many-statements
+# Reason: This number of statements is necessary because of the scope of the application.
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QAbstractItemView,
@@ -12,6 +22,10 @@ from technician_client.modules.loaders import account_loader
 
 
 def load_all_widgets(window):
+    """
+    Mass-loads all the widgets.
+    """
+
     load_tabs(window)
     load_text_lines(window)
     load_buttons(window)
@@ -25,6 +39,10 @@ def load_all_widgets(window):
 
 
 def load_tabs(window):
+    """
+    Loads the tabs for the technician application.
+    """
+
     window.tab_widget.setGeometry(QtCore.QRect(0, 0, 921, 641))
     window.tab_widget.setCurrentIndex(1)
     window.tab_widget.addTab(window.accounts_tab, "Accounts")
@@ -32,6 +50,10 @@ def load_tabs(window):
 
 
 def load_text_lines(window):
+    """
+    Loads the text lines for the technician application.
+    """
+
     window.email_line.setPlaceholderText("Email Address")
     window.email_line.setGeometry(QtCore.QRect(400, 140, 181, 24))
 
@@ -82,6 +104,10 @@ def load_text_lines(window):
 
 
 def load_buttons(window):
+    """
+    Loads the buttons for the technician application.
+    """
+
     window.change_account_button.setText("Change")
     window.change_account_button.setGeometry(QtCore.QRect(310, 440, 80, 24))
 
@@ -105,6 +131,10 @@ def load_buttons(window):
 
 
 def load_labels(window):
+    """
+    Loads the labels for the technician application.
+    """
+
     window.create_account_label.setText("Create Account")
     window.create_account_label.setGeometry(QtCore.QRect(400, 60, 100, 16))
 
@@ -119,6 +149,10 @@ def load_labels(window):
 
 
 def load_tables(window: QMainWindow):
+    """
+    Loads the tables for the technician application.
+    """
+
     accounts_table: QTableView = window.accounts_table
     reports_table: QTableView = window.reports_table
 
@@ -155,40 +189,60 @@ def load_tables(window: QMainWindow):
     accounts_table.setSortingEnabled(True)
 
     # Reports Table
+    reports_table.setSelectionBehavior(QTableView.SelectRows)
+    reports_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    reports_table.setSelectionMode(QAbstractItemView.SingleSelection)
     reports_table.setGeometry(QtCore.QRect(10, 10, 571, 171))
     reports_table.setColumnCount(4)
     reports_table.setRowCount(0)
+
     item = QTableWidgetItem()
     header = reports_table.horizontalHeader()
     header.setSectionResizeMode(QHeaderView.ResizeToContents)
-    header.setSectionResizeMode(0, QHeaderView.Stretch)
     reports_table.setHorizontalHeaderItem(0, item)
     item = QTableWidgetItem()
+    header.setSectionResizeMode(0, QHeaderView.Stretch)
     reports_table.setHorizontalHeaderItem(1, item)
-    header.setSectionResizeMode(1, QHeaderView.Stretch)
     item = QTableWidgetItem()
     reports_table.setHorizontalHeaderItem(2, item)
     item = QTableWidgetItem()
     reports_table.setHorizontalHeaderItem(3, item)
+    reports_table.hideColumn(3)
+
     item = reports_table.horizontalHeaderItem(0)
     item.setText("Submitter")
     item = reports_table.horizontalHeaderItem(1)
-    item.setText("Issue Type")
+    item.setText(" Issue Type ")
     item = reports_table.horizontalHeaderItem(2)
-    item.setText(" Severity ")
+    item.setText(" Submitted On ")
     item = reports_table.horizontalHeaderItem(3)
-    item.setText(" Reported On ")
+    item.setText("ID")
+
+    # ACTIONS
+    reports_table.doubleClicked.connect(window.check_report_selection)
 
 
 def load_text_browsers(window):
+    """
+    Loads the text browsers for the technician application.
+    """
+
     window.report_text_browser.setGeometry(QtCore.QRect(10, 190, 321, 331))
 
 
 def load_text_boxes(window):
+    """
+    Loads the text boxes for the technician application.
+    """
+
     window.technician_report_notes.setGeometry(QtCore.QRect(340, 350, 241, 141))
 
 
 def load_combo_boxes(window):
+    """
+    Loads the combo boxes for the technician application.
+    """
+
     window.case_status_combo_box.setGeometry(QtCore.QRect(340, 500, 151, 24))
     window.case_status_combo_box.addItem("Case Open")
     window.case_status_combo_box.addItem("Case In Progress")
@@ -203,4 +257,8 @@ def load_combo_boxes(window):
 
 
 def load_graphics_view(window):
+    """
+    Loads the graphics viewers for the technician application.
+    """
+
     window.screenshot_view.setGeometry(QtCore.QRect(340, 220, 241, 121))
