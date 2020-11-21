@@ -2,6 +2,9 @@
 The main file to execute for the technician client.
 """
 
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
 import sys
 
 from PyQt5.QtWidgets import QApplication, QDialog
@@ -10,7 +13,7 @@ from technician_client.technician_login_window import TechnicianLoginWindow
 from technician_client.technician_window import TechnicianMainWindow
 
 
-def run_login_window(app_in_use):
+def run_login_window():
     """
     Runs the login verification process through the technician's login window class.
 
@@ -23,8 +26,6 @@ def run_login_window(app_in_use):
         run_main_window()
     else:
         return
-
-    # sys.exit(app_in_use.exec_())
 
 
 def run_main_window():
@@ -43,6 +44,5 @@ def run_main_window():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    run_login_window(app)
-    # app.quitOnLastWindowClosed()
-    # run_main_window()
+    # run_login_window()
+    run_main_window()
