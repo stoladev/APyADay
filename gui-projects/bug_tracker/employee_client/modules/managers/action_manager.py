@@ -2,7 +2,9 @@
 Handles all actions that do specific operations for checking, generating, updating, or similar.
 """
 import base64
+import os
 import platform
+import tempfile
 
 import pyautogui
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -16,18 +18,24 @@ def check_issue_type(window):
     :param window: The QApplication in use.
     :return: Updates the issue type line in the report.
     """
-    check_status = window.program_checkbox.isChecked()
 
-    window.crash_checkbox.setEnabled(check_status)
+    # check_status = window.program_checkbox.isChecked()
+    # window.crash_checkbox.setEnabled(check_status)
 
     if window.site_checkbox.isChecked() & window.program_checkbox.isChecked():
-        issue_type = "Issue Type:\nWebsite and Program Related\n\n"
+        issue_type = "Website and Program Related"
     elif window.site_checkbox.isChecked():
-        issue_type = "Issue Type:\nWebsite Related\n\n"
+        issue_type = "Website Related"
     elif window.program_checkbox.isChecked():
-        issue_type = "Issue Type:\nProgram Related\n\n"
+        issue_type = "Program Related"
     else:
-        issue_type = ""
+        issue_type = None
+
+    if not window.program_checkbox.isChecked():
+        window.crash_checkbox.setChecked(False)
+        window.crash_checkbox.setEnabled(False)
+    else:
+        window.crash_checkbox.setEnabled(True)
 
     return issue_type
 
@@ -41,6 +49,11 @@ def update_preview(window):
     :return: Updates the preview textbox.
     """
     issue_type = check_issue_type(window)
+
+    if issue_type is None:
+        issue_type = ""
+    else:
+        issue_type = "Issue Type:\n" + issue_type + "\n\n"
 
     environment = (
         "Environment:\n" + platform.system() + " " + platform.release() + "\n\n"
@@ -84,6 +97,7 @@ def take_screenshot(window):
 
     :param window: The QApplication in use.
     :return: Attaches the new screenshot into the screenshot preview viewer.
+
     """
 
     dialogue = QtWidgets.QMessageBox.question(
@@ -96,11 +110,8 @@ def take_screenshot(window):
     )
 
     if dialogue == QtWidgets.QMessageBox.Yes:
-        pyautogui.screenshot(window.screenshot_path)
-        pixmap = QtGui.QPixmap(window.screenshot_path)
-        item = QtWidgets.QGraphicsPixmapItem(pixmap)
-        scene = QtWidgets.QGraphicsScene(window)
-        scene.addItem(item)
+        scene = generate_png(window)
+
         window.screenshot_view.setScene(scene)
         window.screenshot_view.ensureVisible(scene.sceneRect())
         window.screenshot_view.fitInView(
@@ -111,6 +122,26 @@ def take_screenshot(window):
         msg.setWindowTitle("Success")
         msg.setText("Screenshot successfully taken.")
         msg.exec_()
+
+
+def generate_png(window):
+    """
+    Generates the image using pyautogui.
+
+    :param window: The QMainWindow in use.
+    :return: The compiled scene for display.
+    """
+
+    screenshot_path = tempfile.NamedTemporaryFile(
+        suffix=".png", prefix=os.path.basename(__file__), delete=True
+    ).name
+    pyautogui.screenshot(screenshot_path)
+    pixmap = QtGui.QPixmap(screenshot_path)
+    item = QtWidgets.QGraphicsPixmapItem(pixmap)
+    scene = QtWidgets.QGraphicsScene(window)
+    scene.addItem(item)
+
+    return scene
 
 
 def png_to_base64(image):
@@ -127,32 +158,20 @@ def png_to_base64(image):
     return base_64_data
 
 
-def base64_to_png(base_64_data):
-    """
-    Converts base64 data to a PNG file.
-
-    :param base_64_data: The base64 data to convert.
-    :return: An image.
-    """
-
-    with open("image.png", "wb") as image_file:
-        return image_file.write(base64.decodebytes(base_64_data))
-
-
 def process_screenshot(window):
     """
     Processes the screenshot, if applicable, to base64 for easier MongoDB upload.
     :param window: The QMainWindow in use.
     :return: Either the encoded image in base64, or null.
     """
+
     screenshot = window.screenshot_path
 
     try:
         encoded_image = png_to_base64(screenshot)
         return encoded_image
     except FileNotFoundError:
-        msg = QtWidgets.QMessageBox()
-        msg.question(
+        msg = QtWidgets.QMessageBox().question(
             window,
             "No Screenshot Attached",
             "Are you sure you want to continue with "
@@ -160,5 +179,6 @@ def process_screenshot(window):
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
             QtWidgets.QMessageBox.No,
         )
-        if msg == QtWidgets.QMessageBox.No:
-            return None
+        if msg == QtWidgets.QMessageBox.Yes:
+            encoded_image = "N/A"
+            return encoded_image
