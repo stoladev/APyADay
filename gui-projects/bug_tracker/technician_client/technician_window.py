@@ -13,6 +13,7 @@ specifications of execution/registered events.
 # Reason: The 2 invalid names are overrides.
 
 import pymongo
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import (
     QComboBox,
     QGraphicsView,
@@ -30,6 +31,7 @@ from PyQt5.QtWidgets import (
 from technician_client.modules.loaders import menu_loader, report_loader, widget_loader
 from technician_client.modules.managers import (
     account_manager,
+    action_manager,
     keypress_manager,
     selection_manager,
 )
@@ -52,6 +54,8 @@ class TechnicianMainWindow(QMainWindow):
 
         # General Settings
         self.setWindowTitle("Login Window")
+        self.screenshot_path = ""
+        self.in_screenshot_mode = False
         self.setFixedSize(593, 558)
         self.central_widget = QWidget(self)
 
@@ -132,6 +136,15 @@ class TechnicianMainWindow(QMainWindow):
 
         keypress_manager.check_keypress(self, event)
 
+    def mouseDoubleClickEvent(self, a0: QtGui.QMouseEvent) -> None:
+        """
+        Overrides the double click event to check for any opening actions.
+        """
+
+        mouse_on_graphics_view = self.screenshot_view.underMouse()
+        if mouse_on_graphics_view:
+            action_manager.open_large_viewer(self)
+
     def search_accounts_table(self):
         """
         Forwards this self function to a manager.
@@ -187,3 +200,10 @@ class TechnicianMainWindow(QMainWindow):
         """
 
         account_manager.change_email(self)
+
+    def open_large_viewer(self):
+        """
+        Forwards this self function to a manager.
+        """
+
+        action_manager.open_large_viewer(self)

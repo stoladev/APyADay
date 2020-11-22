@@ -135,6 +135,7 @@ def generate_png(window):
     screenshot_path = tempfile.NamedTemporaryFile(
         suffix=".png", prefix=os.path.basename(__file__), delete=True
     ).name
+
     pyautogui.screenshot(screenshot_path)
     pixmap = QtGui.QPixmap(screenshot_path)
     item = QtWidgets.QGraphicsPixmapItem(pixmap)

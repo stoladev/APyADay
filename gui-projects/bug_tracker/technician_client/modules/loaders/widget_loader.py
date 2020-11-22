@@ -11,6 +11,7 @@ Loads all specifications for the widgets used within the technician application.
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QAbstractItemView,
+    QGraphicsView,
     QHeaderView,
     QLineEdit,
     QMainWindow,
@@ -261,4 +262,6 @@ def load_graphics_view(window):
     Loads the graphics viewers for the technician application.
     """
 
-    window.screenshot_view.setGeometry(QtCore.QRect(340, 220, 241, 121))
+    screenshot_view: QGraphicsView = window.screenshot_view.setGeometry(
+        QtCore.QRect(340, 220, 241, 121)
+    )

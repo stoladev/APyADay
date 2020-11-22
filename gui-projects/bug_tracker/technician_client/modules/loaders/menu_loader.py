@@ -21,6 +21,7 @@ def load_accounts_menu(window, event):
     :param event: The context menu event.
     :return: The selected action, or cancels if none selected/clicked off.
     """
+
     table: QTableWidget = window.accounts_table
     index: indexes = table.selectionModel().selection().indexes()
     mouse_on_table = window.accounts_table.underMouse()

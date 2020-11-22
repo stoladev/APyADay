@@ -6,6 +6,7 @@ import base64
 import os
 import tempfile
 
+from PIL import Image
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -33,13 +34,13 @@ def decode_screenshot(window, encoded_image):
     :return: A compiled scene for use in the screenshot viewer.
     """
 
-    screenshot_path = tempfile.NamedTemporaryFile(
+    window.screenshot_path = tempfile.NamedTemporaryFile(
         suffix=".png", prefix=os.path.basename(__file__), delete=True
     ).name
 
-    base64_to_png(screenshot_path, encoded_image)
+    base64_to_png(window.screenshot_path, encoded_image)
 
-    pixmap = QtGui.QPixmap(screenshot_path)
+    pixmap = QtGui.QPixmap(window.screenshot_path)
     item = QtWidgets.QGraphicsPixmapItem(pixmap)
     scene = QtWidgets.QGraphicsScene(window)
     scene.addItem(item)
@@ -58,3 +59,10 @@ def base64_to_png(screenshot_path, encoded_image):
 
     with open(screenshot_path, "wb") as image_file:
         return image_file.write(base64.decodebytes(encoded_image))
+
+
+def open_large_viewer(window):
+    screenshot_path = window.screenshot_path
+    image = Image.open(screenshot_path, mode="r")
+    image.show()
+    print("Image opened.")
