@@ -11,18 +11,17 @@ Loads all specifications for the widgets used within the technician application.
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QAbstractItemView,
-    QGraphicsView,
     QHeaderView,
     QLineEdit,
-    QMainWindow,
     QTableView,
     QTableWidgetItem,
 )
 
 from technician_client.modules.loaders import account_loader
+from technician_client.technician_window import TechnicianMainWindow
 
 
-def load_all_widgets(window):
+def load_all_widgets(window: TechnicianMainWindow):
     """
     Mass-loads all the widgets.
     """
@@ -34,12 +33,13 @@ def load_all_widgets(window):
     load_tables(window)
     load_text_browsers(window)
     load_text_boxes(window)
+    load_checkboxes(window)
     load_combo_boxes(window)
     load_graphics_view(window)
     window.setCentralWidget(window.central_widget)
 
 
-def load_tabs(window):
+def load_tabs(window: TechnicianMainWindow):
     """
     Loads the tabs for the technician application.
     """
@@ -50,7 +50,7 @@ def load_tabs(window):
     window.tab_widget.addTab(window.reports_tab, "Reports")
 
 
-def load_text_lines(window):
+def load_text_lines(window: TechnicianMainWindow):
     """
     Loads the text lines for the technician application.
     """
@@ -104,7 +104,7 @@ def load_text_lines(window):
     window.search_reports_line.setAlignment(QtCore.Qt.AlignCenter)
 
 
-def load_buttons(window):
+def load_buttons(window: TechnicianMainWindow):
     """
     Loads the buttons for the technician application.
     """
@@ -131,7 +131,7 @@ def load_buttons(window):
     window.update_report_button.setGeometry(QtCore.QRect(500, 500, 80, 24))
 
 
-def load_labels(window):
+def load_labels(window: TechnicianMainWindow):
     """
     Loads the labels for the technician application.
     """
@@ -149,7 +149,7 @@ def load_labels(window):
     window.reset_password_label.setGeometry(QtCore.QRect(401, 290, 91, 16))
 
 
-def load_tables(window: QMainWindow):
+def load_tables(window: TechnicianMainWindow):
     """
     Loads the tables for the technician application.
     """
@@ -228,7 +228,7 @@ def load_tables(window: QMainWindow):
     reports_table.doubleClicked.connect(window.check_report_selection)
 
 
-def load_text_browsers(window):
+def load_text_browsers(window: TechnicianMainWindow):
     """
     Loads the text browsers for the technician application.
     """
@@ -236,7 +236,7 @@ def load_text_browsers(window):
     window.report_text_browser.setGeometry(QtCore.QRect(10, 220, 321, 305))
 
 
-def load_text_boxes(window):
+def load_text_boxes(window: TechnicianMainWindow):
     """
     Loads the text boxes for the technician application.
     """
@@ -244,7 +244,13 @@ def load_text_boxes(window):
     window.technician_report_notes.setGeometry(QtCore.QRect(340, 350, 241, 141))
 
 
-def load_combo_boxes(window):
+def load_checkboxes(window: TechnicianMainWindow):
+    """
+    Loads the check boxes for the technician application.
+    """
+
+
+def load_combo_boxes(window: TechnicianMainWindow):
     """
     Loads the combo boxes for the technician application.
     """
@@ -262,11 +268,9 @@ def load_combo_boxes(window):
     window.worker_type_combo_box.addItem("Department Head")
 
 
-def load_graphics_view(window):
+def load_graphics_view(window: TechnicianMainWindow):
     """
     Loads the graphics viewers for the technician application.
     """
 
-    screenshot_view: QGraphicsView = window.screenshot_view.setGeometry(
-        QtCore.QRect(340, 220, 241, 121)
-    )
+    window.screenshot_view.setGeometry(QtCore.QRect(340, 220, 241, 121))

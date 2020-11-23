@@ -12,9 +12,12 @@ specifications of execution/registered events.
 # pylint: disable=invalid-name
 # Reason: The 2 invalid names are overrides.
 
+# pylint: disable=too-many-statements
+# Reason: This number of statements is necessary because of the scope of the application.
+
 import pymongo
-from PyQt5 import QtGui
 from PyQt5.QtWidgets import (
+    QCheckBox,
     QComboBox,
     QGraphicsView,
     QLabel,
@@ -93,6 +96,10 @@ class TechnicianMainWindow(QMainWindow):
         # Report Search
         self.reports_table = QTableWidget(self.reports_tab)
         self.search_reports_line = QLineEdit(self.reports_tab)
+        self.open_reports_checkbox = QCheckBox(self.reports_tab)
+        self.in_progress_reports_checkbox = QCheckBox(self.reports_tab)
+        self.closed_fixed_reports_checkbox = QCheckBox(self.reports_tab)
+        self.not_a_bug_reports_checkbox = QCheckBox(self.reports_tab)
 
         # Report View
         self.report_text_browser = QTextBrowser(self.reports_tab)
@@ -136,7 +143,7 @@ class TechnicianMainWindow(QMainWindow):
 
         keypress_manager.check_keypress(self, event)
 
-    def mouseDoubleClickEvent(self, a0: QtGui.QMouseEvent) -> None:
+    def mouseDoubleClickEvent(self, event) -> None:
         """
         Overrides the double click event to check for any opening actions.
         """
