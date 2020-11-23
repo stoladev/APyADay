@@ -83,16 +83,34 @@ def check_report_selection(window):
     """
 
     row = window.reports_table.currentRow()
-
     report_id = window.reports_table.item(row, 3).text()
-
     reports = window.database.reports
-    print(report_id)
+    accounts = window.database.accounts
+
     report = reports.find_one({"_id": ObjectId(report_id)})
+    submitter = accounts.find_one({"account_name": report["account_name"]})
+    submitter_email = submitter["email"]
+    submitter_employee_type = submitter["employee_type"]
 
     if report:
         report_browser: QTextBrowser = window.report_text_browser
-        report_browser.setText(report["report"])
+
+        submitter_text = "Submitter: " + report["account_name"]
+        employee_type_text = "Employee Type: " + submitter_employee_type
+        email_text = "Email: " + submitter_email
+        final_text = (
+            submitter_text
+            + "\n"
+            + email_text
+            + "\n"
+            + employee_type_text
+            + "\n\n"
+            + "______________"
+            + "\n\n"
+            + report["report"]
+        )
+
+        report_browser.setText(final_text)
 
         encoded_image = report["screenshot"]
         action_manager.load_screenshot(window, encoded_image)
