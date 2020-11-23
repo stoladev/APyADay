@@ -31,6 +31,7 @@ def load_reports(window):
         table.setItem(i, 1, QTableWidgetItem(document["issue_type"]))
         table.setItem(i, 2, QTableWidgetItem(str(document["submitted_on"])))
         table.setItem(i, 3, QTableWidgetItem(str(document["_id"])))
+        table.setItem(i, 4, QTableWidgetItem(document["report"]))
         i += 1
 
     if selection is not None:

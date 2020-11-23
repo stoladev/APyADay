@@ -194,7 +194,7 @@ def load_tables(window: QMainWindow):
     reports_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
     reports_table.setSelectionMode(QAbstractItemView.SingleSelection)
     reports_table.setGeometry(QtCore.QRect(10, 10, 571, 171))
-    reports_table.setColumnCount(4)
+    reports_table.setColumnCount(5)
     reports_table.setRowCount(0)
 
     item = QTableWidgetItem()
@@ -209,15 +209,20 @@ def load_tables(window: QMainWindow):
     item = QTableWidgetItem()
     reports_table.setHorizontalHeaderItem(3, item)
     reports_table.hideColumn(3)
+    item = QTableWidgetItem()
+    reports_table.setHorizontalHeaderItem(4, item)
+    reports_table.hideColumn(4)
 
     item = reports_table.horizontalHeaderItem(0)
     item.setText("Submitter")
     item = reports_table.horizontalHeaderItem(1)
-    item.setText(" Issue Type ")
+    item.setText("Issue Type")
     item = reports_table.horizontalHeaderItem(2)
-    item.setText(" Submitted On ")
+    item.setText("Submitted On")
     item = reports_table.horizontalHeaderItem(3)
     item.setText("ID")
+    item = reports_table.horizontalHeaderItem(4)
+    item.setText("Report")
 
     # ACTIONS
     reports_table.doubleClicked.connect(window.check_report_selection)
@@ -228,7 +233,7 @@ def load_text_browsers(window):
     Loads the text browsers for the technician application.
     """
 
-    window.report_text_browser.setGeometry(QtCore.QRect(10, 190, 321, 331))
+    window.report_text_browser.setGeometry(QtCore.QRect(10, 220, 321, 305))
 
 
 def load_text_boxes(window):

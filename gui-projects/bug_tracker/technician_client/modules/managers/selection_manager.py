@@ -90,24 +90,22 @@ def check_report_selection(window):
     report = reports.find_one({"_id": ObjectId(report_id)})
     submitter = accounts.find_one({"account_name": report["account_name"]})
     submitter_email = submitter["email"]
-    submitter_employee_type = submitter["employee_type"]
 
     if report:
         report_browser: QTextBrowser = window.report_text_browser
 
-        submitter_text = "Submitter: " + report["account_name"]
-        employee_type_text = "Employee Type: " + submitter_employee_type
+        submitter_text = "Submitter: " + window.reports_table.item(row, 0).text()
         email_text = "Email: " + submitter_email
+        report_text = window.reports_table.item(row, 4).text()
+
         final_text = (
             submitter_text
             + "\n"
             + email_text
-            + "\n"
-            + employee_type_text
             + "\n\n"
             + "______________"
             + "\n\n"
-            + report["report"]
+            + report_text
         )
 
         report_browser.setText(final_text)
