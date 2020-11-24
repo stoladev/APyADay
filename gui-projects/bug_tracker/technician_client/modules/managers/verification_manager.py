@@ -67,6 +67,13 @@ def verify_new_account_name(window, account_name):
 
 
 def verify_new_password(window, password):
+    """
+    Verifies the new password choice against the current requirements.
+
+    :param window: The QMainWindow in use.
+    :param password: The password to verify.
+    """
+
     upper = len(set(re.findall(r"[A-Z]", password)))
     lower = len(set(re.findall(r"[a-z]", password)))
     nums = len(set(re.findall(r"[0-9]", password)))

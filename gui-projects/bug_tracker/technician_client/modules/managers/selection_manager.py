@@ -7,8 +7,8 @@ TODO Clear find line if an item is clicked manually
 # pylint: disable=import-error
 # Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
 
+import PyQt5.QtWidgets as qtW
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QLineEdit, QTextBrowser
 from bson import ObjectId
 
 from technician_client.modules.managers import action_manager
@@ -24,11 +24,11 @@ def check_account_selection(window):
 
     row = window.accounts_table.currentRow()
     selected_account_name = window.accounts_table.item(row, 0).text()
-    found_account_line: QLineEdit = window.found_account_line
-    found_email_line: QLineEdit = window.found_email_line
-    reports_filed_line: QLineEdit = window.reports_filed_line
-    last_login_line: QLineEdit = window.last_login_line
-    new_pass_id_line: QLineEdit = window.new_pass_id_line
+    found_account_line: qtW.QLineEdit = window.found_account_line
+    found_email_line: qtW.QLineEdit = window.found_email_line
+    reports_filed_line: qtW.QLineEdit = window.reports_filed_line
+    last_login_line: qtW.QLineEdit = window.last_login_line
+    new_pass_id_line: qtW.QLineEdit = window.new_pass_id_line
 
     accounts = window.database.accounts
     selected_account = accounts.find_one({"account_name": selected_account_name})
@@ -74,16 +74,24 @@ def clear_account_fields(window):
     window.accounts_table.clearSelection()
 
 
-def check_report_selection(window):
+def check_report_selection(
+    window,
+    report_id,
+    report_browser: qtW.QTextBrowser,
+    submitter_text,
+    report_text,
+):
     """
     Loads the double-clicked report's details, such as the report itself along with any images.
 
     :param window: The QMainWindow in use.
-    :return: Detailed report data.
+    :param row: The row of the selected report.
+    :param report_id: The report ID of the selected report.
+    :param report_browser: The report browser in which the report loads into.
+    :param submitter_text: The submitter of the report.
+    :param report_text: The text contents of the report.
     """
 
-    row = window.reports_table.currentRow()
-    report_id = window.reports_table.item(row, 3).text()
     reports = window.database.reports
     accounts = window.database.accounts
 
@@ -92,11 +100,7 @@ def check_report_selection(window):
     submitter_email = submitter["email"]
 
     if report:
-        report_browser: QTextBrowser = window.report_text_browser
-
-        submitter_text = "Submitter: " + window.reports_table.item(row, 0).text()
         email_text = "Email: " + submitter_email
-        report_text = window.reports_table.item(row, 4).text()
 
         final_text = (
             submitter_text

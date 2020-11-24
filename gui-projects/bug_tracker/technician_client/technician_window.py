@@ -16,7 +16,16 @@ specifications of execution/registered events.
 # Reason: This number of statements is necessary because of the scope of the application.
 
 import PyQt5.QtWidgets
+import bcrypt
 import pymongo
+
+from technician_client.modules.loaders import menu_loader, report_loader, widget_loader
+from technician_client.modules.managers import (
+    account_manager,
+    action_manager,
+    keypress_manager,
+    selection_manager,
+)
 
 
 class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
@@ -27,8 +36,6 @@ class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
-
-        from technician_client.modules.loaders import widget_loader, report_loader
 
         # MongoDB Connection
         mongodb_url = open("../mongo_cluster.txt", "r")
@@ -99,7 +106,7 @@ class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
         self.last_login_label = PyQt5.QtWidgets.QLabel(self.accounts_tab)
         self.create_account_label = PyQt5.QtWidgets.QLabel(self.accounts_tab)
 
-        widget_loader.load_all_widgets(self)
+        self.load_all_widgets()
         report_loader.load_reports(self)
 
         self.show()
@@ -119,16 +126,12 @@ class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
         Overrides context menu events to load the account table's menu.
         """
 
-        from technician_client.modules.loaders import menu_loader
-
         menu_loader.load_accounts_menu(self, event)
 
     def keyPressEvent(self, event):
         """
         Overrides key press events to check for special key presses.
         """
-
-        from technician_client.modules.managers import keypress_manager
 
         keypress_manager.check_keypress(self, event)
 
@@ -139,16 +142,12 @@ class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
 
         mouse_on_graphics_view = self.screenshot_view.underMouse()
         if mouse_on_graphics_view:
-            from technician_client.modules.managers import action_manager
-
             action_manager.open_large_viewer(self)
 
     def search_accounts_table(self):
         """
         Forwards this self function to a manager.
         """
-
-        from technician_client.modules.managers import selection_manager
 
         selection_manager.find_account_match(self)
 
@@ -157,8 +156,6 @@ class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import selection_manager
-
         selection_manager.check_account_selection(self)
 
     def check_report_selection(self):
@@ -166,60 +163,116 @@ class TechnicianMainWindow(PyQt5.QtWidgets.QMainWindow):
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import selection_manager
+        row = self.reports_table.currentRow()
+        report_browser = self.report_text_browser
 
-        selection_manager.check_report_selection(self)
+        report_id = self.reports_table.item(row, 3).text()
+        submitter_text = "Submitter: " + self.reports_table.item(row, 0).text()
+        report_text = self.reports_table.item(row, 4).text()
+
+        selection_manager.check_report_selection(
+            self, report_id, report_browser, submitter_text, report_text
+        )
 
     def create_new_account(self):
         """
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import account_manager
+        account_name = self.account_name_line.text()
+        email = self.email_line.text()
+        worker_type = self.worker_type_combo_box.currentText()
+        password = self.password_line.text()
 
-        account_manager.create_new_account(self)
+        account_manager.create_new_account(
+            self, account_name, email, worker_type, password
+        )
 
     def delete_selected_account(self):
         """
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import account_manager
+        table = self.accounts_table
 
-        account_manager.delete_selected_account(self)
+        account_manager.delete_selected_account(self, table)
 
     def reset_account_password(self):
         """
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import account_manager
+        password = self.new_password_line.text()
+        password_verified = self.new_password_2_line.text()
 
-        account_manager.reset_account_password(self)
+        account_name = self.new_pass_id_line.text()
+        hash_pass = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
+        account_manager.reset_account_password(
+            self,
+            password,
+            password_verified,
+            hash_pass,
+            account_name,
+        )
 
     def change_account_name(self):
         """
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import account_manager
+        account_name = self.found_account_line.text()
 
-        account_manager.change_account_name(self)
+        account_manager.change_account_name(self, account_name)
 
     def change_email(self):
         """
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import account_manager
+        email = self.found_email_line.text()
 
-        account_manager.change_email(self)
+        account_manager.change_email(self, email)
 
     def open_large_viewer(self):
         """
         Forwards this self function to a manager.
         """
 
-        from technician_client.modules.managers import action_manager
-
         action_manager.open_large_viewer(self)
+
+    def load_all_widgets(self):
+        """
+        Mass-loads all the widgets.
+        """
+
+        widget_loader.load_tabs(self.tab_widget, self.accounts_tab, self.reports_tab)
+
+        widget_loader.load_account_creation(
+            self.email_line, self.account_name_line, self.password_line
+        )
+
+        widget_loader.load_account_finder(
+            self.find_account_line,
+            self.found_account_line,
+            self.found_email_line,
+            self.reports_filed_line,
+            self.last_login_line,
+        )
+
+        widget_loader.load_password_changer(
+            self.new_pass_id_line, self.new_password_line, self.new_password_2_line
+        )
+
+        widget_loader.load_report_finder(self.search_reports_line)
+
+        widget_loader.load_buttons(self)
+        widget_loader.load_labels(self)
+        widget_loader.load_tables(self)
+        widget_loader.load_text_browsers(self)
+        widget_loader.load_text_boxes(self)
+        widget_loader.load_checkboxes(self)
+        widget_loader.load_combo_boxes(self)
+        widget_loader.load_graphics_view(self.screenshot_view)
+
+        self.setCentralWidget(self.central_widget)
