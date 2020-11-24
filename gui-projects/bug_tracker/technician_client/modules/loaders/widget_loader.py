@@ -8,16 +8,9 @@ Loads all specifications for the widgets used within the technician application.
 # pylint: disable=too-many-statements
 # Reason: This number of statements is necessary because of the scope of the application.
 
+import PyQt5.QtWidgets
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (
-    QAbstractItemView,
-    QHeaderView,
-    QLineEdit,
-    QTableView,
-    QTableWidgetItem,
-)
 
-from technician_client.modules.loaders import account_loader
 from technician_client.technician_window import TechnicianMainWindow
 
 
@@ -62,7 +55,7 @@ def load_text_lines(window: TechnicianMainWindow):
     window.account_name_line.setGeometry(QtCore.QRect(400, 80, 181, 24))
 
     window.password_line.setPlaceholderText("Password")
-    window.password_line.setEchoMode(QLineEdit.Password)
+    window.password_line.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
     window.password_line.setGeometry(QtCore.QRect(400, 110, 181, 24))
 
     window.find_account_line.setPlaceholderText("Find Account...")
@@ -92,11 +85,11 @@ def load_text_lines(window: TechnicianMainWindow):
     window.new_pass_id_line.setGeometry(QtCore.QRect(401, 310, 181, 24))
 
     window.new_password_line.setPlaceholderText("New Password")
-    window.new_password_line.setEchoMode(QLineEdit.Password)
+    window.new_password_line.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
     window.new_password_line.setGeometry(QtCore.QRect(401, 340, 181, 24))
 
     window.new_password_2_line.setPlaceholderText("Verify New Password")
-    window.new_password_2_line.setEchoMode(QLineEdit.Password)
+    window.new_password_2_line.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
     window.new_password_2_line.setGeometry(QtCore.QRect(401, 370, 181, 24))
 
     window.search_reports_line.setPlaceholderText("Search reports for...")
@@ -154,22 +147,22 @@ def load_tables(window: TechnicianMainWindow):
     Loads the tables for the technician application.
     """
 
-    accounts_table: QTableView = window.accounts_table
-    reports_table: QTableView = window.reports_table
+    accounts_table: PyQt5.QtWidgets.QTableView = window.accounts_table
+    reports_table: PyQt5.QtWidgets.QTableView = window.reports_table
 
-    accounts_table.setSelectionBehavior(QTableView.SelectRows)
-    accounts_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-    accounts_table.setSelectionMode(QAbstractItemView.SingleSelection)
+    accounts_table.setSelectionBehavior(PyQt5.QtWidgets.QTableView.SelectRows)
+    accounts_table.setEditTriggers(PyQt5.QtWidgets.QAbstractItemView.NoEditTriggers)
+    accounts_table.setSelectionMode(PyQt5.QtWidgets.QAbstractItemView.SingleSelection)
     accounts_table.setGeometry(QtCore.QRect(10, 10, 381, 391))
     accounts_table.setRowCount(0)
     accounts_table.setColumnCount(3)
 
     # Columns
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     accounts_table.setHorizontalHeaderItem(0, item)
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     accounts_table.setHorizontalHeaderItem(1, item)
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     accounts_table.setHorizontalHeaderItem(2, item)
 
     # Column Settings
@@ -177,39 +170,41 @@ def load_tables(window: TechnicianMainWindow):
     # accounts_table.sortItems(2, Qt.DescendingOrder)
     item = accounts_table.horizontalHeaderItem(0)
     header = accounts_table.horizontalHeader()
-    header.setSectionResizeMode(QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(PyQt5.QtWidgets.QHeaderView.ResizeToContents)
     item.setText("Account Name")
     item = accounts_table.horizontalHeaderItem(1)
-    header.setSectionResizeMode(1, QHeaderView.Stretch)
+    header.setSectionResizeMode(1, PyQt5.QtWidgets.QHeaderView.Stretch)
     item.setText("Email")
     item = accounts_table.horizontalHeaderItem(2)
     item.setText("Reports")
 
     # Row Settings
+    from technician_client.modules.loaders import account_loader
+
     account_loader.load_accounts(window)
     accounts_table.setSortingEnabled(True)
 
     # Reports Table
-    reports_table.setSelectionBehavior(QTableView.SelectRows)
-    reports_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-    reports_table.setSelectionMode(QAbstractItemView.SingleSelection)
+    reports_table.setSelectionBehavior(PyQt5.QtWidgets.QTableView.SelectRows)
+    reports_table.setEditTriggers(PyQt5.QtWidgets.QAbstractItemView.NoEditTriggers)
+    reports_table.setSelectionMode(PyQt5.QtWidgets.QAbstractItemView.SingleSelection)
     reports_table.setGeometry(QtCore.QRect(10, 10, 571, 171))
     reports_table.setColumnCount(5)
     reports_table.setRowCount(0)
 
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     header = reports_table.horizontalHeader()
-    header.setSectionResizeMode(QHeaderView.ResizeToContents)
+    header.setSectionResizeMode(PyQt5.QtWidgets.QHeaderView.ResizeToContents)
     reports_table.setHorizontalHeaderItem(0, item)
-    item = QTableWidgetItem()
-    header.setSectionResizeMode(0, QHeaderView.Stretch)
+    item = PyQt5.QtWidgets.QTableWidgetItem()
+    header.setSectionResizeMode(0, PyQt5.QtWidgets.QHeaderView.Stretch)
     reports_table.setHorizontalHeaderItem(1, item)
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     reports_table.setHorizontalHeaderItem(2, item)
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     reports_table.setHorizontalHeaderItem(3, item)
     reports_table.hideColumn(3)
-    item = QTableWidgetItem()
+    item = PyQt5.QtWidgets.QTableWidgetItem()
     reports_table.setHorizontalHeaderItem(4, item)
     reports_table.hideColumn(4)
 
@@ -228,7 +223,9 @@ def load_tables(window: TechnicianMainWindow):
     reports_table.doubleClicked.connect(window.check_report_selection)
 
 
-def load_text_browsers(window: TechnicianMainWindow):
+def load_text_browsers(
+    window: TechnicianMainWindow,
+):
     """
     Loads the text browsers for the technician application.
     """
@@ -249,6 +246,18 @@ def load_checkboxes(window: TechnicianMainWindow):
     Loads the check boxes for the technician application.
     """
 
+    # window.search_reports_line.setPlaceholderText("Search reports for...")
+    # window.search_reports_line.setGeometry(QtCore.QRect(340, 190, 241, 24))
+    # window.search_reports_line.setAlignment(QtCore.Qt.AlignCenter)
+
+    window.open_reports_checkbox.setGeometry(QtCore.QRect(10, 190, 20, 20))
+    window.open_reports_label.setGeometry(QtCore.QRect(30, 190, 100, 20))
+    window.open_reports_label.setText("Open Reports")
+
+    # window.in_progress_reports_checkbox.setGeometry(QtCore.QRect(40, 190, 20, 20))
+    # window.closed_fixed_reports_checkbox.setGeometry(QtCore.QRect(70, 190, 20, 20))
+    # window.not_a_bug_reports_checkbox.setGeometry(QtCore.QRect(100, 190, 20, 20))
+
 
 def load_combo_boxes(window: TechnicianMainWindow):
     """
@@ -268,7 +277,9 @@ def load_combo_boxes(window: TechnicianMainWindow):
     window.worker_type_combo_box.addItem("Department Head")
 
 
-def load_graphics_view(window: TechnicianMainWindow):
+def load_graphics_view(
+    window: TechnicianMainWindow,
+):
     """
     Loads the graphics viewers for the technician application.
     """

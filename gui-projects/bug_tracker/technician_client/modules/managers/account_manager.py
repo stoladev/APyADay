@@ -8,11 +8,16 @@ Manages all interactions with an account, from creation to modification to delet
 import bcrypt
 from PyQt5.QtWidgets import QInputDialog, QLineEdit, QMessageBox
 
-from technician_client.modules.loaders import account_loader
+import technician_client.modules.loaders
 from technician_client.modules.managers import verification_manager
+from technician_client.technician_window import TechnicianMainWindow
 
 
-def create_new_account(window):
+def load_widgets(window: TechnicianMainWindow):
+    technician_client.modules.loaders.widget_loader.load_all_widgets(window)
+
+
+def create_new_account(window: TechnicianMainWindow):
     """
     Creates a new account using the information in the respective textbox lines.
 
@@ -78,10 +83,10 @@ def create_new_account(window):
 
         msg = QMessageBox()
         msg.about(window, "Success", "The account has been successfully created.")
-        account_loader.load_accounts(window)
+        technician_client.modules.loaders.account_loader.load_accounts(window)
 
 
-def reset_account_password(window):
+def reset_account_password(window: TechnicianMainWindow):
     """
     Resets an account's password using the textbox line data.
 
@@ -125,10 +130,10 @@ def reset_account_password(window):
         account_name + "'s password has been successfully reset.",
     )
 
-    account_loader.load_accounts(window)
+    technician_client.modules.loaders.account_loader.load_accounts(window)
 
 
-def delete_selected_account(window):
+def delete_selected_account(window: TechnicianMainWindow):
     """
     Deletes the selected account.
 
@@ -166,7 +171,7 @@ def delete_selected_account(window):
 
     accounts.remove({"account_name": account_name})
 
-    account_loader.load_accounts(window)
+    technician_client.modules.loaders.account_loader.load_accounts(window)
 
     next_index = table.model().index(row, 0)
     table.setCurrentIndex(next_index)
@@ -175,7 +180,7 @@ def delete_selected_account(window):
         table.setCurrentIndex(next_index)
 
 
-def change_account_name(window):
+def change_account_name(window: TechnicianMainWindow):
     """
     Changes the selected account name.
 
@@ -227,10 +232,10 @@ def change_account_name(window):
         + ".",
     )
 
-    account_loader.load_accounts(window)
+    technician_client.modules.loaders.account_loader.load_accounts(window)
 
 
-def change_email(window):
+def change_email(window: TechnicianMainWindow):
     """
     Changes the selected account's email.
 
@@ -279,4 +284,4 @@ def change_email(window):
         email + "'s email has been successfully reset to " + new_email_name + ".",
     )
 
-    account_loader.load_accounts(window)
+    technician_client.modules.loaders.account_loader.load_accounts(window)
