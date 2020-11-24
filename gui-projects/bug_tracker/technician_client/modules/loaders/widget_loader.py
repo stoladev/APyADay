@@ -11,6 +11,7 @@ Loads all specifications for the widgets used within the technician application.
 import PyQt5.QtWidgets
 from PyQt5 import QtCore
 
+from technician_client.modules.loaders import account_loader
 from technician_client.technician_window import TechnicianMainWindow
 
 
@@ -141,6 +142,18 @@ def load_labels(window: TechnicianMainWindow):
     window.reset_password_label.setText("Reset Password")
     window.reset_password_label.setGeometry(QtCore.QRect(401, 290, 91, 16))
 
+    window.open_reports_label.setGeometry(QtCore.QRect(25, 191, 100, 20))
+    window.open_reports_label.setText("Open")
+
+    window.in_progress_label.setGeometry(QtCore.QRect(75, 191, 100, 20))
+    window.in_progress_label.setText("In Progress")
+
+    window.closed_label.setGeometry(QtCore.QRect(167, 191, 100, 20))
+    window.closed_label.setText("Closed")
+
+    window.not_a_bug_label.setGeometry(QtCore.QRect(228, 191, 100, 20))
+    window.not_a_bug_label.setText("Not A Bug")
+
 
 def load_tables(window: TechnicianMainWindow):
     """
@@ -179,7 +192,6 @@ def load_tables(window: TechnicianMainWindow):
     item.setText("Reports")
 
     # Row Settings
-    from technician_client.modules.loaders import account_loader
 
     account_loader.load_accounts(window)
     accounts_table.setSortingEnabled(True)
@@ -246,17 +258,15 @@ def load_checkboxes(window: TechnicianMainWindow):
     Loads the check boxes for the technician application.
     """
 
-    # window.search_reports_line.setPlaceholderText("Search reports for...")
-    # window.search_reports_line.setGeometry(QtCore.QRect(340, 190, 241, 24))
-    # window.search_reports_line.setAlignment(QtCore.Qt.AlignCenter)
-
     window.open_reports_checkbox.setGeometry(QtCore.QRect(10, 190, 20, 20))
-    window.open_reports_label.setGeometry(QtCore.QRect(30, 190, 100, 20))
-    window.open_reports_label.setText("Open Reports")
+    window.open_reports_checkbox.setChecked(True)
 
-    # window.in_progress_reports_checkbox.setGeometry(QtCore.QRect(40, 190, 20, 20))
-    # window.closed_fixed_reports_checkbox.setGeometry(QtCore.QRect(70, 190, 20, 20))
-    # window.not_a_bug_reports_checkbox.setGeometry(QtCore.QRect(100, 190, 20, 20))
+    window.in_progress_reports_checkbox.setGeometry(QtCore.QRect(60, 190, 20, 20))
+    window.in_progress_reports_checkbox.setChecked(True)
+
+    window.closed_fixed_reports_checkbox.setGeometry(QtCore.QRect(152, 190, 20, 20))
+
+    window.not_a_bug_reports_checkbox.setGeometry(QtCore.QRect(213, 190, 20, 20))
 
 
 def load_combo_boxes(window: TechnicianMainWindow):
