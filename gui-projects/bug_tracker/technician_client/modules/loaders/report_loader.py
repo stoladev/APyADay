@@ -19,7 +19,7 @@ def load_reports(window):
 
     table.setRowCount(0)
 
-    collection = window.database.reports
+    collection = window.model.database.reports
 
     reports = collection.find({})
 

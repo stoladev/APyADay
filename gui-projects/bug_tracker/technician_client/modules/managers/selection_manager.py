@@ -30,7 +30,7 @@ def check_account_selection(window):
     last_login_line: qtW.QLineEdit = window.last_login_line
     new_pass_id_line: qtW.QLineEdit = window.new_pass_id_line
 
-    accounts = window.database.accounts
+    accounts = window.model.database.accounts
     selected_account = accounts.find_one({"account_name": selected_account_name})
 
     if selected_account:
@@ -92,8 +92,8 @@ def check_report_selection(
     :param report_text: The text contents of the report.
     """
 
-    reports = window.database.reports
-    accounts = window.database.accounts
+    reports = window.model.database.reports
+    accounts = window.model.database.accounts
 
     report = reports.find_one({"_id": ObjectId(report_id)})
     submitter = accounts.find_one({"account_name": report["account_name"]})

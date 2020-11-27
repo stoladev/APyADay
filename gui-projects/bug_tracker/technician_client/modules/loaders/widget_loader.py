@@ -134,15 +134,15 @@ def load_buttons(self):
 
     self.create_account_button.setText("Create")
     self.create_account_button.setGeometry(QtCore.QRect(529, 200, 51, 24))
-    self.create_account_button.pressed.connect(self.create_new_account)
+    self.create_account_button.pressed.connect(self.model.create_new_account)
 
     self.reset_password_button.setText("Reset")
     self.reset_password_button.setGeometry(QtCore.QRect(530, 400, 51, 24))
-    self.reset_password_button.pressed.connect(self.reset_account_password)
+    self.reset_password_button.pressed.connect(self.model.reset_account_password)
 
     self.delete_account_button.setText("Delete Selected Account")
     self.delete_account_button.setGeometry(QtCore.QRect(430, 500, 150, 24))
-    self.delete_account_button.pressed.connect(self.delete_selected_account)
+    self.delete_account_button.pressed.connect(self.model.delete_selected_account)
 
     self.update_report_button.setText("Update")
     self.update_report_button.setGeometry(QtCore.QRect(500, 500, 80, 24))
@@ -258,7 +258,7 @@ def load_tables(self):
     item.setText("Report")
 
     # ACTIONS
-    self.reports_table.doubleClicked.connect(self.check_report_selection)
+    self.reports_table.doubleClicked.connect(self.model.check_report_selection)
 
 
 def load_text_browsers(self):

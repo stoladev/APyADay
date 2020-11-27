@@ -21,10 +21,9 @@ def verify_inputs(window, account_name, password, email):
 
 
 def verify_technician(window):
-    username = window.technician_login_line.text()
-    password = window.technician_password_line.text()
-
-    accounts = window.database.technicians
+    username = window.root.technician_login_line.text()
+    password = window.root.technician_password_line.text()
+    accounts = window.model.database.technicians
 
     account = accounts.find_one({"username": username})
 
@@ -33,7 +32,7 @@ def verify_technician(window):
         salt = account["password"]
         lock = account["password"]
         if bcrypt.hashpw(key, salt) == lock:
-            window.accept()
+            window.root.accept()
         else:
             QMessageBox.warning(
                 window,

@@ -19,7 +19,7 @@ def load_accounts(window):
 
     table.setRowCount(0)
 
-    collection = window.database.accounts
+    collection = window.model.database.accounts
 
     accounts = collection.find({})
 
