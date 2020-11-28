@@ -7,6 +7,10 @@ Loads all specifications for the widgets used within the technician application.
 
 # pylint: disable=too-many-statements
 # Reason: This number of statements is necessary because of the scope of the application.
+
+# TODO
+# Load widgets in a seperate fashion, using MVC.
+
 import PyQt5
 import PyQt5.QtWidgets as qtW
 from PyQt5 import QtCore
