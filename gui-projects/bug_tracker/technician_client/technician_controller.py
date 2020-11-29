@@ -23,6 +23,11 @@ class TechnicianController:
             self.view = MainView(self.main_window, self.model)
 
 
+# TODO
+# Create a LoginWindow class to replace above init
+# Move below class to separate files
+
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
