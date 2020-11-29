@@ -1,5 +1,11 @@
+"""
+The data model used for the technician's main report window.
+"""
+
+# pylint: disable=import-error
+# Reason: Importing is working fine, but pylint begs to differ. Most likely because of venv.
+
 import bcrypt
-import pymongo
 
 from technician_client.modules.managers import (
     account_manager,
@@ -9,14 +15,13 @@ from technician_client.modules.managers import (
 
 
 class Model:
-    def __init__(self, root):
+    """
+    Handles all data manipulations for the technician's main report window.
+    """
+
+    def __init__(self, root, database):
         self.root = root
-
-        mongodb_url = open("../mongo_cluster.txt", "r")
-        connection = mongodb_url.read()
-        cluster = pymongo.MongoClient(connection)
-
-        self.database = cluster["bug_tracker_db"]
+        self.database = database
 
     def search_accounts_table(self):
         """
