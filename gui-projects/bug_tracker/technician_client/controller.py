@@ -53,5 +53,5 @@ class Controller:
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    c = Controller()
-    c.run()
+    controller = Controller()
+    controller.run()
