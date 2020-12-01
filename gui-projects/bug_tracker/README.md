@@ -6,6 +6,7 @@
 ##### Security
 - [x] Employee login with ID number and password
 - [x] Popup login window instead of in-tab technician login
+- [x] Create a separate file location for MongoDB connection data
 ##### Networking/Upload/Download
 - [x] Connect with MongoDB
 - [x] Technician login verification
@@ -17,16 +18,14 @@
 - [x] Generate and attach a screenshot
 - [x] Text boxes to optionally write in more details
 - [x] Preview of bug report with all selected information shown
+- [x] Report sorting by time reported, severity, issue type, questionaire
 
 ## TODO
 ##### Security
 - [ ] Secure Login Authentication through MongoDB
-- [ ] Create a separate file location for MongoDB connection data
 ##### Networking/Upload/Download
 - [ ] Zipped report automatic upload to FTP
 ##### Compatibility
 - [ ] Create executables/packages for each OS
 ##### Functionality
 - [ ] New/old/fixed statuses
-- [ ] Report sorting by time reported, severity, issue type, questionaire
-- [ ] Automatic severity level depending on what the selected issues are
