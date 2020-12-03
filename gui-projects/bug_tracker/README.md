@@ -24,8 +24,14 @@
 ##### Security
 - [ ] Secure Login Authentication through MongoDB
 ##### Networking/Upload/Download
-- [ ] Zipped report automatic upload to FTP
+- [ ] Reliable connection method without confidential code in data
 ##### Compatibility
 - [ ] Create executables/packages for each OS
 ##### Functionality
-- [ ] New/old/fixed statuses
+- [ ] Update button functionality
+    - [ ] Takes text from textbox
+    - [ ] Takes case status text
+    - [ ] Updates selected report with new info
+- [ ] Report filtering based on case status (default=open)
+- [ ] Search reports functionality
+    - [ ] Searches filtered reports' submitter names and report details
