@@ -33,5 +33,8 @@
     - [ ] Takes case status text
     - [ ] Updates selected report with new info
 - [ ] Report filtering based on case status (default=open)
+- [ ] Search accounts functionality
+    - [ ] Hides non-matching results from the table
 - [ ] Search reports functionality
     - [ ] Searches filtered reports' submitter names and report details
+    - [ ] Hides non-matching results from the table
