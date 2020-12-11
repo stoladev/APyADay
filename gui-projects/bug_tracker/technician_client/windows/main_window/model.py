@@ -119,3 +119,9 @@ class Model:
         """
 
         action_manager.open_large_viewer(self.root)
+
+    def update_report(self):
+        """
+        Updates the report with any new data made by the technician.
+        """
+       
