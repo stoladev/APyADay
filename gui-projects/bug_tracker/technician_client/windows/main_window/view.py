@@ -98,6 +98,7 @@ class View:
         # Button actions on Accounts Tab
         root.change_account_button.pressed.connect(model.change_account_name)
         root.change_email_button.pressed.connect(model.change_email)
+        root.update_report_button.pressed.connect(model.update_report)
 
         # Checks for item selection changes
         root.accounts_table.itemSelectionChanged.connect(model.check_new_selection)

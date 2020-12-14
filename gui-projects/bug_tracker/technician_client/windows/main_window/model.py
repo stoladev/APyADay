@@ -122,6 +122,7 @@ class Model:
 
     def update_report(self):
         """
-        Updates the report with any new data made by the technician.
+        Forwards this self function to a manager.
         """
-       
+
+        action_manager.update_report(self.root)

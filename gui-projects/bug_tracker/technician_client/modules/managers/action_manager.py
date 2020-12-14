@@ -62,7 +62,20 @@ def base64_to_png(screenshot_path, encoded_image):
 
 
 def open_large_viewer(window):
+    """
+    Opens the image in the large viewer.
+    """
     screenshot_path = window.screenshot_path
     image = Image.open(screenshot_path, mode="r")
     image.show()
     print("Image opened.")
+
+
+def update_report(window):
+    """
+    Updates the report with any new data made by the technician.
+    """
+
+    technician_notes = window.technician_report_notes.toPlainText()
+
+    print(technician_notes)
