@@ -5,8 +5,9 @@ This project's objective is to create an intuitive interface with multiple socia
  that show quality statistics regarding account growth and positive pattern recognition.
  
  ## ToDo List
- - [ ] Connect through social media API's (Twitter, Instagram, TikTok, YouTube)
+ - [ ] Create a cost/benefit analysis of the features provided
  - [ ] Create a rough draft of a qt interface
  - [ ] Create a MongoDB with customer login information for account verification
- - [ ] Create a cost/benefit analysis of the features provided
+ - [ ] Connect through social media API's (Twitter, Instagram, TikTok, YouTube)
+ - [ ] Create a separate repo and private it for this
  
