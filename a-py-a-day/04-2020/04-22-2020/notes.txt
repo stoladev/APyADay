@@ -1,5 +1,0 @@
-I've completed the Introduction to Bash Scripting course today. I've also
-started up the Python lessons again, taking a break from SQL. I'll continue
-with Python because at the moment, it's coming to me much easier and sticking
-than SQL. SQL doesn't seem that difficult, but switching back and forth is
-proving to be more of a struggle than a benefit.
